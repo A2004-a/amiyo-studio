@@ -1,5 +1,4 @@
-/* Amiyo Studio - Extracted Stylesheet */
-/* Generated from Amiyo_lagfix_step01.html */
+/* Amiyo Studio - Production Stylesheet */
 
 /* ==================== Style 0 id="am-perf-css" ==================== */
 /* Lag fix (phones/tablets): live blur of whatever is behind panels is the most expensive effect on mobile GPUs. Panels keep their colours. */

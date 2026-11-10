@@ -47,3 +47,4 @@ The application is structured for high browser performance and rapid loading:
 2. Ensure `npm run validate` passes with zero errors.
 3. Commit your changes with clear, descriptive commit messages.
 4. Push to your branch and open a Pull Request.
+

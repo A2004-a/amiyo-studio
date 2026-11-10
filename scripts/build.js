@@ -36,3 +36,4 @@ console.log(`- Stylesheet (css/app.css): ${(cssSize / 1024).toFixed(1)} KB`);
 console.log(`- JavaScript Modules (${jsFiles.length} files): ${(jsTotal / 1024 / 1024).toFixed(2)} MB`);
 console.log(`- Total App Bundle Size: ${((htmlSize + cssSize + jsTotal) / 1024 / 1024).toFixed(2)} MB`);
 console.log('\n✓ Ready for GitHub and GitHub Pages deployment!');
+

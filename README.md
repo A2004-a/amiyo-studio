@@ -64,8 +64,8 @@ Originally bundled into a single massive 9.2 MB file containing 93,700+ lines, t
 
 ```
 amiyo-studio/
-├── index.html                   # Clean, lightweight application entry point
-├── Amiyo_lagfix_step01.html     # Backward-compatible HTML entry point
+├── index.html                   # Primary application entry point (GitHub Pages ready)
+├── editor.html                  # Standalone video editor entry point
 ├── manifest.webmanifest         # PWA Web App Manifest
 ├── package.json                 # Project configuration & npm scripts
 ├── LICENSE                      # MIT Open Source License
@@ -109,7 +109,7 @@ amiyo-studio/
 ## 🚀 Quick Start
 
 ### Method 1: Direct Double-Click (No Installation Required)
-Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `Amiyo_lagfix_step01.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
+Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `editor.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
 
 ### Method 2: Local HTTP Server (Recommended)
 Running through a local web server enables Service Worker registration and PWA installation:
@@ -189,3 +189,4 @@ npm run build
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+

@@ -37,6 +37,11 @@ check('index.html exists and is non-empty', () => {
   return fs.existsSync(p) && fs.statSync(p).size > 1000;
 });
 
+check('editor.html exists and is non-empty', () => {
+  const p = path.join(rootDir, 'editor.html');
+  return fs.existsSync(p) && fs.statSync(p).size > 1000;
+});
+
 check('css/app.css exists and is non-empty', () => {
   const p = path.join(rootDir, 'css', 'app.css');
   return fs.existsSync(p) && fs.statSync(p).size > 100000;
@@ -100,3 +105,4 @@ if (hasErrors) {
   console.log('========================================');
   process.exit(0);
 }
+
