@@ -36,7 +36,7 @@ Download standalone native applications for your operating system:
 | **Windows** | **32-bit (x32 / ia32)** | Installer `.exe` | [⬇️ **Download for Windows x32 (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-ia32.exe) |
 | **Linux** | **64-bit (x86_64)** | Portable `.AppImage` | [⬇️ **Download for Linux AppImage (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-linux-x86_64.AppImage) |
 | **macOS** | **Universal (Apple / Intel)** | Disk Image `.dmg` | [⬇️ **Download for macOS DMG (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-mac.dmg) |
-| **Android** | **Universal** | Mobile `.apk` | [⬇️ **Download for Android APK**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.1/Amiyo-Studio-android.apk) |
+| **Android** | **Universal** | Mobile `.apk` | [⬇️ **Download for Android APK (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-android.apk) |
 
 > [!TIP]
 > All current and historical versions can be viewed on the **[GitHub Releases Page](https://github.com/A2004-a/amiyo-studio/releases)**.
