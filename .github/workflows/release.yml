@@ -65,4 +65,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: assets/*
+          make_latest: true
           generate_release_notes: true
+
