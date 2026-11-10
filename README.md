@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/amiyogarai/amiyo-studio/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"/></a>
+  <a href="https://github.com/A2004-a/amiyo-studio/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
   <img src="https://img.shields.io/badge/PWA-offline--capable-orange.svg" alt="PWA Ready"/>
   <img src="https://img.shields.io/badge/WebCodecs-hardware--accelerated-purple.svg" alt="WebCodecs"/>
@@ -117,7 +117,7 @@ Running through a local web server enables Service Worker registration and PWA i
 
 ```bash
 # Clone the repository
-git clone https://github.com/amiyogarai/amiyo-studio.git
+git clone https://github.com/A2004-a/amiyo-studio.git
 cd amiyo-studio
 
 # Start dev server (requires Node.js)
