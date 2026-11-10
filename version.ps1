@@ -30,3 +30,4 @@ if ($foundPath) {
     Write-Host "To download and open immediately, run:" -ForegroundColor White
     Write-Host "  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex" -ForegroundColor Cyan
 }
+

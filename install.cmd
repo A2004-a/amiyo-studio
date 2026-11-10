@@ -72,3 +72,4 @@ if %ERRORLEVEL% equ 0 (
 echo [OK] Opening in default browser...
 start "" "%TARGET_DIR%\index.html"
 exit /b 0
+

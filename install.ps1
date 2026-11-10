@@ -1,18 +1,13 @@
-param(
-    [switch]$Version,
-    [switch]$Help
-)
-
 $appVersion = "0.0.1"
 $githubRepo = "A2004-a/amiyo-studio"
-$zipUrl = "https://github.com/A2004-a/amiyo-studio/archive/refs/heads/main.zip"
+$zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "          Amiyo Studio v$appVersion       " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # 1. Version Check Request
-if ($Version -or ($args -contains "--version") -or ($args -contains "-v") -or ($args -contains "version") -or ($env:AMIYO_VERSION_ONLY -eq "1")) {
+if ($args -contains "--version" -or $args -contains "-v" -or $args -contains "version" -or $args -contains "-version" -or $args -contains "/v" -or $env:AMIYO_VERSION_ONLY -eq "1") {
     Write-Host "Installed Version: v$appVersion" -ForegroundColor Green
     return
 }
@@ -75,24 +70,24 @@ if ((Test-Path (Join-Path $currentDir "index.html")) -and (Test-Path (Join-Path 
 try {
     $windowsApps = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps"
     if (Test-Path $windowsApps) {
-        $cmdShim = Join-Path $windowsApps "amiyo.cmd"
-        $cmdLines = @(
-            "@echo off",
-            "if /i `"%~1`"==`"--version`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-            "if /i `"%~1`"==`"-v`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-            "if /i `"%~1`"==`"version`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-            "where node >nul 2>&1",
-            "if %ERRORLEVEL% equ 0 (",
-            "  node `"$targetDir\bin\cli.js`" %*",
-            "  exit /b %ERRORLEVEL%",
-            ")",
-            "start `"`" `"$targetDir\index.html`"",
-            "exit /b 0"
-        )
-        [System.IO.File]::WriteAllLines($cmdShim, $cmdLines, [System.Text.Encoding]::ASCII)
+        $srcCmd = Join-Path $targetDir "bin\amiyo.cmd"
+        $srcPs1 = Join-Path $targetDir "bin\amiyo.ps1"
+        if (Test-Path $srcCmd) {
+            Copy-Item $srcCmd (Join-Path $windowsApps "amiyo.cmd") -Force -ErrorAction SilentlyContinue
+        }
+        if (Test-Path $srcPs1) {
+            Copy-Item $srcPs1 (Join-Path $windowsApps "amiyo.ps1") -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    # Add to persistent User PATH
+    $binDir = Join-Path $targetDir "bin"
+    $userPath = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
+    if ($userPath -notlike "*$binDir*") {
+        [Environment]::SetEnvironmentVariable("Path", "$binDir;$userPath", [EnvironmentVariableTarget]::User)
     }
 } catch {
-    # Non-fatal shim registration
+    # Non-fatal registration
 }
 
 # Register function in current PowerShell session for immediate terminal access
