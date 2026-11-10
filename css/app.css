@@ -1202,17 +1202,26 @@ html.amiyo-bigtrk .trk-dots::after{inset:0!important}
 html.amiyo-bigtrk .track-label{column-gap:4px!important;row-gap:4px!important}
 
 /* ==================== Style 66 id="amiyo-step171-tap" ==================== */
-@media (pointer:coarse),(max-width:1024px){
-  #v19h button{min-height:44px;min-width:200px;padding:11px 20px;font-size:14px}
-  .trk-dots{width:44px;height:44px;font-size:20px}
-  .trk-dots::after{inset:0}
-  .trk-menu button{min-height:44px;padding:11px 12px;font-size:13.5px}
-  .trk-menu{min-width:220px;max-height:calc(100vh - 24px);overflow-y:auto}
+@media (pointer: coarse), (max-width: 1024px) {
+  #v19h button { min-height: 44px; min-width: 200px; padding: 11px 20px; font-size: 14px; }
+  .trk-dots { width: 44px; height: 44px; font-size: 20px; }
+  .trk-dots::after { inset: 0; }
+  .trk-menu button { min-height: 44px; padding: 11px 12px; font-size: 13.5px; }
+  .trk-menu { min-width: 220px; max-height: calc(100vh - 24px); overflow-y: auto; }
 }
 
 /* ==================== Style 67 id="amiyo-step173-nodrag" ==================== */
-#tracks .clip,#tracks .clip *{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none}
-#tracks .clip img,#tracks .clip canvas{pointer-events:none}
+#tracks .clip,
+#tracks .clip * {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#tracks .clip img,
+#tracks .clip canvas {
+  pointer-events: none;
+}
 
 /* ==================== Style 68 id="amiyo-preview-gestures-css" ==================== */
 @media (pointer:coarse){ #canvasShell{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none} }
@@ -1363,9 +1372,6 @@ body.vs-probing #previewCanvas{ cursor:crosshair; }
 #pwaBox .pwa-act button.go{background:linear-gradient(155deg,var(--accent),#e8622a);color:#1a0c03;font-weight:700;border-color:transparent}
 #pwaBox .pwa-act button small{display:block;font-weight:400;opacity:.75;font-size:11.5px;margin-top:2px}
 #pwaBox .pwa-row{display:flex;gap:8px;justify-content:flex-end}
-
-/* ==================== Style 81 id="amiyoFonts" ==================== */
-'; if(css&&html.indexOf(tag)<0){ var k=html.indexOf("</head>"); if(k>0) html=html.slice(0,k)+tag+css+'
 
 /* ==================== Style 82 id="amiyo-ws-css" ==================== */
 #wsBtn{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--text);font-size:12.5px;cursor:pointer;white-space:nowrap}
