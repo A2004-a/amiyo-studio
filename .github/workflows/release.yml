@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-desktop:
+    name: Desktop (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: win-x64,   os: windows-latest, script: 'dist:win64', file: 'dist/Amiyo-Studio-win-x64.exe' }
+          - { name: win-ia32,  os: windows-latest, script: 'dist:win32', file: 'dist/Amiyo-Studio-win-ia32.exe' }
+          - { name: linux,     os: ubuntu-latest,  script: 'dist:linux', file: 'dist/Amiyo-Studio-linux-x86_64.AppImage' }
+          - { name: mac,       os: macos-latest,   script: 'dist:mac',   file: 'dist/Amiyo-Studio-mac.dmg' }
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install --no-audit --no-fund --fetch-retries 5
+
+      - name: Build Desktop Distribution
+        run: |
+          npm run ${{ matrix.script }} -- --publish never || \
+          (sleep 5 && npm run ${{ matrix.script }} -- --publish never)
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.file }}
+          if-no-files-found: error
+
+  release:
+    name: Publish Release
+    needs: [build-desktop]
+    if: always() && (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+
+      - name: List Artifacts
+        run: ls -la assets/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: assets/*
+          generate_release_notes: true

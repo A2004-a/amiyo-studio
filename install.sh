@@ -43,3 +43,4 @@ else
         open index.html
     fi
 fi
+

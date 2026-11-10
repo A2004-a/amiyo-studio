@@ -20,9 +20,26 @@
 
 ## 🌟 Overview
 
-**Amiyo Studio** is a full-featured, multi-track video and audio editing suite that runs **100% inside modern web browsers**. Your media never leaves your device: all decoding, timeline manipulation, effects processing, audio DSP, and exporting are computed locally via WebCodecs, Web Audio API, and HTML5 Canvas.
+**Amiyo Studio** is a full-featured, multi-track video and audio editing suite that runs **100% inside modern web browsers** and as **native desktop applications** for Windows, Linux, and macOS. Your media never leaves your device: all decoding, timeline manipulation, effects processing, audio DSP, and exporting are computed locally on your hardware.
 
 Originally bundled into a single massive 9.2 MB file containing 93,700+ lines, this repository features a high-performance **modular architecture** that eliminates DOM churn, accelerates startup to milliseconds, and organizes code into dedicated functional modules.
+
+---
+
+## 📥 Desktop Downloads (Windows, Linux, macOS, Android)
+
+Download standalone native applications for your operating system:
+
+| Platform | Architecture | Package Type | Direct Download Link |
+| :--- | :--- | :--- | :--- |
+| **Windows** | **64-bit (x64)** | Installer `.exe` | [⬇️ **Download for Windows x64**](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-win-x64.exe) |
+| **Windows** | **32-bit (x32 / ia32)** | Installer `.exe` | [⬇️ **Download for Windows x32**](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-win-ia32.exe) |
+| **Linux** | **64-bit (x86_64)** | Portable `.AppImage` | [⬇️ **Download for Linux AppImage**](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-linux-x86_64.AppImage) |
+| **macOS** | **Universal (Apple / Intel)** | Disk Image `.dmg` | [⬇️ **Download for macOS DMG**](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-mac.dmg) |
+| **Android** | **Universal** | Mobile `.apk` | [⬇️ **Download for Android APK**](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-android.apk) |
+
+> [!TIP]
+> All current and historical versions can be viewed on the **[GitHub Releases Page](https://github.com/A2004-a/amiyo-studio/releases)**.
 
 ---
 
@@ -160,8 +177,8 @@ This repository is **100% GitHub Pages ready** with automated GitHub Actions inc
    git push -u origin main
    ```
 2. In your GitHub repository:
-   - Go to **Settings** > **Pages**.
-   - Under **Build and deployment** > **Source**, select **GitHub Actions**.
+   - Go to **Settings** > **Pages** (`https://github.com/A2004-a/amiyo-studio/settings/pages`).
+   - Under **Build and deployment** > **Source**, select **GitHub Actions** (this resolves the red cross on `github-pages` deployments).
 3. Every push to `main` will automatically validate integrity and deploy your live site!
 
 ---

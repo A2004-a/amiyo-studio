@@ -1,17 +1,23 @@
 {
   "name": "amiyo-studio",
-  "version": "1.0.0",
-  "description": "Private, high-performance in-browser multi-track video and audio editor.",
-  "main": "index.html",
+  "version": "0.0.1",
+  "description": "Private, high-performance in-browser and desktop multi-track video and audio editor.",
+  "main": "main.js",
+  "browser": "index.html",
   "bin": {
     "amiyo-studio": "./bin/cli.js"
   },
   "scripts": {
     "start": "node bin/cli.js",
     "dev": "node bin/cli.js",
+    "electron": "electron .",
     "validate": "node scripts/validate.js",
     "test": "node scripts/validate.js",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "dist:win64": "electron-builder --win --x64",
+    "dist:win32": "electron-builder --win --ia32",
+    "dist:linux": "electron-builder --linux --x64",
+    "dist:mac": "electron-builder --mac --universal"
   },
   "keywords": [
     "video-editor",
@@ -21,10 +27,53 @@
     "canvas",
     "timeline",
     "pwa",
+    "electron",
     "browser-video-editor",
     "offline-first"
   ],
   "author": "amiyo garai",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.amiyo.studio",
+    "productName": "Amiyo Studio",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "editor.html",
+      "sw.js",
+      "manifest.webmanifest",
+      "assets/**/*",
+      "css/**/*",
+      "js/**/*",
+      "build/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Amiyo-Studio-win-${arch}.${ext}"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png",
+      "category": "Video",
+      "artifactName": "Amiyo-Studio-linux-x86_64.${ext}"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.video",
+      "artifactName": "Amiyo-Studio-mac.${ext}"
+    }
+  }
 }
-

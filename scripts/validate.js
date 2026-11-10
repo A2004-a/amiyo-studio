@@ -74,6 +74,19 @@ check('bin/cli.js exists and is syntactically valid', () => {
   return true;
 });
 
+check('main.js (Electron entry) exists and is syntactically valid', () => {
+  const p = path.join(rootDir, 'main.js');
+  if (!fs.existsSync(p)) return false;
+  const code = fs.readFileSync(p, 'utf8');
+  new vm.Script(code);
+  return true;
+});
+
+check('build/icon.ico and build/icon.png exist', () => {
+  return fs.existsSync(path.join(rootDir, 'build', 'icon.ico')) &&
+         fs.existsSync(path.join(rootDir, 'build', 'icon.png'));
+});
+
 check('Terminal installers (install.ps1, install.sh) exist', () => {
   return fs.existsSync(path.join(rootDir, 'install.ps1')) &&
          fs.existsSync(path.join(rootDir, 'install.sh'));

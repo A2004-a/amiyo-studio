@@ -1,4 +1,4 @@
-﻿# Amiyo Studio - Windows 1-Line Installer & Launcher
+# Amiyo Studio - Windows 1-Line Installer & Launcher
 # Usage: irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex
 
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -37,3 +37,4 @@ if (Get-Command node -ErrorAction SilentlyContinue) {
     Write-Host "Opening Amiyo Studio directly in browser..." -ForegroundColor Cyan
     Start-Process (Join-Path $targetDir "index.html")
 }
+
