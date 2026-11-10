@@ -87,9 +87,14 @@ check('build/icon.ico and build/icon.png exist', () => {
          fs.existsSync(path.join(rootDir, 'build', 'icon.png'));
 });
 
-check('Terminal installers (install.ps1, install.sh) exist', () => {
+check('Terminal installers and version tools exist', () => {
   return fs.existsSync(path.join(rootDir, 'install.ps1')) &&
-         fs.existsSync(path.join(rootDir, 'install.sh'));
+         fs.existsSync(path.join(rootDir, 'install.sh')) &&
+         fs.existsSync(path.join(rootDir, 'install.cmd')) &&
+         fs.existsSync(path.join(rootDir, 'version.ps1')) &&
+         fs.existsSync(path.join(rootDir, 'version.cmd')) &&
+         fs.existsSync(path.join(rootDir, 'bin', 'amiyo.cmd')) &&
+         fs.existsSync(path.join(rootDir, 'bin', 'amiyo.ps1'));
 });
 
 console.log('\n2. Verifying JavaScript modules...');
