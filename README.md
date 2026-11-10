@@ -149,17 +149,19 @@ irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | ie
 curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
 ```
 
-### Option 3: Manual Clone & Local Server
+### Option 3: Global Terminal Command (`amiyo-studio`)
+Install globally once to run Amiyo Studio anytime from anywhere:
 ```bash
-# Clone the repository
-git clone https://github.com/A2004-a/amiyo-studio.git
-cd amiyo-studio
+npm install -g github:A2004-a/amiyo-studio
+amiyo-studio
+```
 
-# Start the high-speed local server & open browser
+### Option 4: Local Server (When inside project directory)
+```bash
 npm start
 ```
 
-### Option 4: Direct Double-Click (No Installation Required)
+### Option 5: Direct Double-Click (No Installation Required)
 Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `editor.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
 
 ---

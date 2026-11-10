@@ -89,7 +89,11 @@ function openBrowser(url) {
   } else {
     cmd = `xdg-open "${url}"`;
   }
-  exec(cmd, () => {});
+  exec(cmd, (err) => {
+    if (err && platform === 'win32') {
+      exec(`explorer "${url}"`, () => {});
+    }
+  });
 }
 
 function startServer(initialPort) {

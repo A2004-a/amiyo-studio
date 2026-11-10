@@ -1,0 +1,5 @@
+android/
+build/
+.github/
+dist/
+*.log
