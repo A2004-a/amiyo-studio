@@ -5,6 +5,7 @@
   "main": "main.js",
   "browser": "index.html",
   "bin": {
+    "amiyo": "./bin/cli.js",
     "amiyo-studio": "./bin/cli.js"
   },
   "scripts": {

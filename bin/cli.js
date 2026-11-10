@@ -26,8 +26,8 @@ for (let i = 0; i < args.length; i++) {
     port = parseInt(args[++i], 10) || 3000;
   } else if (arg === '--no-open') {
     autoOpen = false;
-  } else if (arg === '-v' || arg === '--version') {
-    console.log(`v${pkg.version}`);
+  } else if (arg === '-v' || arg === '--version' || arg === 'version') {
+    console.log(`Amiyo Studio v${pkg.version}`);
     process.exit(0);
   } else if (arg === '-h' || arg === '--help') {
     console.log(`

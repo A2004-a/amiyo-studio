@@ -129,40 +129,65 @@ amiyo-studio/
 
 ---
 
-## 🚀 Quick Start & Terminal Options
+## 🚀 Terminal Commands & Windows Quick Start
 
-### Option 1: Instant Terminal Run (Zero Download / Setup)
-Launch directly from GitHub into your browser with a single command:
-```bash
-npx github:A2004-a/amiyo-studio
+### 🔍 Check Version in Terminal
+Check the latest version and your local installation status directly from your terminal:
+
+**Windows PowerShell:**
+```powershell
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.ps1 | iex
 ```
 
-### Option 2: 1-Line Terminal Download & Launch
+**Windows Command Prompt (CMD):**
+```cmd
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.cmd -o "%TEMP%\v.cmd" && call "%TEMP%\v.cmd"
+```
 
-**Windows (PowerShell):**
+**If already installed, just type:**
+```bash
+amiyo --version
+```
+
+---
+
+### ⚡ Smart 1-Line Launcher (Opens Directly if Installed; Downloads if Not)
+Run this single command in your terminal. If Amiyo Studio is **already downloaded**, it skips downloading and **directly opens** instantly. If not installed yet, it automatically downloads the latest release (`v0.0.1`), configures the global `amiyo` command, and launches.
+
+**Windows PowerShell:**
 ```powershell
 irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex
 ```
 
-**macOS / Linux (Terminal):**
+**Windows Command Prompt (CMD):**
+```cmd
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.cmd -o "%TEMP%\amiyo.cmd" && call "%TEMP%\amiyo.cmd"
+```
+
+**macOS / Linux (Bash):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
 ```
 
-### Option 3: Global Terminal Command (`amiyo-studio`)
-Install globally once to run Amiyo Studio anytime from anywhere:
+---
+
+### 🎬 Everyday Terminal Command (`amiyo`)
+Once installed (or inside the workspace), launch Amiyo Studio anytime from **any terminal window** (CMD, PowerShell, Git Bash):
+
 ```bash
-npm install -g github:A2004-a/amiyo-studio
-amiyo-studio
+amiyo                 # Directly open Amiyo Studio
+amiyo --version       # Show installed version
+amiyo --help          # View all CLI options
+amiyo -p 8080         # Start local server on custom port
 ```
 
-### Option 4: Local Server (When inside project directory)
-```bash
-npm start
-```
+---
 
-### Option 5: Direct Double-Click (No Installation Required)
-Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `editor.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
+### 🌐 Instant Browser Run (No Installation Required)
+Launch directly from GitHub into your browser without downloading files:
+```bash
+npx github:A2004-a/amiyo-studio
+```
 
 ---
 
