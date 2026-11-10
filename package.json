@@ -1,0 +1,26 @@
+{
+  "name": "amiyo-studio",
+  "version": "1.0.0",
+  "description": "Private, high-performance in-browser multi-track video and audio editor.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx serve -l 3000 .",
+    "validate": "node scripts/validate.js",
+    "test": "node scripts/validate.js",
+    "build": "node scripts/build.js"
+  },
+  "keywords": [
+    "video-editor",
+    "audio-editor",
+    "webaudio",
+    "webcodecs",
+    "canvas",
+    "timeline",
+    "pwa",
+    "browser-video-editor",
+    "offline-first"
+  ],
+  "author": "amiyo garai",
+  "license": "MIT"
+}
