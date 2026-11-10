@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Private, high-performance in-browser multi-track video and audio editor.",
   "main": "index.html",
+  "bin": {
+    "amiyo-studio": "./bin/cli.js"
+  },
   "scripts": {
-    "start": "npx serve -l 3000 .",
-    "dev": "npx serve -l 3000 .",
+    "start": "node bin/cli.js",
+    "dev": "node bin/cli.js",
     "validate": "node scripts/validate.js",
     "test": "node scripts/validate.js",
     "build": "node scripts/build.js"

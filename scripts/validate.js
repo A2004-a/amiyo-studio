@@ -66,6 +66,19 @@ check('sw.js exists and is syntactically valid', () => {
   return true;
 });
 
+check('bin/cli.js exists and is syntactically valid', () => {
+  const p = path.join(rootDir, 'bin', 'cli.js');
+  if (!fs.existsSync(p)) return false;
+  const code = fs.readFileSync(p, 'utf8');
+  new vm.Script(code);
+  return true;
+});
+
+check('Terminal installers (install.ps1, install.sh) exist', () => {
+  return fs.existsSync(path.join(rootDir, 'install.ps1')) &&
+         fs.existsSync(path.join(rootDir, 'install.sh'));
+});
+
 console.log('\n2. Verifying JavaScript modules...');
 const jsDir = path.join(rootDir, 'js');
 const expectedModules = [

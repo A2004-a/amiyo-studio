@@ -67,11 +67,16 @@ amiyo-studio/
 ├── index.html                   # Primary application entry point (GitHub Pages ready)
 ├── editor.html                  # Standalone video editor entry point
 ├── sw.js                        # Offline Service Worker cache engine
+├── install.ps1                  # Windows 1-line PowerShell installer & launcher
+├── install.sh                   # macOS / Linux 1-line Bash installer & launcher
 ├── manifest.webmanifest         # PWA Web App Manifest
-├── package.json                 # Project configuration & npm scripts
+├── package.json                 # Project configuration, CLI bin & scripts
 ├── LICENSE                      # MIT Open Source License
 ├── README.md                    # Project documentation
 ├── .gitignore                   # Standard gitignore (excludes backups & temp files)
+│
+├── bin/
+│   └── cli.js                   # Zero-dependency CLI web server & browser launcher
 │
 ├── .github/
 │   └── workflows/
@@ -107,26 +112,38 @@ amiyo-studio/
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Terminal Options
 
-### Method 1: Direct Double-Click (No Installation Required)
-Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `editor.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
+### Option 1: Instant Terminal Run (Zero Download / Setup)
+Launch directly from GitHub into your browser with a single command:
+```bash
+npx github:A2004-a/amiyo-studio
+```
 
-### Method 2: Local HTTP Server (Recommended)
-Running through a local web server enables Service Worker registration and PWA installation:
+### Option 2: 1-Line Terminal Download & Launch
 
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex
+```
+
+**macOS / Linux (Terminal):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
+```
+
+### Option 3: Manual Clone & Local Server
 ```bash
 # Clone the repository
 git clone https://github.com/A2004-a/amiyo-studio.git
 cd amiyo-studio
 
-# Start dev server (requires Node.js)
+# Start the high-speed local server & open browser
 npm start
-# or:
-npx serve -l 3000 .
 ```
 
-Open `http://localhost:3000` in Google Chrome, Microsoft Edge, Firefox, or Safari.
+### Option 4: Direct Double-Click (No Installation Required)
+Because all modules use standard relative script paths and standard browser APIs, you can simply **double-click** `index.html` (or `editor.html`) in Windows Explorer / Finder to run it directly in your browser (`file:///` protocol supported).
 
 ---
 
