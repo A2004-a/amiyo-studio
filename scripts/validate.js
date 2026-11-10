@@ -58,6 +58,14 @@ check('assets/icons/icon-64.png and icon-180.png exist', () => {
          fs.existsSync(path.join(rootDir, 'assets', 'icons', 'icon-180.png'));
 });
 
+check('sw.js exists and is syntactically valid', () => {
+  const p = path.join(rootDir, 'sw.js');
+  if (!fs.existsSync(p)) return false;
+  const code = fs.readFileSync(p, 'utf8');
+  new vm.Script(code);
+  return true;
+});
+
 console.log('\n2. Verifying JavaScript modules...');
 const jsDir = path.join(rootDir, 'js');
 const expectedModules = [

@@ -66,6 +66,7 @@ Originally bundled into a single massive 9.2 MB file containing 93,700+ lines, t
 amiyo-studio/
 ├── index.html                   # Primary application entry point (GitHub Pages ready)
 ├── editor.html                  # Standalone video editor entry point
+├── sw.js                        # Offline Service Worker cache engine
 ├── manifest.webmanifest         # PWA Web App Manifest
 ├── package.json                 # Project configuration & npm scripts
 ├── LICENSE                      # MIT Open Source License

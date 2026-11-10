@@ -1213,7 +1213,6 @@ html.amiyo-bigtrk .track-label{column-gap:4px!important;row-gap:4px!important}
 #tracks .clip,
 #tracks .clip * {
   -webkit-user-drag: none;
-  user-drag: none;
   -webkit-user-select: none;
   user-select: none;
 }
