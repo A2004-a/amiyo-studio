@@ -1,8 +1,5 @@
-﻿# Amiyo Studio - Windows 1-Line Installer & Launcher
-# Usage: irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex
-
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "      🎬 Launching Amiyo Studio           " -ForegroundColor Yellow
+Write-Host "      Launching Amiyo Studio              " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # Check if we are already inside the amiyo-studio repository
@@ -34,7 +31,7 @@ if ((Test-Path "index.html") -and (Test-Path "bin\cli.js")) {
     }
 }
 
-Write-Host "✓ Amiyo Studio ready!" -ForegroundColor Green
+Write-Host "Amiyo Studio ready!" -ForegroundColor Green
 
 # Resolve launcher files
 $entryHtml = Join-Path (Get-Location).Path "index.html"
