@@ -54,6 +54,9 @@ powershell -NoProfile -Command "Expand-Archive -Path '%ZIP_TEMP%' -DestinationPa
 set "TARGET_DIR=%STANDARD_DIR%"
 
 :setup_cmd
+if exist "%APPDATA%\npm" (
+  copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%APPDATA%\npm\amiyo.cmd" >nul 2>&1
+)
 if exist "%LOCALAPPDATA%\Microsoft\WindowsApps" (
   copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%LOCALAPPDATA%\Microsoft\WindowsApps\amiyo.cmd" >nul 2>&1
 )
