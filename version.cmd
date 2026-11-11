@@ -6,6 +6,16 @@ echo          Amiyo Studio Version Check
 echo ==========================================
 echo Latest Release: v0.0.1
 
+if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
+  set "FOUND_DIR=%LOCALAPPDATA%\Programs\amiyo-studio"
+  goto :installed
+)
+
+if exist "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" (
+  set "FOUND_DIR=%ProgramFiles%\Amiyo Studio"
+  goto :installed
+)
+
 if exist "index.html" if exist "bin\cli.js" (
   set "FOUND_DIR=%CD%"
   goto :installed

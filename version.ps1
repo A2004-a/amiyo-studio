@@ -5,17 +5,28 @@ Write-Host "         Amiyo Studio Version Check       " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "Latest Release: v$appVersion" -ForegroundColor Green
 
-$installDir = Join-Path $env:LOCALAPPDATA "AmiyoStudio"
-$userHomeDir = Join-Path $env:USERPROFILE "amiyo-studio"
-$currentDir = (Get-Location).Path
+$searchLocations = @(
+    (Get-Location).Path,
+    (Join-Path $env:LOCALAPPDATA "Programs\amiyo-studio"),
+    (Join-Path $env:LOCALAPPDATA "Programs\Amiyo Studio"),
+    "C:\Program Files\Amiyo Studio",
+    "C:\Program Files (x86)\Amiyo Studio",
+    (Join-Path $env:LOCALAPPDATA "AmiyoStudio"),
+    (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2"),
+    (Join-Path $env:USERPROFILE "amiyo-studio")
+)
 
 $foundPath = $null
-if ((Test-Path (Join-Path $currentDir "index.html")) -and (Test-Path (Join-Path $currentDir "bin\cli.js"))) {
-    $foundPath = $currentDir
-} elseif (Test-Path (Join-Path $installDir "index.html")) {
-    $foundPath = $installDir
-} elseif (Test-Path (Join-Path $userHomeDir "index.html")) {
-    $foundPath = $userHomeDir
+foreach ($loc in $searchLocations) {
+    if (Test-Path $loc) {
+        if ((Test-Path (Join-Path $loc "Amiyo Studio.exe")) -or (Test-Path (Join-Path $loc "amiyo-studio.exe"))) {
+            $foundPath = $loc
+            break
+        } elseif (Test-Path (Join-Path $loc "index.html")) {
+            $foundPath = $loc
+            break
+        }
+    }
 }
 
 if ($foundPath) {
@@ -28,6 +39,6 @@ if ($foundPath) {
     Write-Host "Installed: NO (Not downloaded yet)" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "To download and open immediately, run:" -ForegroundColor White
-    Write-Host "  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex" -ForegroundColor Cyan
+    Write-Host "  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex" -ForegroundColor Cyan
 }
 

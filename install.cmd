@@ -21,17 +21,32 @@ if /i "%~1"=="version" (
 
 set "TARGET_DIR=%CD%"
 set "STANDARD_DIR=%LOCALAPPDATA%\AmiyoStudio"
+set "NATIVE_EXE="
+
+if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
+  set "NATIVE_EXE=%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe"
+  set "TARGET_DIR=%LOCALAPPDATA%\Programs\amiyo-studio"
+  echo [OK] Detected desktop installation at: !TARGET_DIR!
+  goto :setup_cmd
+)
+
+if exist "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" (
+  set "NATIVE_EXE=%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe"
+  set "TARGET_DIR=%ProgramFiles%\Amiyo Studio"
+  echo [OK] Detected desktop installation at: !TARGET_DIR!
+  goto :setup_cmd
+)
 
 if exist "%TARGET_DIR%\index.html" if exist "%TARGET_DIR%\bin\cli.js" (
   echo [OK] Detected active workspace: %TARGET_DIR%
-  goto :launch
+  goto :setup_cmd
 )
 
 if exist "%STANDARD_DIR%\index.html" (
   set "TARGET_DIR=%STANDARD_DIR%"
   echo [OK] Amiyo Studio is already installed at: !TARGET_DIR!
   echo [OK] Skipping download - directly opening installed app.
-  goto :launch
+  goto :setup_cmd
 )
 
 rem Not installed -> Download now
@@ -63,6 +78,10 @@ if exist "%LOCALAPPDATA%\Microsoft\WindowsApps" (
 
 :launch
 echo [-^>] Directly opening Amiyo Studio...
+if defined NATIVE_EXE (
+  start "" "!NATIVE_EXE!"
+  exit /b 0
+)
 where node >nul 2>&1
 if %ERRORLEVEL% equ 0 (
   if exist "%TARGET_DIR%\bin\cli.js" (

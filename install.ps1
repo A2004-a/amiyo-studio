@@ -206,7 +206,7 @@ try {
     }
 
     # Layer 6: PowerShell Profiles
-    $profileSnippet = "`r`n# Amiyo Studio CLI Launcher`r`nfunction global:amiyo { & `"$amiyoPs1Path`" @args }`r`n"
+    $profileSnippet = "`r`n# Amiyo Studio CLI Launcher`r`nfunction global:amiyo { if (`$args -contains '--version' -or `$args -contains '-v' -or `$args -contains 'version') { Write-Host 'Amiyo Studio v$appVersion' -ForegroundColor Green; return }; if (Test-Path `"$amiyoPs1Path`") { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$amiyoPs1Path`" @args } else { & `"$amiyoCmdPath`" @args } }`r`n"
     $profilePaths = @(
         "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1",
         "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
@@ -220,12 +220,24 @@ try {
             }
         } catch {}
     }
+
+    # Set execution policy for CurrentUser so user scripts run without admin prompts
+    try {
+        $curPol = Get-ExecutionPolicy -Scope CurrentUser
+        if ($curPol -eq "Restricted" -or $curPol -eq "Undefined") {
+            Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue
+        }
+    } catch {}
 } catch {
     # Non-fatal registration
 }
 
 # Define function in current session for instant terminal use
 function global:amiyo {
+    if ($args -contains "--version" -or $args -contains "-v" -or $args -contains "version") {
+        Write-Host "Amiyo Studio v$appVersion" -ForegroundColor Green
+        return
+    }
     & $amiyoPs1Path @args
 }
 

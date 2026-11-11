@@ -131,33 +131,16 @@ amiyo-studio/
 
 ## 🚀 Terminal Commands & Windows Quick Start
 
-### 🔍 Check Version in Terminal
-Check the latest version and your local installation status directly from your terminal:
+### ⚡ 1-Line Setup & Smart Launcher
+Run this single command in **Windows PowerShell**. It automatically detects if Amiyo Studio is already installed (desktop app or portable), sets up the global `amiyo` command across your system, and launches the app:
 
-**Windows PowerShell:**
 ```powershell
-irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.ps1 | iex
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex
 ```
 
-**Windows Command Prompt (CMD):**
-```cmd
-curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.cmd -o "%TEMP%\v.cmd" && call "%TEMP%\v.cmd"
-```
-
-**If already installed, just type:**
-```bash
-amiyo --version
-```
-
----
-
-### ⚡ Smart 1-Line Launcher (Opens Directly if Installed; Downloads if Not)
-Run this single command in your terminal. If Amiyo Studio is **already downloaded**, it skips downloading and **directly opens** instantly. If not installed yet, it automatically downloads the latest release (`v0.0.1`), configures the global `amiyo` command, and launches.
-
-**Windows PowerShell:**
-```powershell
-irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1 | iex
-```
+> [!TIP]
+> - **Already Installed?** Skips downloading and **directly opens** Amiyo Studio in under a second!
+> - **New Computer?** Automatically downloads the latest `v0.0.1` release, configures the terminal command, and launches.
 
 **Windows Command Prompt (CMD):**
 ```cmd
@@ -171,14 +154,29 @@ curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.s
 
 ---
 
-### 🎬 Everyday Terminal Command (`amiyo`)
-Once installed (or inside the workspace), launch Amiyo Studio anytime from **any terminal window** (CMD, PowerShell, Git Bash):
+### 🎬 Everyday Terminal Commands (`amiyo`)
+Once set up, launch Amiyo Studio anytime from **any terminal window** (PowerShell, CMD, Git Bash):
 
 ```bash
 amiyo                 # Directly open Amiyo Studio
-amiyo --version       # Show installed version
+amiyo --version       # Show installed version (outputs: Amiyo Studio v0.0.1)
 amiyo --help          # View all CLI options
 amiyo -p 8080         # Start local server on custom port
+```
+
+---
+
+### 🔍 Check Version Remotely (Without Installing)
+Check the latest release version and your local installation status directly:
+
+**Windows PowerShell:**
+```powershell
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.ps1?v=0.0.1 | iex
+```
+
+**Windows Command Prompt (CMD):**
+```cmd
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.cmd -o "%TEMP%\v.cmd" && call "%TEMP%\v.cmd"
 ```
 
 ---
