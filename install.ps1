@@ -100,51 +100,68 @@ $amiyoCmdPath = Join-Path $binDir "amiyo.cmd"
 $amiyoPs1Path = Join-Path $binDir "amiyo.ps1"
 
 # Generate amiyo.cmd
-$cmdLines = @(
-    "@echo off",
-    "if /i `"%~1`"==`"--version`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-    "if /i `"%~1`"==`"-v`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-    "if /i `"%~1`"==`"version`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-    "if /i `"%~1`"==`"-version`" (echo Amiyo Studio v$appVersion & exit /b 0)",
-    "if /i `"%~1`"==`"/v`" (echo Amiyo Studio v$appVersion & exit /b 0)"
-)
-
+$cmdContent = @"
+@echo off
+if /i "%~1"=="--version" (echo Amiyo Studio v$appVersion & exit /b 0)
+if /i "%~1"=="-v" (echo Amiyo Studio v$appVersion & exit /b 0)
+if /i "%~1"=="version" (echo Amiyo Studio v$appVersion & exit /b 0)
+if /i "%~1"=="-version" (echo Amiyo Studio v$appVersion & exit /b 0)
+if /i "%~1"=="/v" (echo Amiyo Studio v$appVersion & exit /b 0)
+if /i "%~1"=="--help" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
+if /i "%~1"=="-h" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
+if /i "%~1"=="help" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
+"@
 if ($nativeExe) {
-    $cmdLines += "start `"`" `"$nativeExe`" %*"
-    $cmdLines += "exit /b 0"
+    $cmdContent += "`r`nstart `"`" `"$nativeExe`" %*`r`nexit /b 0`r`n"
 } else {
-    $cmdLines += "where node >nul 2>&1"
-    $cmdLines += "if %ERRORLEVEL% equ 0 ("
-    $cmdLines += "  if exist `"$targetDir\bin\cli.js`" ("
-    $cmdLines += "    node `"$targetDir\bin\cli.js`" %*"
-    $cmdLines += "    exit /b %ERRORLEVEL%"
-    $cmdLines += "  )"
-    $cmdLines += ")"
-    $cmdLines += "start `"`" `"$targetDir\index.html`""
-    $cmdLines += "exit /b 0"
+    $cmdContent += @"
+
+where node >nul 2>&1
+if %ERRORLEVEL% equ 0 (
+  if exist "$targetDir\bin\cli.js" (
+    node "$targetDir\bin\cli.js" %*
+    exit /b %ERRORLEVEL%
+  )
+)
+start "" "$targetDir\index.html"
+exit /b 0
+"@
 }
-[System.IO.File]::WriteAllLines($amiyoCmdPath, $cmdLines, [System.Text.Encoding]::ASCII)
+[System.IO.File]::WriteAllText($amiyoCmdPath, $cmdContent, [System.Text.Encoding]::ASCII)
 
 # Generate amiyo.ps1
-$ps1Lines = @(
-    "`$appVersion = `"$appVersion`"",
-    "if (`$args -contains `"--version`" -or `$args -contains `"-v`" -or `$args -contains `"version`" -or `$args -contains `"-version`" -or `$args -contains `"/v`") {",
-    "    Write-Host `"Amiyo Studio v`$appVersion`" -ForegroundColor Green",
-    "    return",
-    "}"
-)
-if ($nativeExe) {
-    $ps1Lines += "Start-Process `"$nativeExe`" -ArgumentList `$args"
-} else {
-    $ps1Lines += "`$cli = `"$targetDir\bin\cli.js`""
-    $ps1Lines += "`$html = `"$targetDir\index.html`""
-    $ps1Lines += "if ((Get-Command node -ErrorAction SilentlyContinue) -and (Test-Path `$cli)) {",
-    $ps1Lines += "    node `$cli @args",
-    $ps1Lines += "} else {",
-    $ps1Lines += "    Start-Process `$html",
-    $ps1Lines += "}"
+$ps1Content = @"
+`$appVersion = "$appVersion"
+if (`$args -contains "--version" -or `$args -contains "-v" -or `$args -contains "version" -or `$args -contains "-version" -or `$args -contains "/v") {
+    Write-Host "Amiyo Studio v`$appVersion" -ForegroundColor Green
+    return
 }
-[System.IO.File]::WriteAllLines($amiyoPs1Path, $ps1Lines, [System.Text.Encoding]::ASCII)
+if (`$args -contains "--help" -or `$args -contains "-h" -or `$args -contains "help" -or `$args -contains "-help" -or `$args -contains "/?") {
+    Write-Host "Amiyo Studio CLI v`$appVersion" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Usage:"
+    Write-Host "  amiyo                 Directly open Amiyo Studio"
+    Write-Host "  amiyo --version, -v   Show installed version"
+    Write-Host "  amiyo --help, -h      Show this help message"
+    Write-Host "  amiyo -p 8080         Start local server on port 8080"
+    return
+}
+"@
+if ($nativeExe) {
+    $ps1Content += "`r`nStart-Process `"$nativeExe`" -ArgumentList `$args`r`n"
+} else {
+    $ps1Content += @"
+
+`$cli = "$targetDir\bin\cli.js"
+`$html = "$targetDir\index.html"
+if ((Get-Command node -ErrorAction SilentlyContinue) -and (Test-Path `$cli)) {
+    node `$cli @args
+} else {
+    Start-Process `$html
+}
+"@
+}
+[System.IO.File]::WriteAllText($amiyoPs1Path, $ps1Content, [System.Text.Encoding]::ASCII)
 
 # Register across Windows system locations
 try {
