@@ -1,18 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem Resolve application root directory
-set "APP_DIR=%~dp0.."
-if not exist "%APP_DIR%\index.html" (
-  if exist "%LOCALAPPDATA%\AmiyoStudio\index.html" (
-    set "APP_DIR=%LOCALAPPDATA%\AmiyoStudio"
-  ) else if exist "%USERPROFILE%\Desktop\amiyo studio 2\index.html" (
-    set "APP_DIR=%USERPROFILE%\Desktop\amiyo studio 2"
-  ) else if exist "%USERPROFILE%\amiyo-studio\index.html" (
-    set "APP_DIR=%USERPROFILE%\amiyo-studio"
-  )
-)
-
 rem Check version requests
 if /i "%~1"=="--version" goto :show_version
 if /i "%~1"=="-v" goto :show_version
@@ -26,6 +14,32 @@ if /i "%~1"=="-h" goto :show_help
 if /i "%~1"=="help" goto :show_help
 if /i "%~1"=="-help" goto :show_help
 if /i "%~1"=="/?" goto :show_help
+
+rem Check native desktop app installations
+if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
+  start "" "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" %*
+  exit /b 0
+)
+if exist "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" (
+  start "" "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" %*
+  exit /b 0
+)
+if exist "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" (
+  start "" "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" %*
+  exit /b 0
+)
+
+rem Resolve application root directory
+set "APP_DIR=%~dp0.."
+if not exist "%APP_DIR%\index.html" (
+  if exist "%LOCALAPPDATA%\AmiyoStudio\index.html" (
+    set "APP_DIR=%LOCALAPPDATA%\AmiyoStudio"
+  ) else if exist "%USERPROFILE%\Desktop\amiyo studio 2\index.html" (
+    set "APP_DIR=%USERPROFILE%\Desktop\amiyo studio 2"
+  ) else if exist "%USERPROFILE%\amiyo-studio\index.html" (
+    set "APP_DIR=%USERPROFILE%\amiyo-studio"
+  )
+)
 
 rem If Node.js is installed, use cli.js for full features
 where node >nul 2>&1
