@@ -54,3 +54,24 @@ This document tracks all identified bugs, root causes, applied remediations, and
 - **Fix Applied**: Appended query string version tag `?v=0.0.1` to all one-line installer URLs in `README.md` and `version.ps1` to force immediate cache bypass.
 - **Verification**: HTTP requests with query strings confirmed to return fresh commit content.
 - **Status**: ✅ **VERIFIED & FIXED** (Commit `906fe1b`).
+
+---
+
+### Bug #006: PowerShell Array Append Trailing Comma Causing Assignment Expression Error
+- **Severity**: P0 (Installation Abort on Friend's Laptop)
+- **Component**: `install.ps1` (Lines 141–144)
+- **Root Cause**: During generation of `amiyo.ps1`, lines 141-144 had accidental trailing commas on array append assignments (`$ps1Lines += "... ",`), causing PowerShell to throw `The assignment expression is not valid. The input to an assignment operator must be an object that is able to accept assignments`. Because `install.ps1` aborted before generating `amiyo.cmd` or writing to PATH, subsequent commands (`amiyo --version` or `amiyo`) threw `CommandNotFoundException: The term 'amiyo' is not recognized`.
+- **Fix Applied**: Completely replaced array append statements with PowerShell multi-line raw here-strings (`@" ... "@`), eliminating syntax ambiguity. Added multi-tier download fallback supporting TLS 1.2, `Invoke-WebRequest -UseBasicParsing`, `System.Net.WebClient`, and `curl.exe`.
+- **Verification**: PowerShell AST syntax check `node scripts/verify-scripts.js` passes with 0 syntax errors across Windows PowerShell 5.1 and pwsh 7+.
+- **Status**: ✅ **VERIFIED & FIXED** (Commit `be86c17` & current).
+
+---
+
+### Bug #007: POSIX Shell Wrapper `gradlew` CRLF Line Endings
+- **Severity**: P1 (Android Build / IDE Warning)
+- **Component**: `android/gradlew`, `.gitattributes`
+- **Root Cause**: Windows git checkouts converted the Unix shell script `android/gradlew` to CRLF (`\r\n`), causing VS Code warnings and potential `/bin/sh^M: bad interpreter` errors on Unix environments.
+- **Fix Applied**: Explicitly added `gradlew text eol=lf` to `.gitattributes` and converted `android/gradlew` to native LF (`\n`) line endings.
+- **Verification**: Verified byte-level LF endings with `node -e "const fs = require('fs'); console.log(!fs.readFileSync('android/gradlew').includes(Buffer.from('\r\n')));"`.
+- **Status**: ✅ **VERIFIED & FIXED** (Commit current).
+

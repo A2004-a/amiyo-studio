@@ -50,6 +50,12 @@
 4. **Command Prompt Registry PATH Persistence**:
    - *Bug*: CMD setups without existing npm global paths failed to find `amiyo`.
    - *Fix*: Added `%USERPROFILE%\bin` fallback and Windows User PATH registry updates in `install.cmd`.
+5. **PowerShell Array Append Trailing Comma Assignment Error**:
+   - *Bug*: `install.ps1` had accidental trailing commas on array appends causing `The assignment expression is not valid` at line 141 and preventing `amiyo` CLI registration on fresh installations.
+   - *Fix*: Replaced array concatenation with clean multi-line here-strings (`@" ... "@`) and verified 0 syntax errors via PowerShell AST parser. Added multi-tier download fallback (TLS 1.2, `UseBasicParsing`, `curl.exe`).
+6. **POSIX Shell Wrapper `gradlew` CRLF Line Endings**:
+   - *Bug*: Windows git checkout converted `android/gradlew` to CRLF, triggering editor warnings and shell interpreter issues.
+   - *Fix*: Configured `.gitattributes` with `gradlew text eol=lf` and converted `android/gradlew` to LF.
 
 ### Active Issues & Technical Limitations
 1. **WebCodecs Browser Support**:

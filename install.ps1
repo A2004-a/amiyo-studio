@@ -2,6 +2,11 @@ $appVersion = "0.0.1"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
 
+# Ensure TLS 1.2+ for reliable HTTPS communication across all PowerShell versions
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+} catch {}
+
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "          Amiyo Studio v$appVersion       " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -59,15 +64,24 @@ if ($targetDir) {
     Write-Host "[INFO] Downloading and installing Amiyo Studio v$appVersion..." -ForegroundColor Cyan
 
     $targetDir = Join-Path $env:LOCALAPPDATA "AmiyoStudio"
-    if (-not (Test-Path $targetDir)) {
-        New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
-    }
 
     $downloadSuccess = $false
     if (Get-Command git -ErrorAction SilentlyContinue) {
         try {
-            git clone --depth 1 "https://github.com/$githubRepo.git" $targetDir
-            $downloadSuccess = $true
+            if (Test-Path (Join-Path $targetDir ".git")) {
+                Push-Location $targetDir
+                git pull --rebase origin main 2>&1 | Out-Null
+                Pop-Location
+                $downloadSuccess = (Test-Path (Join-Path $targetDir "index.html"))
+            } elseif (Test-Path (Join-Path $targetDir "index.html")) {
+                $downloadSuccess = $true
+            } else {
+                if (Test-Path $targetDir) {
+                    Remove-Item $targetDir -Recurse -Force -ErrorAction SilentlyContinue
+                }
+                git clone --depth 1 "https://github.com/$githubRepo.git" $targetDir 2>&1 | Out-Null
+                $downloadSuccess = (Test-Path (Join-Path $targetDir "index.html"))
+            }
         } catch {
             $downloadSuccess = $false
         }
@@ -75,16 +89,36 @@ if ($targetDir) {
 
     if (-not $downloadSuccess) {
         $tempZip = Join-Path $env:TEMP "amiyo-studio-main.zip"
-        Invoke-WebRequest -Uri $zipUrl -OutFile $tempZip
-        $tempExtract = Join-Path $env:TEMP "amiyo_extract_temp"
-        if (Test-Path $tempExtract) {
-            Remove-Item $tempExtract -Recurse -Force
+        $downloaded = $false
+        try {
+            Invoke-WebRequest -Uri $zipUrl -OutFile $tempZip -UseBasicParsing -ErrorAction Stop
+            $downloaded = $true
+        } catch {
+            try {
+                (New-Object System.Net.WebClient).DownloadFile($zipUrl, $tempZip)
+                $downloaded = $true
+            } catch {
+                if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
+                    & curl.exe -fsSL $zipUrl -o $tempZip
+                    if (Test-Path $tempZip) { $downloaded = $true }
+                }
+            }
         }
-        Expand-Archive -Path $tempZip -DestinationPath $tempExtract -Force
-        $extractedFolder = Join-Path $tempExtract "amiyo-studio-main"
-        Copy-Item -Path "$extractedFolder\*" -Destination $targetDir -Recurse -Force
-        Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
-        Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+
+        if ($downloaded -and (Test-Path $tempZip)) {
+            $tempExtract = Join-Path $env:TEMP "amiyo_extract_temp"
+            if (Test-Path $tempExtract) {
+                Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+            }
+            Expand-Archive -Path $tempZip -DestinationPath $tempExtract -Force
+            $extractedFolder = Join-Path $tempExtract "amiyo-studio-main"
+            if (-not (Test-Path $targetDir)) {
+                New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+            }
+            Copy-Item -Path "$extractedFolder\*" -Destination $targetDir -Recurse -Force
+            Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
+            Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
 
     Write-Host "[OK] Installation completed successfully!" -ForegroundColor Green

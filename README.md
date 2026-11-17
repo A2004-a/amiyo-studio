@@ -26,17 +26,59 @@ Originally bundled into a single massive 9.2 MB file containing 93,700+ lines, t
 
 ---
 
-## 📥 Desktop Downloads (Windows, Linux, macOS, Android)
+## 📦 Downloads & Installers (All Platforms — Step-by-Step)
 
-Download standalone native applications for your operating system:
+Choose your platform to download Amiyo Studio directly or install via a single terminal command:
 
-| Platform | Architecture | Package Type | Direct Download Link |
-| :--- | :--- | :--- | :--- |
-| **Windows** | **64-bit (x64)** | Installer `.exe` | [⬇️ **Download for Windows x64 (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-x64.exe) |
-| **Windows** | **32-bit (x32 / ia32)** | Installer `.exe` | [⬇️ **Download for Windows x32 (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-ia32.exe) |
-| **Linux** | **64-bit (x86_64)** | Portable `.AppImage` | [⬇️ **Download for Linux AppImage (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-linux-x86_64.AppImage) |
-| **macOS** | **Universal (Apple / Intel)** | Disk Image `.dmg` | [⬇️ **Download for macOS DMG (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-mac.dmg) |
-| **Android** | **Universal** | Mobile `.apk` | [⬇️ **Download for Android APK (v0.0.1)**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-android.apk) |
+### 1. 🪟 Windows (Windows 11, 10, 8.1, 7)
+- **64-bit Installer (x64)**: [⬇️ **Download Amiyo-Studio-win-x64.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-x64.exe)
+- **32-bit Installer (x86 / ia32)**: [⬇️ **Download Amiyo-Studio-win-ia32.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-ia32.exe)
+- **Portable ZIP (Zero Installation)**: [⬇️ **Download Amiyo-Studio-Source.zip**](https://github.com/A2004-a/amiyo-studio/archive/refs/heads/main.zip) *(Extract and double-click `index.html` to run instantly!)*
+- **⚡ 1-Line PowerShell Auto-Installer (Recommended)**:
+  ```powershell
+  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex
+  ```
+- **💻 1-Line Command Prompt (CMD)**:
+  ```cmd
+  curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.cmd -o "%TEMP%\amiyo.cmd" && call "%TEMP%\amiyo.cmd"
+  ```
+
+---
+
+### 2. 🍎 macOS (Apple Silicon M1/M2/M3 & Intel)
+- **Universal Disk Image (.dmg)**: [⬇️ **Download Amiyo-Studio-mac.dmg**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-mac.dmg)
+- **⚡ 1-Line Terminal (Bash/Zsh)**:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
+  ```
+
+---
+
+### 3. 🐧 Linux (Ubuntu, Debian, Fedora, Arch, etc.)
+- **Universal 64-bit (.AppImage)**: [⬇️ **Download Amiyo-Studio-linux-x86_64.AppImage**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-linux-x86_64.AppImage)
+- **⚡ 1-Line Terminal (Bash)**:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
+  ```
+
+---
+
+### 4. 📱 Android (Phones, Tablets & Foldables)
+- **Direct APK Package**: [⬇️ **Download Amiyo-Studio-android.apk**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-android.apk)
+- **Build from Source (Gradle 8.5 & AGP 8.2)**:
+  ```bash
+  cd android
+  ./gradlew assembleDebug
+  ```
+
+---
+
+### 5. 🌐 Web & Browser (Instant Run — No Download Needed)
+- **Run with NPX**:
+  ```bash
+  npx github:A2004-a/amiyo-studio
+  ```
+- **Open in Browser**: Open `index.html` in Chrome, Edge, Brave, or Firefox. Works 100% offline with zero dependencies!
 
 > [!TIP]
 > All current and historical versions can be viewed on the **[GitHub Releases Page](https://github.com/A2004-a/amiyo-studio/releases)**.
