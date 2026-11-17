@@ -7935,10 +7935,10 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(L))}catch(e){}}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 var ws,ct,gl,gr,gt,st=document.createElement('style');st.id='amiyo-pr2-s01-dyn';
 function apply(){
-  if(window.innerWidth<=1024){st.textContent='';return}
+  if(window.innerWidth<768){st.textContent='';return}
   var W=window.innerWidth,H=window.innerHeight;
-  L.l=clamp(L.l,180,Math.max(180,W*.4));L.r=clamp(L.r,240,Math.max(240,W*.45));
-  var avail=(ct&&ct.clientHeight)||H-100;L.t=clamp(L.t,170,Math.max(170,avail-190));
+  L.l=clamp(L.l,220,Math.max(220,W*.32));L.r=clamp(L.r,280,Math.max(280,W*.36));
+  var avail=(ct&&ct.clientHeight)||H-90;L.t=clamp(L.t,240,Math.max(240,avail-180));
   st.textContent='html body .app .workspace,html body .workspace{grid-template-columns:'+L.l+'px minmax(0,1fr) '+L.r+'px!important}'+
    'html body .app .workspace>.center,html body .app .center{grid-template-rows:minmax(150px,1fr) '+L.t+'px!important}';
   place();

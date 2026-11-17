@@ -3299,9 +3299,10 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
    bar.appendChild(b);btns.push(b)});
   var sp=document.createElement('span');sp.className='sp';bar.appendChild(sp);
   var st=document.createElement('span');st.className='st';st.id='pp5MenuSt';st.textContent='Amiyo Studio';bar.appendChild(st);
-  app.insertBefore(bar,app.firstChild);
-  function rowsFix(){var big=innerWidth>=900&&innerHeight>=560;
-   if(big){app.style.setProperty('grid-template-rows','26px 56px minmax(0,1fr) 30px','important');
+  // pp5Menu disabled to preserve clean single-row header and optimal workspace
+  bar.style.display="none";
+  function rowsFix(){var big=innerWidth>=768&&innerHeight>=500;
+   if(big){app.style.setProperty('grid-template-rows','56px minmax(0,1fr) auto','important');
     [['header.topbar',2],['#amiyoMain',3],['#oneBar',4]].forEach(function(a){var e=app.querySelector(':scope>'+a[0]);if(e)e.style.setProperty('grid-row',String(a[1]),'important')});bar.style.setProperty('grid-row','1','important')}
    else{app.style.removeProperty('grid-template-rows');['header.topbar','#amiyoMain','#oneBar'].forEach(function(a){var e=app.querySelector(':scope>'+a);if(e)e.style.removeProperty('grid-row')})}}
   rowsFix();addEventListener('resize',rowsFix);

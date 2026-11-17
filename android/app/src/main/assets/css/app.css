@@ -2796,7 +2796,7 @@ body.pr2-src #s2Sheet button,body.pr2-src #s2Sheet select{min-height:30px!import
 body.pr2-src #s2Sheet .s2row{display:flex;gap:6px}
 
 /* ==================== Style 195 id="amiyo-pr2-fix-mobile" ==================== */
-@media (max-width:1024px){
+@media (max-width:768px){
   html body .app .sidebar,html body .app #inspectorCol{position:absolute!important}
   html body .app .workspace{position:relative}
   html body .app .timeline{padding-left:0!important}
@@ -5278,4 +5278,13 @@ body .app {
   html body #timelineScroll {
     min-height: 130px !important;
   }
+}
+
+
+/* Hide redundant pp5Menu so header.topbar is the clean row as in intended design */
+#pp5Menu {
+  display: none !important;
+}
+.app {
+  grid-template-rows: 56px minmax(0, 1fr) auto !important;
 }
