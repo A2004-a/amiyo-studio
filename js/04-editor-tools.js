@@ -27,8 +27,14 @@ function draw(){var e=30,n=0,a=0;project.tracks.forEach(function(t){var tc=Strin
  if(s!==sig){var h="";project.tracks.forEach(function(t){t.clips.forEach(function(c){h+='<i class="c '+(c.type||t.type||"video")+'" style="left:'+(c.start/T*100).toFixed(3)+'%;width:'+(c.duration/T*100).toFixed(3)+'%"></i>'});});sig=s;m.innerHTML=h;m.appendChild(vw);m.appendChild(pp)}
  var w=Math.max(1,ts.clientWidth-labelW()),px=getTimelinePx(),l=ts.scrollLeft/px/T*100,wd=w/px/T*100;
  vw.style.left=Math.min(100,l)+"%";vw.style.width=Math.min(100-Math.min(100,l),wd)+"%";pp.style.left=Math.min(100,currentTime/T*100)+"%"}
-function go(e){var r=m.getBoundingClientRect(),T=total(),t=(e.clientX-r.left)/r.width*T,w=Math.max(1,ts.clientWidth-labelW());ts.scrollLeft=Math.max(0,t*getTimelinePx()-w/2);draw()}
-var dn=false;m.addEventListener("pointerdown",function(e){dn=true;m.setPointerCapture(e.pointerId);go(e)});m.addEventListener("pointermove",function(e){if(dn)go(e)});m.addEventListener("pointerup",function(){dn=false});
+var _mRect=null, _mRaf=0, _mLastE=null;
+function go(e){var r=_mRect||m.getBoundingClientRect(),T=total(),t=(e.clientX-r.left)/r.width*T,w=Math.max(1,ts.clientWidth-labelW());ts.scrollLeft=Math.max(0,t*getTimelinePx()-w/2);draw()}
+function flushM(){ _mRaf=0; if(_mLastE){ go(_mLastE); _mLastE=null; } }
+var dn=false;
+m.addEventListener("pointerdown",function(e){dn=true;try{_mRect=m.getBoundingClientRect();}catch(_){_mRect=null;}m.setPointerCapture(e.pointerId);go(e)});
+m.addEventListener("pointermove",function(e){if(dn){_mLastE=e;if(!_mRaf)_mRaf=requestAnimationFrame(flushM);}});
+function mEnd(){dn=false;_mRect=null;if(_mRaf){cancelAnimationFrame(_mRaf);_mRaf=0;}if(_mLastE){go(_mLastE);_mLastE=null;}}
+m.addEventListener("pointerup",mEnd);m.addEventListener("pointercancel",mEnd);
 var raf=0;ts.addEventListener("scroll",function(){if(raf)return;raf=requestAnimationFrame(function(){raf=0;draw()})},{passive:true});setInterval(function(){if(!document.hidden)draw()},800);draw();
 }catch(e){console.warn("v16",e)}})();
 
@@ -1763,7 +1769,7 @@ function sel(){ var f=getClip(); if(!f) return null; var c=f.clip; if(currentTim
 
 /* ---------- drawing the overlay ---------- */
 var raf=0, drag=null;
-function sched(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; place(); }); }
+function sched(){ if((typeof isPlaying!=="undefined"&&isPlaying)||window.__amiyoScrubbing||window.__amiyoExporting) return; if(raf) return; raf=requestAnimationFrame(function(){ raf=0; place(); }); }
 function place(){
   var s=on&&!isPlaying&&!window.__amiyoExporting?sel():null;
   if(!s){ ov.classList.remove("on"); return; }

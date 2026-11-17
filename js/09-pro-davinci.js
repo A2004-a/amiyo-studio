@@ -1437,8 +1437,23 @@ function init(){
 var G=window.AMIYO_DV_GRADE, MODES=[["parade","Parade"],["wave","Waveform"],["vector","Vector"],["hist","Histogram"],["quad","Quad Scopes"]], mode="parade", last=0, SW=280, SH=150;
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
 function open(){ var d=document.getElementById("dvGrade"); return !!d&&d.classList.contains("open")&&!!document.getElementById("dvScopeCv"); }
-function sample(){ if(typeof canvas==="undefined") return null; var W=canvas.width,H=canvas.height, sx=Math.max(1,Math.round(W/320)), sy=Math.max(1,Math.round(H/180)), img;
-  try{ img=canvas.getContext("2d").getImageData(0,0,W,H).data; }catch(e){ return null; } return {d:img,W:W,H:H,sx:sx,sy:sy}; }
+var _scopeScratch=null, _scopeCtx=null;
+function sample(){
+  if(typeof canvas==="undefined"||!canvas.width||!canvas.height) return null;
+  var targetW=320, targetH=180;
+  if(!_scopeScratch){
+    _scopeScratch=document.createElement("canvas");
+    _scopeScratch.width=targetW; _scopeScratch.height=targetH;
+    try{ _scopeCtx=_scopeScratch.getContext("2d",{willReadFrequently:true}); }catch(e){ _scopeCtx=_scopeScratch.getContext("2d"); }
+  }
+  try{
+    _scopeCtx.drawImage(canvas,0,0,targetW,targetH);
+    var img=_scopeCtx.getImageData(0,0,targetW,targetH).data;
+    return {d:img,W:targetW,H:targetH,sx:1,sy:1};
+  }catch(e){
+    return null;
+  }
+}
 function paint(){
   var cv=document.getElementById("dvScopeCv"); if(!cv) return; var s=sample(); if(!s) return; var c=cv.getContext("2d"), d=s.d, W=s.W, H=s.H, sx=s.sx, sy=s.sy;
   c.fillStyle="#0a0908"; c.fillRect(0,0,SW,SH);
@@ -9628,7 +9643,7 @@ function covered(r){ var m=$("modalBackdrop"); if(m&&m.style.display&&m.style.di
 function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
 function draw(){
   if(drag) return;
-  if(window.__amiyoExporting||window.__amExporting){ svg.style.display="none"; return; }   /* step 17: no measuring of the page while an export runs */
+  if(window.__amiyoExporting||window.__amExporting||(typeof isPlaying!=="undefined"&&isPlaying)||window.__amiyoScrubbing){ if(svg.style.display!=="none") svg.style.display="none"; return; }   /* step 17: no measuring of the page while an export, playback or scrub runs */
   var t=on?target():null;
   if(!t){ if(svg.style.display!=="none") svg.style.display="none"; return; }   /* perf: nothing to draw, so do not measure the page on every frame */
   var r=cv.getBoundingClientRect();

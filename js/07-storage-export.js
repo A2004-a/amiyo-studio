@@ -1384,7 +1384,7 @@ f();document.addEventListener('DOMContentLoaded',f);setTimeout(f,1500);})();
 (function(){
   var raf=0,tm=0,last=0;
   function run(){raf=0;last=performance.now();try{
-    if(window.__amiyoExporting||window.__amExporting) return;   /* step 17: skip while exporting */
+    if(window.__amiyoExporting||window.__amExporting||(typeof isPlaying!=="undefined"&&isPlaying)||window.__amiyoScrubbing) return;   /* skip while playing, scrubbing or exporting */
     var ph=document.getElementById('playhead'),rm=document.getElementById('rulerMarks'); if(!ph||!rm) return;
     var bd=ph.querySelector('.v12f'); if(!bd) return;
     var b=bd.getBoundingClientRect(), pad=4, ms=rm.querySelectorAll('.rmark'), hits=new Array(ms.length), i;
@@ -1392,7 +1392,7 @@ f();document.addEventListener('DOMContentLoaded',f);setTimeout(f,1500);})();
     for(i=0;i<ms.length;i++){ var r=ms[i].getBoundingClientRect(); hits[i]=r.right>b.left-pad&&r.left<b.right+pad&&r.bottom>b.top&&r.top<b.bottom; }
     for(i=0;i<ms.length;i++){ if(hits[i]!==ms[i].classList.contains('am-hide')) ms[i].classList.toggle('am-hide',hits[i]); }
   }catch(e){}}
-  function q(){ if(raf||tm) return; var w=130-(performance.now()-last); if(w>8){ tm=setTimeout(function(){ tm=0; if(!raf) raf=requestAnimationFrame(run); },w); } else raf=requestAnimationFrame(run); }
+  function q(){ if(window.__amiyoExporting||(typeof isPlaying!=="undefined"&&isPlaying)||window.__amiyoScrubbing) return; if(raf||tm) return; var w=130-(performance.now()-last); if(w>8){ tm=setTimeout(function(){ tm=0; if(!raf) raf=requestAnimationFrame(run); },w); } else raf=requestAnimationFrame(run); }
   function boot(){
     var ph=document.getElementById('playhead'),rm=document.getElementById('rulerMarks'); if(!ph||!rm){ setTimeout(boot,500); return; }
     var o=new MutationObserver(q);

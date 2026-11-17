@@ -1440,11 +1440,11 @@ P.css('ph','.playhead::before{content:"";position:absolute;top:0;left:-6px;width
 var tip=P.el('<div id="am-tip"></div>');document.body.appendChild(tip);
 var ru=P.$('#ruler');
 function fmt(t){var m=Math.floor(t/60),s=t-m*60;return (m<10?'0':'')+m+':'+(s<10?'0':'')+s.toFixed(2)}
-ru&&ru.addEventListener('mousemove',function(e){if(!P.cal)return;var r=ru.getBoundingClientRect(),t=(e.clientX-r.left-P.cal.x0)/P.cal.pps;if(t<0)return;tip.textContent=fmt(t);tip.style.left=(e.clientX+12)+'px';tip.style.top=(r.top-24)+'px';tip.style.display='block'});
+ru&&ru.addEventListener('mousemove',function(e){if(!P.cal||e.buttons||window.__amiyoScrubbing)return;var r=ru.getBoundingClientRect(),t=(e.clientX-r.left-P.cal.x0)/P.cal.pps;if(t<0)return;tip.textContent=fmt(t);tip.style.left=(e.clientX+12)+'px';tip.style.top=(r.top-24)+'px';tip.style.display='block'});
 ru&&ru.addEventListener('mouseleave',function(){tip.style.display='none'});
 var follow=true,ph=P.$('#playhead'),sc=P.$('#timelineScroll'),host=P.$('#fitTimelineBtn');
 if(host&&!P.$('#amFollow')){var b=P.el('<button class="toolbtn am-follow on" id="amFollow" title="Auto-scroll timeline to follow the playhead">⇥ Follow</button>');host.after(b);b.onclick=function(){follow=!follow;b.classList.toggle('on',follow)}}
-setInterval(function(){if(!follow||!ph||!sc)return;var p=ph.getBoundingClientRect(),v=sc.getBoundingClientRect();if(p.width===0&&p.left===0)return;if(p.left>v.right-30)sc.scrollLeft+=p.left-v.left-80;else if(p.left<v.left-4&&p.left>0)sc.scrollLeft-=v.left-p.left+80},180);
+setInterval(function(){if(!follow||!ph||!sc||(typeof isPlaying!=="undefined"&&isPlaying)||window.__amiyoScrubbing)return;var p=ph.getBoundingClientRect(),v=sc.getBoundingClientRect();if(p.width===0&&p.left===0)return;if(p.left>v.right-30)sc.scrollLeft+=p.left-v.left-80;else if(p.left<v.left-4&&p.left>0)sc.scrollLeft-=v.left-p.left+80},180);
 });
 
 /* PRO 10 - keyboard shortcuts overlay (?) */
