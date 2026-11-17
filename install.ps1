@@ -238,10 +238,14 @@ function global:amiyo {
         Write-Host "Amiyo Studio v$appVersion" -ForegroundColor Green
         return
     }
-    & $amiyoPs1Path @args
+    if (Test-Path $amiyoPs1Path) {
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $amiyoPs1Path @args
+    } else {
+        & $amiyoCmdPath @args
+    }
 }
 
-# 4. DIRECTLY OPEN AMIRYO STUDIO
+# 4. DIRECTLY OPEN AMIYO STUDIO
 Write-Host "[->] Directly opening Amiyo Studio..." -ForegroundColor Cyan
 
 if ($nativeExe) {

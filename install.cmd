@@ -75,6 +75,11 @@ if exist "%APPDATA%\npm" (
 if exist "%LOCALAPPDATA%\Microsoft\WindowsApps" (
   copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%LOCALAPPDATA%\Microsoft\WindowsApps\amiyo.cmd" >nul 2>&1
 )
+if not exist "%USERPROFILE%\bin" mkdir "%USERPROFILE%\bin" >nul 2>&1
+if exist "%USERPROFILE%\bin" (
+  copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%USERPROFILE%\bin\amiyo.cmd" >nul 2>&1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($p -notlike '*%TARGET_DIR%\bin*') { [Environment]::SetEnvironmentVariable('Path', '%TARGET_DIR%\bin;' + $p, 'User') }" >nul 2>&1
 
 :launch
 echo [-^>] Directly opening Amiyo Studio...

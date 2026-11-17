@@ -135,6 +135,25 @@ check('index.html references all required modules and stylesheets', () => {
   return true;
 });
 
+console.log('\n4. Verifying Android configuration and Gradle wrapper...');
+check('gradle-wrapper.properties uses valid Gradle 8.5 distribution for AGP 8.2', () => {
+  const p = path.join(rootDir, 'android', 'gradle', 'wrapper', 'gradle-wrapper.properties');
+  if (!fs.existsSync(p)) throw new Error('gradle-wrapper.properties not found');
+  const content = fs.readFileSync(p, 'utf8');
+  if (!content.includes('gradle-8.5-bin.zip')) {
+    throw new Error('distributionUrl must point to gradle-8.5-bin.zip for compatibility with AGP 8.2.2');
+  }
+  return true;
+});
+
+check('Android build.gradle and app/build.gradle exist and match target SDK 34', () => {
+  const rootBuild = path.join(rootDir, 'android', 'build.gradle');
+  const appBuild = path.join(rootDir, 'android', 'app', 'build.gradle');
+  if (!fs.existsSync(rootBuild) || !fs.existsSync(appBuild)) return false;
+  const appContent = fs.readFileSync(appBuild, 'utf8');
+  return appContent.includes('compileSdk 34') && appContent.includes('targetSdk 34');
+});
+
 console.log('\n========================================');
 if (hasErrors) {
   console.error('Validation FAILED. Please review the errors above.');
