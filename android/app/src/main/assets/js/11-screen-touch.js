@@ -1089,7 +1089,7 @@ var DEF={stack:.52,phone:.42,side:.46}, MIN=.12, MAX=.9, f=.5, ev={}, raf=0;
 function mode(){ return SIDE.matches?"side":"stack"; }
 function key(){ return SIDE.matches?"side":(PHONE.matches?"phone":"stack"); }
 function def(){ return DEF[key()]; }
-function clamp(v){ v=+v; if(!(v===v)) v=def(); return Math.min(MAX,Math.max(MIN,v)); }
+function clamp(v){ if(typeof innerWidth==="number"&&innerWidth>=768) return 0.48; v=+v; if(!(v===v)) v=def(); return Math.min(MAX,Math.max(MIN,v)); }
 function emit(n,a){ (ev[n]||[]).slice().forEach(function(fn){ try{ fn(a); }catch(e){ try{console.warn("AMPV",e);}catch(x){} } }); }
 var lt=0;
 function refit(live){
@@ -1114,6 +1114,7 @@ try{ window.AMIYO_EDITOR_BUILD="preview-size-step1-no-auto-resize"; }catch(e){}
 (function(){"use strict";
 if(window.AMPV_HANDLE) return;
 function init(){
+  if(typeof innerWidth==="number"&&innerWidth>=768){ var oldH=document.getElementById("amPvHandle"); if(oldH) oldH.remove(); return; }
   var A=window.AMPV, c=document.querySelector(".center"), tl=c&&c.querySelector(":scope>.timeline"), pw=c&&c.querySelector(":scope>.preview-wrap");
   if(!A||!c||!tl||!pw){ return setTimeout(init,300); }
   var h=document.createElement("div"); h.id="amPvHandle"; h.className="am-pvh"; h.tabIndex=0; h.setAttribute("role","separator");
@@ -1162,7 +1163,7 @@ var SK="amiyo.preview.size.v1";
 function read(){ try{ var o=JSON.parse(localStorage.getItem(SK)||"{}"); return (o&&typeof o==="object")?o:{}; }catch(e){ return {}; } }
 function write(o){ try{ localStorage.setItem(SK,JSON.stringify(o)); }catch(e){} }
 function say(m){ try{ if(typeof window.toast==="function") window.toast(m); }catch(e){} }
-function load(){ var v=read()[A.key()]; if(typeof v==="number"&&v>=A.MIN&&v<=A.MAX) A.set(v); }
+function load(){ if(typeof innerWidth==="number"&&innerWidth>=768){ try{ localStorage.removeItem(SK); }catch(e){} A.set(0.48); return; } var v=read()[A.key()]; if(typeof v==="number"&&v>=A.MIN&&v<=A.MAX) A.set(v); }
 A.on("change",function(a){ if(a&&a.user&&a.final){ var o=read(); o[a.key]=+a.f.toFixed(4); write(o); } });
 A.on("mode",load); load();
 function reset(){ var o=read(); delete o[A.key()]; write(o); A.reset(); say("Preview size reset"); }
@@ -2094,4 +2095,31 @@ function init(){ var t=document.querySelector(".app .center>.timeline"); if(!t||
   try{ new ResizeObserver(upd).observe(t); }catch(e){ window.addEventListener("resize",upd); }
   window.AMPV.on("change",function(){ setTimeout(upd,60); }); upd(); }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+})();
+
+
+// Desktop Layout & Reset Safeguard (Auto-healing)
+(function(){
+  try {
+    if (typeof innerWidth === "number" && innerWidth >= 768) {
+      try {
+        localStorage.removeItem("amiyo.preview.size.v1");
+        localStorage.removeItem("amiyo_pv_size_v1");
+        localStorage.removeItem("amiyo-pp4-tlh");
+      } catch(e) {}
+      document.documentElement.style.setProperty("--am-f", "0.48");
+      document.documentElement.style.removeProperty("--pv-tl");
+      document.documentElement.style.removeProperty("--pv-pw");
+      function clean(){
+        var c = document.querySelector(".center");
+        if (c) c.classList.remove("pv-col", "pv-row");
+        var h1 = document.getElementById("amPvHandle"); if (h1) h1.remove();
+        var h2 = document.getElementById("pvHandle"); if (h2) h2.remove();
+      }
+      clean();
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", clean);
+      else setTimeout(clean, 300);
+      setTimeout(clean, 1200);
+    }
+  } catch(e) {}
 })();
