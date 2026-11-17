@@ -7,13 +7,13 @@ try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 } catch {}
 
-Write-Host "       ▲                                           " -ForegroundColor Yellow
-Write-Host "      /█\                                          " -ForegroundColor Yellow
-Write-Host "     /███\        ▶  AMIYO STUDIO UPDATER          " -ForegroundColor Red
-Write-Host "    /██ █ \          Updating old version to latest " -ForegroundColor Cyan
-Write-Host "   /███████\                                       " -ForegroundColor Gray
-Write-Host "  /███   ███\                                      " -ForegroundColor Yellow
-Write-Host " ═════════════                                     " -ForegroundColor DarkYellow
+Write-Host "       /\                                           " -ForegroundColor Yellow
+Write-Host "      /  \                                          " -ForegroundColor Yellow
+Write-Host "     / /\ \       >>  AMIYO STUDIO UPDATER          " -ForegroundColor Red
+Write-Host "    / /  \ \          Updating old version to latest " -ForegroundColor Cyan
+Write-Host "   / /----\ \                                       " -ForegroundColor Gray
+Write-Host "  / /      \ \                                      " -ForegroundColor Yellow
+Write-Host " ===============                                    " -ForegroundColor DarkYellow
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "      Amiyo Studio Auto-Updater           " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan

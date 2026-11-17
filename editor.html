@@ -32,10 +32,37 @@
 <meta name="robots" content="noindex,nofollow"/>
 
 <!-- Application Stylesheet (378 styles extracted) -->
-<link rel="stylesheet" href="css/app.css" id="v07-css"/>
+<link rel="stylesheet" href="css/app.css?v=1.0.3" id="v07-css"/>
 
 <!-- Core performance guards & event throttlers -->
-<script src="js/01-core-guards.js"></script>
+<script src="js/01-core-guards.js?v=1.0.3"></script>
+
+<style id="amiyo-inline-layout-fix">
+@media (min-width:769px){
+  #pp5Menu{display:none!important}
+  .app{grid-template-rows:56px minmax(0,1fr) auto!important;width:100vw!important;height:100vh!important;overflow:hidden!important}
+  .app .center{display:flex!important;flex-direction:column!important;height:100%!important;overflow:hidden!important}
+  .app .center>.preview-wrap{flex:1 1 0!important;max-height:50%!important;min-height:160px!important;overflow:hidden!important}
+  .app .center>#amPvHandle,.app .center>#pvHandle{display:none!important;height:0!important;pointer-events:none!important}
+  .app .center>.timeline{flex:1 1 0!important;min-height:250px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+  #timelineScroll{flex:1 1 auto!important;min-height:150px!important;overflow:auto!important}
+  #tracks{min-height:130px!important}
+}
+</style>
+<script>
+(function(){
+  try{
+    if(typeof innerWidth==="number"&&innerWidth>=768){
+      try{localStorage.removeItem("amiyo.preview.size.v1");localStorage.removeItem("amiyo_pv_size_v1");localStorage.removeItem("amiyo-pp4-tlh");}catch(e){}
+      document.documentElement.style.setProperty("--am-f","0.48");
+    }
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});
+      if(typeof caches!=="undefined"){caches.keys().then(function(ks){ks.forEach(function(k){if(k!=="amiyo-editor-v1.0.2")caches.delete(k)})})}
+    }
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div id="amBoot" role="status" aria-live="polite" style="position:fixed;inset:0;z-index:2147483600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d0c09;color:#cfc8bb;font:600 14px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;transition:opacity .25s ease;touch-action:none">
@@ -679,15 +706,15 @@ a.length>D&&(D=a.length,p=0|1.25*D+7200,r=new Int8Array(p));a=u.lame_encode_buff
 </script>
 
 <!-- Application Modules (1,677 scripts organized into modules) -->
-<script src="js/02-ux3-system.js"></script>
-<script src="js/03-editor-core.js"></script>
-<script src="js/04-editor-tools.js"></script>
-<script src="js/05-ai-features.js"></script>
-<script src="js/06-range-fx.js"></script>
-<script src="js/07-storage-export.js"></script>
-<script src="js/08-audio-lab.js"></script>
-<script src="js/09-pro-davinci.js"></script>
-<script src="js/10-filmora-opt.js"></script>
-<script src="js/11-screen-touch.js"></script>
+<script src="js/02-ux3-system.js?v=1.0.3"></script>
+<script src="js/03-editor-core.js?v=1.0.3"></script>
+<script src="js/04-editor-tools.js?v=1.0.3"></script>
+<script src="js/05-ai-features.js?v=1.0.3"></script>
+<script src="js/06-range-fx.js?v=1.0.3"></script>
+<script src="js/07-storage-export.js?v=1.0.3"></script>
+<script src="js/08-audio-lab.js?v=1.0.3"></script>
+<script src="js/09-pro-davinci.js?v=1.0.3"></script>
+<script src="js/10-filmora-opt.js?v=1.0.3"></script>
+<script src="js/11-screen-touch.js?v=1.0.3"></script>
 </body>
 </html>

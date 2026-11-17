@@ -1,6 +1,6 @@
 /* Amiyo Editor - offline support. Keep this file in the same folder as the editor's .html file.
    Network first (so a new step is picked up as soon as you are online), cached copy when offline. Media you import is never cached here. */
-const CACHE = 'amiyo-editor-v1.0.2';
+const CACHE = 'amiyo-editor-v1.0.3';
 self.addEventListener('install', function(){ self.skipWaiting(); });
 self.addEventListener('activate', function(e){
   e.waitUntil(caches.keys().then(function(ks){ return Promise.all(ks.filter(function(k){ return k !== CACHE; }).map(function(k){ return caches.delete(k); })); }).then(function(){ return self.clients.claim(); }));
