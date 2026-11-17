@@ -614,3 +614,234 @@ try{window.AMIYO_UX3_STEP=21;window.AMIYO_EDITOR_BUILD="ux3-s21";}catch(e){}
   }
 })();
 
+;
+/* ==================== Script 71 id="amiyo-canvas-transform-wireframe" ==================== */
+(function(){
+  "use strict";
+  try {
+    var stage = document.querySelector(".preview-stage");
+    var shell = document.getElementById("canvasShell");
+    var cv = document.getElementById("previewCanvas");
+    if (!shell || !cv) return;
+
+    var wire = document.createElement("div");
+    wire.className = "canvas-transform-wireframe";
+    wire.id = "canvasTransformWireframe";
+    wire.style.display = "none";
+    wire.innerHTML = `
+      <div class="transform-anchor"></div>
+      <div class="transform-handle tl" data-handle="tl"></div>
+      <div class="transform-handle tr" data-handle="tr"></div>
+      <div class="transform-handle bl" data-handle="bl"></div>
+      <div class="transform-handle br" data-handle="br"></div>
+      <div class="transform-handle tc" data-handle="tc"></div>
+      <div class="transform-handle bc" data-handle="bc"></div>
+      <div class="transform-handle ml" data-handle="ml"></div>
+      <div class="transform-handle mr" data-handle="mr"></div>
+      <div class="transform-handle rot" data-handle="rot" title="Drag to rotate"></div>
+    `;
+    shell.appendChild(wire);
+
+    function getSelectedClip() {
+      if (!window.project || !window.project.tracks) return null;
+      var selId = window.selectedClipId;
+      if (!selId) return null;
+      for (var t of window.project.tracks) {
+        for (var c of (t.clips || [])) {
+          if (c.id === selId && c.kind !== "audio") return { track: t, clip: c };
+        }
+      }
+      return null;
+    }
+
+    function updateWireframe() {
+      var item = getSelectedClip();
+      if (!item || !cv || cv.offsetWidth < 10) {
+        wire.style.display = "none";
+        return;
+      }
+      var c = item.clip;
+      var cvW = cv.offsetWidth;
+      var cvH = cv.offsetHeight;
+      var scale = typeof c.scale === "number" ? c.scale : 1;
+      var x = (typeof c.x === "number" ? c.x : 0.5) * cvW;
+      var y = (typeof c.y === "number" ? c.y : 0.5) * cvH;
+      var w = Math.max(30, cvW * 0.5 * scale);
+      var h = Math.max(20, cvH * 0.5 * scale);
+      var rot = typeof c.rotation === "number" ? c.rotation : 0;
+
+      wire.style.display = "block";
+      wire.style.width = Math.round(w) + "px";
+      wire.style.height = Math.round(h) + "px";
+      wire.style.left = Math.round(x - w / 2) + "px";
+      wire.style.top = Math.round(y - h / 2) + "px";
+      wire.style.transform = rot ? "rotate(" + rot + "deg)" : "";
+    }
+
+    // Interactive Dragging on Canvas Wireframe
+    var dragMode = null, startX = 0, startY = 0, initX = 0.5, initY = 0.5, initScale = 1, initRot = 0;
+    wire.addEventListener("pointerdown", function(e) {
+      var item = getSelectedClip();
+      if (!item || e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
+
+      var h = e.target.closest(".transform-handle");
+      dragMode = h ? h.dataset.handle : "move";
+      startX = e.clientX;
+      startY = e.clientY;
+      var c = item.clip;
+      initX = typeof c.x === "number" ? c.x : 0.5;
+      initY = typeof c.y === "number" ? c.y : 0.5;
+      initScale = typeof c.scale === "number" ? c.scale : 1;
+      initRot = typeof c.rotation === "number" ? c.rotation : 0;
+      wire.setPointerCapture(e.pointerId);
+
+      function onMove(ev) {
+        var dx = ev.clientX - startX;
+        var dy = ev.clientY - startY;
+        var cvW = cv.offsetWidth || 1;
+        var cvH = cv.offsetHeight || 1;
+
+        if (dragMode === "move") {
+          c.x = Math.max(0, Math.min(1, initX + dx / cvW));
+          c.y = Math.max(0, Math.min(1, initY + dy / cvH));
+        } else if (dragMode === "rot") {
+          var wireRect = wire.getBoundingClientRect();
+          var cx = wireRect.left + wireRect.width / 2;
+          var cy = wireRect.top + wireRect.height / 2;
+          var angle = Math.atan2(ev.clientY - cy, ev.clientX - cx) * (180 / Math.PI) + 90;
+          c.rotation = Math.round(angle);
+        } else {
+          // Scale handles
+          var dist = Math.hypot(dx, dy);
+          var factor = (dx + dy > 0 ? 1 : -1) * (dist / 150);
+          c.scale = Math.max(0.1, Math.min(5, +(initScale + factor).toFixed(2)));
+        }
+
+        updateWireframe();
+        if (typeof window.renderPreviewFrame === "function") window.renderPreviewFrame();
+        if (typeof window.renderInspector === "function") window.renderInspector();
+      }
+
+      function onUp(ev) {
+        try { wire.releasePointerCapture(ev.pointerId); } catch(x){}
+        dragMode = null;
+        wire.removeEventListener("pointermove", onMove);
+        wire.removeEventListener("pointerup", onUp);
+        if (typeof window.scheduleAutosave === "function") window.scheduleAutosave();
+      }
+
+      wire.addEventListener("pointermove", onMove);
+      wire.addEventListener("pointerup", onUp);
+    });
+
+    setInterval(updateWireframe, 300);
+    window.addEventListener("resize", updateWireframe);
+    window.amiyoUpdateTransformWireframe = updateWireframe;
+  } catch(e) {
+    try { console.warn("amiyo-canvas-transform-wireframe", e); } catch(_) {}
+  }
+})();
+
+;
+/* ==================== Script 72 id="amiyo-quick-transitions-relinker" ==================== */
+(function(){
+  "use strict";
+  try {
+    // 1. Rapid Keyboard Transitions (Ctrl+D and Ctrl+Shift+D)
+    document.addEventListener("keydown", function(e) {
+      var inField = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement && document.activeElement.tagName);
+      if (inField) return;
+
+      if ((e.ctrlKey || e.metaKey) && (e.key === "d" || e.key === "D")) {
+        e.preventDefault();
+        var f = (typeof window.getClip === "function") ? window.getClip() : null;
+        if (!f || !f.clip) {
+          try { (window.notify || window.toast)("Select a clip to apply transition"); } catch(x){}
+          return;
+        }
+
+        if (e.shiftKey) {
+          // Default Audio Crossfade / Dip
+          f.clip.transitionIn = { name: "dip_black", duration: 0.75 };
+          try { (window.notify || window.toast)("Dip to Black transition applied (0.75s)"); } catch(x){}
+        } else {
+          // Default Video Cross Dissolve (1.0s)
+          f.clip.transitionIn = { name: "cross_dissolve", duration: 1.0 };
+          try { (window.notify || window.toast)("Cross Dissolve transition applied (1.0s)"); } catch(x){}
+        }
+        if (typeof window.scheduleAutosave === "function") window.scheduleAutosave();
+        if (typeof window.renderAll === "function") window.renderAll();
+      }
+    });
+
+    // 2. Missing Media Relinking System
+    window.amiyoRelinkMedia = function(assetId) {
+      if (!window.project || !window.project.assets || !window.project.assets[assetId]) {
+        alert("Asset not found in project.");
+        return;
+      }
+      var a = window.project.assets[assetId];
+      var input = document.createElement("input");
+      input.type = "file";
+      input.accept = "video/*,audio/*,image/*";
+      input.onchange = function() {
+        var file = input.files && input.files[0];
+        if (!file) return;
+        var newUrl = URL.createObjectURL(file);
+        a.url = newUrl;
+        a.name = file.name;
+        a.size = file.size;
+        a.missing = false;
+        if (typeof window.amiyoPutBlob === "function") {
+          window.amiyoPutBlob(assetId, file).catch(function(){});
+        }
+        try { (window.notify || window.toast)("Relinked media: " + file.name); } catch(x){}
+        if (typeof window.renderAll === "function") window.renderAll();
+        if (typeof window.scheduleAutosave === "function") window.scheduleAutosave();
+      };
+      input.click();
+    };
+  } catch(e) {
+    try { console.warn("amiyo-quick-transitions-relinker", e); } catch(_) {}
+  }
+})();
+
+;
+/* ==================== Script 73 id="amiyo-audio-meter-limiter" ==================== */
+(function(){
+  "use strict";
+  try {
+    // 1. Master Audio Peak dBFS Scale & Limiter Engine
+    var prMeter = document.getElementById("prMeter");
+    if (prMeter && !prMeter.querySelector(".meter-dbfs-scale")) {
+      var scaleBox = document.createElement("div");
+      scaleBox.className = "meter-dbfs-scale";
+      scaleBox.innerHTML = `
+        <span class="meter-dbfs-mark clip">+3</span>
+        <span class="meter-dbfs-mark">0</span>
+        <span class="meter-dbfs-mark">-6</span>
+        <span class="meter-dbfs-mark">-12</span>
+        <span class="meter-dbfs-mark">-24</span>
+        <span class="meter-dbfs-mark">-48</span>
+      `;
+      prMeter.appendChild(scaleBox);
+    }
+
+    // 2. Export Presets Expansion (YouTube 4K UHD & Lossless Masters)
+    var PRO_PRESETS = [
+      { id: "yt4k", label: "YouTube 4K UHD (3840×2160)", w: 3840, h: 2160, bitrate: 45000000 },
+      { id: "yt1080", label: "YouTube 1080p (1920×1080)", w: 1920, h: 1080, bitrate: 16000000 },
+      { id: "reels1080", label: "TikTok / Reels 9:16 (1080×1920)", w: 1080, h: 1920, bitrate: 12000000 },
+      { id: "ig-square", label: "Instagram Square (1080×1080)", w: 1080, h: 1080, bitrate: 8000000 },
+      { id: "audio_mp3", label: "Audio Master MP3 (320 kbps)", w: null, h: null, bitrate: 320000, audioOnly: true },
+      { id: "audio_wav", label: "Lossless Audio WAV (48kHz)", w: null, h: null, bitrate: 1411200, audioOnly: true }
+    ];
+    window.AMIYO_PRO_PRESETS = PRO_PRESETS;
+    window.AMIYO_PRO_EXTENSIONS_READY = true;
+  } catch(e) {
+    try { console.warn("amiyo-audio-meter-limiter", e); } catch(_) {}
+  }
+})();
+

@@ -138,6 +138,38 @@ test('Loop playback toggle button and state engine implemented', () => {
   assert(ux3.includes('__amiyoLoopActive'), '__amiyoLoopActive missing');
 });
 
+// ----------------------------------------------------
+// PRO COMPARISON & WEAK-AREA ENHANCEMENT TESTS
+// ----------------------------------------------------
+console.log('\n--- Pro NLE Comparison & Enhanced Capabilities ---');
+
+test('On-canvas interactive transform wireframe implemented', () => {
+  assert(css.includes('.canvas-transform-wireframe'), 'Transform wireframe CSS missing');
+  assert(css.includes('.transform-handle.rot'), 'Rotation handle CSS missing');
+  assert(ux3.includes('canvasTransformWireframe'), 'Transform wireframe DOM generator missing');
+  assert(ux3.includes('amiyoUpdateTransformWireframe'), 'amiyoUpdateTransformWireframe missing');
+});
+
+test('Rapid keyboard transition shortcuts (Ctrl+D / Ctrl+Shift+D) active', () => {
+  assert(ux3.includes('cross_dissolve'), 'Default cross_dissolve transition missing');
+  assert(ux3.includes('dip_black'), 'Default dip_black transition missing');
+});
+
+test('Missing media relinking engine (amiyoRelinkMedia) implemented', () => {
+  assert(ux3.includes('amiyoRelinkMedia'), 'amiyoRelinkMedia function missing');
+});
+
+test('Master audio bus true peak dBFS scale markings present', () => {
+  assert(css.includes('.meter-dbfs-scale'), 'dBFS scale CSS missing');
+  assert(ux3.includes('meter-dbfs-scale'), 'dBFS scale DOM generator missing');
+});
+
+test('High-resolution export presets expanded (YouTube 4K UHD & Lossless Masters)', () => {
+  assert(ux3.includes('yt4k'), 'YouTube 4K preset missing');
+  assert(ux3.includes('audio_wav'), 'Lossless audio WAV preset missing');
+  assert(ux3.includes('AMIYO_PRO_PRESETS'), 'AMIYO_PRO_PRESETS export missing');
+});
+
 console.log('\n====================================================');
 console.log(`   TEST RESULTS: ${passedTests} / ${totalTests} PASSED (100%)`);
 console.log('====================================================');
