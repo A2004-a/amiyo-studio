@@ -97,6 +97,11 @@ check('Terminal installers and version tools exist', () => {
          fs.existsSync(path.join(rootDir, 'bin', 'amiyo.ps1'));
 });
 
+check('Technical architecture and roadmap documentation exist', () => {
+  const docs = ['ARCHITECTURE.md', 'PROJECT_AUDIT.md', 'FEATURE_MATRIX.md', 'BUG_TRACKER.md', 'DEVELOPMENT_ROADMAP.md', 'DEVELOPMENT_STATUS.md'];
+  return docs.every(d => fs.existsSync(path.join(rootDir, d)) && fs.statSync(path.join(rootDir, d)).size > 500);
+});
+
 console.log('\n2. Verifying JavaScript modules...');
 const jsDir = path.join(rootDir, 'js');
 const expectedModules = [
