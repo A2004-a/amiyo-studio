@@ -5329,7 +5329,9 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   padding: 0 14px !important;
   background: #14120e !important;
   border-bottom: 1px solid var(--line, #26221c) !important;
-  overflow: visible !important;
+  overflow: hidden !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
   position: relative !important;
   z-index: 50 !important;
 }
@@ -5397,7 +5399,13 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   #ppWs,
   #wsBtn,
   #amQaBtn,
-  #ui20More
+  #ui20More,
+  #ui20Ws,
+  #amOneRow,
+  #pp5Menu,
+  #pvSizes,
+  .pv-sizes,
+  #amiyoCrashBar
 ) {
   display: none !important;
   visibility: hidden !important;

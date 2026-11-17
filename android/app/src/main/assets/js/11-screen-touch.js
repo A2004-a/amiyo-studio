@@ -1064,6 +1064,7 @@ function setSize(k){
   setTimeout(function(){ try{ window.AMIYO_PV3&&window.AMIYO_PV3.save(); }catch(e){} mark(); },140);
 }
 function build(){
+  if(typeof innerWidth==="number"&&innerWidth>=768){ var old=document.getElementById("pvSizes"); if(old) old.remove(); return; }
   if(bar||!find()) return; var st=pw.querySelector(".preview-stage")||pw;
   bar=document.createElement("div"); bar.className="pv-sizes"; bar.id="pvSizes"; bar.setAttribute("role","group"); bar.setAttribute("aria-label","Preview size");
   [["S","S"],["M","M"],["L","L"],["F","Full"]].forEach(function(a){

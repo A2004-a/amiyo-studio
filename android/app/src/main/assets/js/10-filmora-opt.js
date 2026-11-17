@@ -1742,7 +1742,7 @@ sets.forEach(function(ids){var els=ids.map(function(i){return document.getElemen
 
 ;
 /* ==================== Script 1443 id="amiyo-ui20-s06" ==================== */
-(function(){try{
+(function(){try{ return; // Disabled: #ui20Ws workspace tabs in topbar
 var api=window.AMIYO_PR2_S08,app=document.querySelector('.app'),top=document.querySelector('header.topbar');
 if(!api||!app||!top||document.getElementById('ui20Ws'))return;
 var bar=document.createElement('div');bar.id='ui20Ws';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Workspaces');
@@ -3180,7 +3180,8 @@ flex();setTimeout(flex,1500);setTimeout(flex,5000);
 
 ;
 /* ==================== Script 1525 id="amiyo-pp4-s02" ==================== */
-(function(){var n=0;function go(){if(!(document.querySelector("#amiyoMain .center>.timeline")&&document.getElementById("timelineScroll")&&document.getElementById("oneBar"))){if(n++<150)return setTimeout(go,100)}try{(function(){
+(function(){var n=0;function go(){ return; // Disabled: do not move ui20Ws into topbar
+if(!(document.querySelector("#amiyoMain .center>.timeline")&&document.getElementById("timelineScroll")&&document.getElementById("oneBar"))){if(n++<150)return setTimeout(go,100)}try{(function(){
 var ws=document.getElementById('ui20Ws'),top=document.querySelector('header.topbar'),app=document.querySelector('.app');
 if(!ws||!top||!app)return;
 ws.classList.add('top-spacer');var sp=top.querySelector('.top-spacer:not(#ppWs)');

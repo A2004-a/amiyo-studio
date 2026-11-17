@@ -9826,7 +9826,7 @@ setTimeout(function(){var el=document.getElementById('alb');if(el)el.title='Clic
 
 ;
 /* ==================== Script 1363 id="amiyo-onerow-js" ==================== */
-(function(){try{
+(function(){try{ return; // Disabled: keep preview-toolbar and pr2-mtabs in preview-wrap
 var mq=window.matchMedia('(min-width:1100px)'),orig=null,wrap=null;
 function els(){return{tb:document.querySelector('header.topbar'),tabs:document.getElementById('pr2-mtabs'),bar:document.querySelector('.preview-toolbar')}}
 function merge(){

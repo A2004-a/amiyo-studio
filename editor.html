@@ -16,12 +16,24 @@
         keys.forEach(function(k){ caches.delete(k); });
       });
     }
-    // 3. Purge all stale layout localStorage keys
-    ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh', 'amiyo_pr2_ws', 'amiyo.workspace'].forEach(function(k){
+    // 3. Purge all stale layout & session crash localStorage keys
+    ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh', 'amiyo.pr2.trackh.v1', 'amiyo_pr2_ws', 'amiyo.workspace', 'amiyo.w11.sessions', 'amiyo-pp4-mview'].forEach(function(k){
       try { localStorage.removeItem(k); } catch(e){}
     });
     // 4. Force root CSS variable
     document.documentElement.style.setProperty('--am-f', '0.48');
+
+    // 5. Active DOM sentinel: aggressively prune topbar clutter and rogue workspace bars
+    function prune() {
+      ['ui20Ws', 'amOneRow', 'ppWs', 'wsBtn', 'pp5Menu', 'pvSizes', 'amiyoCrashBar'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.remove();
+      });
+    }
+    prune();
+    if (typeof MutationObserver !== 'undefined') {
+      new MutationObserver(prune).observe(document.documentElement, { childList: true, subtree: true });
+    }
   } catch(e){}
 })();
 </script>
