@@ -876,14 +876,14 @@ try{ window.AMIYO_EDITOR_BUILD="export19-step19-wording"; }catch(e){}
 if(window.AMIYO_PV1) return;
 var root=document.documentElement, ctr=null, tl=null, lastW=0, fixed=0, timer=0;
 function find(){ ctr=document.querySelector("#amiyoMain .center")||document.querySelector(".center"); tl=ctr&&ctr.querySelector(":scope>.timeline"); return !!(ctr&&tl); }
-function small(){ try{ return matchMedia("(max-width:1024px)").matches; }catch(e){ return innerWidth<=1024; } }
+function small(){ try{ return innerWidth < 768 && matchMedia("(max-width:767px) and (pointer:coarse)").matches; }catch(e){ return innerWidth < 768; } }
 function isColumn(){ var cs=getComputedStyle(ctr); return small()&&cs.display==="flex"&&cs.flexDirection==="column"; }
 function limits(){ var H=ctr.getBoundingClientRect().height; return [Math.min(120,H*.25),Math.max(140,H-150)]; }
 function clampPx(px){ var b=limits(); return Math.round(Math.max(b[0],Math.min(b[1],px))); }
 function release(){ root.style.removeProperty("--pv-tl"); if(ctr) ctr.classList.remove("pv-col"); fixed=0; }
 function measureAndHold(){
   if(!find()) return;
-  if(!isColumn()){ release(); lastW=innerWidth; return; }
+  if(!small() || !isColumn()){ release(); lastW=innerWidth; return; }
   root.style.removeProperty("--pv-tl"); ctr.classList.remove("pv-col");   /* let the normal rules give their natural height once */
   var natural=tl.getBoundingClientRect().height;
   if(!(natural>60)){ lastW=innerWidth; return; }
@@ -913,7 +913,7 @@ try{ window.AMIYO_EDITOR_BUILD="pv-step01-stable-preview"; }catch(e){}
 if(window.AMIYO_PV2) return;
 var ctr=null,tl=null,pw=null,h=null,mode="",raf=0,pend=null,g=null,root=document.documentElement;
 function find(){ ctr=document.querySelector("#amiyoMain .center")||document.querySelector(".center"); tl=ctr&&ctr.querySelector(":scope>.timeline"); pw=ctr&&ctr.querySelector(":scope>.preview-wrap"); return !!(ctr&&tl&&pw); }
-function small(){ try{ return matchMedia("(max-width:1024px)").matches; }catch(e){ return innerWidth<=1024; } }
+function small(){ try{ return innerWidth < 768 && matchMedia("(max-width:767px) and (pointer:coarse)").matches; }catch(e){ return innerWidth < 768; } }
 function build(){
   if(h||!find()) return;
   h=document.createElement("div"); h.id="pvHandle"; h.setAttribute("role","separator"); h.tabIndex=0;

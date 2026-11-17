@@ -5288,3 +5288,436 @@ body .app {
 .app {
   grid-template-rows: 56px minmax(0, 1fr) auto !important;
 }
+
+/* ==========================================================================
+   DEFINITIVE NLE WORKSPACE & SCREEN OPTIMIZATION (MATCHES REFERENCE DESIGN)
+   ========================================================================== */
+
+/* 1. Single Clean Header Row (Matching Reference) */
+#pp5Menu {
+  display: none !important;
+}
+
+html body .app {
+  grid-template-rows: 56px minmax(0, 1fr) auto !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.topbar {
+  display: flex !important;
+  align-items: center !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  padding: 0 14px !important;
+  background: #14120e !important;
+  border-bottom: 1px solid var(--line, #26221c) !important;
+  overflow: visible !important;
+}
+
+.topbar .brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-right: 12px !important;
+}
+
+.topbar .brand img {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 6px !important;
+  object-fit: contain !important;
+}
+
+.topbar .project-name {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #f0ebe4 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  width: 140px !important;
+}
+
+.topbar .status {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #34d399 !important; /* Green status dot */
+  display: inline-block !important;
+  margin-left: 4px !important;
+  text-indent: -9999px !important;
+  overflow: hidden !important;
+}
+
+/* Hide clutter from topbar */
+.topbar .am-ws,
+.topbar #ppWs,
+.topbar #nleKeymapProfile,
+.topbar .ampro-badge,
+.topbar .am-menus,
+.topbar #agentBtn,
+.topbar #storageBtn,
+.topbar #renderQueueBtn {
+  display: none !important;
+}
+
+.topbar .top-spacer {
+  flex: 1 1 auto !important;
+}
+
+/* Export button - Bright orange rounded button matching reference */
+.topbar #exportBtn,
+#exportBtn.primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+  padding: 0 20px !important;
+  background: linear-gradient(180deg, #ff8438, #ff6b18) !important;
+  color: #ffffff !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  border: 1px solid #ff9a59 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(255, 107, 24, 0.4) !important;
+  cursor: pointer !important;
+  margin-left: 8px !important;
+  order: 10 !important;
+}
+.topbar #exportBtn:hover {
+  background: linear-gradient(180deg, #ff9450, #ff7a28) !important;
+}
+
+/* Text links following Export */
+.topbar #captionsBtn,
+.topbar #versionsBtn,
+.topbar #shareBtn,
+.topbar #settingsBtn,
+.topbar #helpBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  padding: 0 10px !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: #b5afa4 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  order: 11 !important;
+}
+.topbar #captionsBtn:hover,
+.topbar #versionsBtn:hover,
+.topbar #shareBtn:hover,
+.topbar #settingsBtn:hover,
+.topbar #helpBtn:hover {
+  color: #ffffff !important;
+}
+
+/* 2. Workspace Layout (3 Columns on Desktop >= 768px) */
+@media (min-width: 769px) {
+  html body .app .workspace,
+  html body #amiyoMain.workspace {
+    display: grid !important;
+    grid-template-columns: var(--sidebar-w, 272px) minmax(420px, 1fr) var(--inspector-w, 336px) !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Left Panel */
+  html body .app .sidebar {
+    width: var(--sidebar-w, 272px) !important;
+    min-width: 220px !important;
+    max-width: 440px !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    border-right: 1px solid var(--line, #26221c) !important;
+    background: #14120e !important;
+    position: relative !important;
+  }
+
+  #ui20PtL {
+    display: flex !important;
+    align-items: center !important;
+    height: 32px !important;
+    padding: 0 10px !important;
+    background: #1e1b17 !important;
+    border-bottom: 1px solid #26221c !important;
+  }
+  #ui20PtL > .t {
+    display: inline-block !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #e5ded3 !important;
+  }
+  #ui20PtL > #pp4ViewTg {
+    display: inline-flex !important;
+    margin-left: auto !important;
+  }
+
+  /* Center Column: 50/50 Dual Pane */
+  html body .app .center,
+  html body #amiyoMain .center {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  /* Preview Wrap (Top Half of Center - Never Giant Void) */
+  html body .app .center > .preview-wrap {
+    flex: 1 1 0 !important;
+    height: auto !important;
+    min-height: 200px !important;
+    max-height: 52% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #090807 !important;
+  }
+
+  /* Monitor Tabs SOURCE / PROGRAM */
+  #pr2-mtabs {
+    display: flex !important;
+    align-items: center !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    background: #14120e !important;
+    border-bottom: 1px solid #26221c !important;
+    padding: 0 8px !important;
+  }
+  #pr2-mtabs > button {
+    height: 28px !important;
+    padding: 0 14px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    color: #8f887b !important;
+    border: 0 !important;
+    background: transparent !important;
+    cursor: pointer !important;
+  }
+  #pr2-mtabs > button.on,
+  #pr2-mtabs > button[aria-selected="true"] {
+    color: #ffffff !important;
+    border-bottom: 2px solid #ff7a30 !important;
+  }
+
+  /* Stage & Canvas */
+  html body .app .preview-stage {
+    flex: 1 1 0 !important;
+    min-height: 120px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    position: relative !important;
+    padding: 8px !important;
+  }
+
+  html body .app .preview-stage #canvasShell,
+  html body .app .preview-stage .canvas-shell {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  html body .app .preview-stage #previewCanvas,
+  html body .app .preview-stage canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    aspect-ratio: 16 / 9 !important;
+    border-radius: 2px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* Transport Row */
+  #pr2-tp {
+    display: grid !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    flex: 0 0 38px !important;
+    background: #14120e !important;
+    border-top: 1px solid #26221c !important;
+    z-index: 20 !important;
+  }
+
+  /* NO pvHandle or squashed timeline on desktop */
+  #pvHandle,
+  .center.pv-col > #pvHandle {
+    display: none !important;
+  }
+
+  /* Multitrack Timeline (Bottom Half of Center - Never Squashed) */
+  html body:not(.am-fs) .center > .timeline,
+  html body:not(.am-fs) .center.pv-col > .timeline,
+  html body .app .timeline {
+    flex: 1 1 0 !important;
+    height: var(--timeline-h, clamp(260px, 48vh, 520px)) !important;
+    min-height: 250px !important;
+    max-height: 56% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #0d0c0a !important;
+    border-top: 1px solid #26221c !important;
+  }
+
+  /* Timeline Header & Title */
+  #ui20PtT {
+    display: flex !important;
+    align-items: center !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 10px !important;
+    background: #181512 !important;
+    border-bottom: 1px solid #26221c !important;
+    color: #e5ded3 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+  }
+  #ui20PtT::before {
+    content: "" !important;
+    width: 3px !important;
+    height: 12px !important;
+    background: #ff7a30 !important;
+    margin-right: 8px !important;
+    border-radius: 2px !important;
+  }
+
+  /* Premiere Pro Vertical Tool Strip */
+  #pr2-tools {
+    display: flex !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 68px !important;
+    bottom: 0 !important;
+    width: 34px !important;
+    background: #14120e !important;
+    border-right: 1px solid #26221c !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    z-index: 25 !important;
+    padding: 4px 0 !important;
+  }
+
+  html body .app .timeline {
+    padding-left: 34px !important;
+  }
+
+  /* Timeline Tracks Container */
+  #timelineScroll {
+    flex: 1 1 auto !important;
+    min-height: 150px !important;
+    overflow: auto !important;
+    display: block !important;
+    position: relative !important;
+  }
+
+  #tracks {
+    min-height: 130px !important;
+    display: block !important;
+    position: relative !important;
+  }
+
+  /* Right Panel: Inspector */
+  html body .app .inspector-col,
+  html body .app #inspectorCol {
+    width: var(--inspector-w, 336px) !important;
+    min-width: 280px !important;
+    max-width: 520px !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-left: 1px solid var(--line, #26221c) !important;
+    background: #14120e !important;
+    position: relative !important;
+  }
+
+  /* Inspector Tab Strip - ONLY 2 TABS */
+  #ppInspTabs {
+    display: flex !important;
+    align-items: center !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 4px !important;
+    background: #181512 !important;
+    border-bottom: 1px solid #26221c !important;
+    overflow: hidden !important;
+  }
+
+  #ppInspTabs > button:not([data-t="fx"]):not([data-t="tools"]) {
+    display: none !important;
+  }
+
+  #ppInspTabs > button[data-t="fx"],
+  #ppInspTabs > button[data-t="tools"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 32px !important;
+    padding: 0 14px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    color: #8f887b !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    cursor: pointer !important;
+  }
+
+  #ppInspTabs > button[data-t="fx"][aria-selected="true"],
+  #ppInspTabs > button[data-t="fx"].on,
+  #ppInspTabs > button[data-t="tools"][aria-selected="true"],
+  #ppInspTabs > button[data-t="tools"].on {
+    color: #ffffff !important;
+    border-bottom: 2px solid #ff7a30 !important;
+  }
+
+  #ppInspTabs > .pp5-ph {
+    margin-left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+
+  /* Inspector Subtitle | Effect Controls */
+  #ui20PtR,
+  html body #ui20PtR.pp6-gone {
+    display: flex !important;
+    align-items: center !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 10px !important;
+    background: #14120e !important;
+    border-bottom: 1px solid #26221c !important;
+    color: #e5ded3 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+  }
+  #ui20PtR::before {
+    content: "" !important;
+    width: 3px !important;
+    height: 12px !important;
+    background: #ff7a30 !important;
+    margin-right: 8px !important;
+    border-radius: 2px !important;
+  }
+}
