@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/icons/logo.svg" width="96" height="96" alt="Amiyo Studio Logo"/>
+  <img src="assets/icons/logo.png" width="128" height="128" alt="Amiyo Studio Logo"/>
 </p>
 
 <h1 align="center">Amiyo Studio</h1>

@@ -146,6 +146,13 @@ function startServer(initialPort) {
     const networkUrl = netAddr ? `http://${netAddr}:${initialPort}` : null;
 
     console.log(`
+       ▲
+      /█\\
+     /███\\        ▶  AMIYO STUDIO
+    /██ █ \\          Professional Non-Linear Video Editor
+   /███████\\         v${pkg.version}
+  /███   ███\\
+ ═════════════
 =============================================================
              🎬 Amiyo Studio - In-Browser Video Editor
 =============================================================

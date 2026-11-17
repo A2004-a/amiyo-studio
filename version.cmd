@@ -1,6 +1,12 @@
 @echo off
 setlocal
 
+echo        /\
+echo       /  \
+echo      / /\ \       [^>] AMIYO STUDIO
+echo     / /  \ \          Professional Video Editor v0.0.1
+echo    / /____\ \
+echo   /_/      \_\
 echo ==========================================
 echo          Amiyo Studio Version Check       
 echo ==========================================

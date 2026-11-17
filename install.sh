@@ -6,6 +6,13 @@ set -e
 
 APP_VERSION="0.0.1"
 
+echo -e "\033[33m       ▲\033[0m"
+echo -e "\033[33m      /█\\\033[0m"
+echo -e "\033[33m     /███\\        \033[31m▶  AMIYO STUDIO\033[0m"
+echo -e "\033[33m    /██ █ \\          \033[36mProfessional Video Editor v${APP_VERSION}\033[0m"
+echo -e "\033[33m   /███████\\\033[0m"
+echo -e "\033[33m  /███   ███\\\033[0m"
+echo -e "\033[33m ═════════════\033[0m"
 echo -e "\033[36m==========================================\033[0m"
 echo -e "\033[33m          Amiyo Studio v${APP_VERSION}    \033[0m"
 echo -e "\033[36m==========================================\033[0m"

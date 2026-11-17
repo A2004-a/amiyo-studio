@@ -1,5 +1,12 @@
-$appVersion = "0.0.1"
+﻿$appVersion = "0.0.1"
 
+Write-Host "       ▲                                           " -ForegroundColor Yellow
+Write-Host "      /█\                                          " -ForegroundColor Yellow
+Write-Host "     /███\        ▶  AMIYO STUDIO                  " -ForegroundColor Red
+Write-Host "    /██ █ \          Professional Video Editor      " -ForegroundColor Cyan
+Write-Host "   /███████\         v$appVersion                   " -ForegroundColor Gray
+Write-Host "  /███   ███\                                      " -ForegroundColor Yellow
+Write-Host " ═════════════                                     " -ForegroundColor DarkYellow
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "         Amiyo Studio Version Check       " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
