@@ -261,13 +261,15 @@ try {
 
     # Layer 3: User Home bin
     $userBin = Join-Path $env:USERPROFILE "bin"
-    if (-not (Test-Path $userBin)) { New-Item -ItemType Directory -Path $userBin -Force -ErrorAction SilentlyContinue | Out-Null }
-    if (Test-Path $userBin) {
-        try {
-            Copy-Item $amiyoCmdPath (Join-Path $userBin "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
-            Copy-Item $amiyoPs1Path (Join-Path $userBin "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
-        } catch {}
-    }
+    try {
+        if (-not (Test-Path -LiteralPath $userBin -ErrorAction SilentlyContinue)) {
+            New-Item -ItemType Directory -Path $userBin -Force -ErrorAction SilentlyContinue 2>$null | Out-Null
+        }
+        if (Test-Path -LiteralPath $userBin -ErrorAction SilentlyContinue) {
+            Copy-Item -LiteralPath $amiyoCmdPath -Destination (Join-Path $userBin "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item -LiteralPath $amiyoPs1Path -Destination (Join-Path $userBin "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        }
+    } catch {}
 
     # Layer 4: Permanent User PATH in Windows Registry
     $userPath = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)

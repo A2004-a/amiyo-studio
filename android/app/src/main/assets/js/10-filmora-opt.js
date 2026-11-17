@@ -3160,9 +3160,9 @@ function lsGet(){try{return parseFloat(localStorage.getItem(K))}catch(e){return 
 function lsSet(v){try{localStorage.setItem(K,String(v))}catch(e){}}
 var ctr=document.querySelector('#amiyoMain .center'),tl=ctr&&ctr.querySelector(':scope>.timeline');
 if(!ctr||!tl)return;
-function bounds(){var H=ctr.getBoundingClientRect().height;return [Math.min(220,H*.4),Math.max(260,H-250)]}
-function dflt(){var H=ctr.getBoundingClientRect().height;return Math.round(H*.5)}
-function apply(px){var b=bounds();px=Math.max(b[0],Math.min(b[1],px));ctr.style.setProperty('grid-template-rows','minmax(0,1fr) '+Math.round(px)+'px','important');window.AMIYO_PP4=window.AMIYO_PP4||{};window.AMIYO_PP4.tlh=px;return px}
+function bounds(){var H=ctr.getBoundingClientRect().height||600;return [220,Math.max(280,H-200)]}
+function dflt(){var H=ctr.getBoundingClientRect().height||600;return Math.max(240,Math.round(H*.42))}
+function apply(px){var b=bounds();px=Math.max(b[0],Math.min(b[1],px||dflt()));ctr.style.setProperty('grid-template-rows','minmax(0,1fr) '+Math.round(px)+'px','important');document.documentElement.style.setProperty('--timeline-h',Math.round(px)+'px');window.AMIYO_PP4=window.AMIYO_PP4||{};window.AMIYO_PP4.tlh=px;return px}
 var saved=lsGet();apply(isNaN(saved)?dflt():saved);
 var h=document.createElement('div');h.id='pp4Split';h.title='Drag to resize timeline · double-click to reset';h.setAttribute('role','separator');h.setAttribute('aria-orientation','horizontal');tl.appendChild(h);
 var y0=0,s0=0;
@@ -3173,7 +3173,7 @@ h.addEventListener('dblclick',function(){var d=apply(dflt());lsSet(d);window.dis
 var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){var s=lsGet();apply(isNaN(s)?dflt():s)},120)});
 function flex(){var ts=document.getElementById('timelineScroll');
  tl.style.setProperty('display','flex','important');tl.style.setProperty('flex-direction','column','important');
- [].forEach.call(tl.children,function(c){var cs=getComputedStyle(c);if(cs.position==='absolute'||cs.display==='none')return;if(c===ts){c.style.setProperty('flex','1 1 0','important');c.style.setProperty('height','auto','important');c.style.setProperty('min-height','0','important')}else c.style.setProperty('flex','0 0 auto','important')})}
+ [].forEach.call(tl.children,function(c){var cs=getComputedStyle(c);if(cs.position==='absolute'||cs.display==='none')return;if(c===ts){c.style.setProperty('flex','1 1 auto','important');c.style.setProperty('height','auto','important');c.style.setProperty('min-height','150px','important')}else c.style.setProperty('flex','0 0 auto','important')})}
 flex();setTimeout(flex,1500);setTimeout(flex,5000);
 
 })()}catch(e){try{console.warn("pp4-s01",e)}catch(_){}}}if(document.readyState==="complete")setTimeout(go,300);else addEventListener("load",function(){setTimeout(go,300)})})();
@@ -3251,7 +3251,7 @@ var F='amiyo-pp4-s10';try{if(localStorage.getItem(F))return;localStorage.setItem
   /* seed only when the person never dragged the splitter (no saved value, or the value is the old 50% default we can recognise by the seed flag being absent) */
   if(isNaN(saved)&&!seeded){
    var H=ctr.getBoundingClientRect().height;
-   var px=Math.round(Math.min(Math.max(H*.6,300),H-230));
+   var px=Math.round(Math.min(Math.max(H*.45,260),H-180));if(px<220)px=260;document.documentElement.style.setProperty('--timeline-h',px+'px');
    try{localStorage.setItem(K,String(px));localStorage.setItem(F,String(px))}catch(e){}
    ctr.style.setProperty('grid-template-rows','minmax(0,1fr) '+px+'px','important');
    window.dispatchEvent(new Event('resize'));

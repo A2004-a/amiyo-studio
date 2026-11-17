@@ -1,4 +1,4 @@
-﻿# Amiyo Studio Auto-Updater
+# Amiyo Studio Auto-Updater
 $appVersion = "1.0.0"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"

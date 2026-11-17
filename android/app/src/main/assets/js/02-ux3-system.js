@@ -212,8 +212,14 @@ try{window.AMIYO_UX3_STEP=21;window.AMIYO_EDITOR_BUILD="ux3-s21";}catch(e){}
       // Restore saved column widths
       try {
         var saved = JSON.parse(localStorage.getItem("amiyo_col_widths") || "null");
-        if (saved && saved.sidebar) ws.style.setProperty("--sidebar-w", saved.sidebar + "px");
-        if (saved && saved.inspector) ws.style.setProperty("--inspector-w", saved.inspector + "px");
+        var curL = (saved && saved.sidebar >= 180) ? saved.sidebar : 240;
+        var curR = (saved && saved.inspector >= 280) ? saved.inspector : 310;
+        ws.style.setProperty("--sidebar-w", curL + "px");
+        ws.style.setProperty("--inspector-w", curR + "px");
+        document.documentElement.style.setProperty("--am-l", curL + "px");
+        document.documentElement.style.setProperty("--am-r", curR + "px");
+        document.documentElement.style.setProperty("--am-lw", curL + "px");
+        document.documentElement.style.setProperty("--am-rw", curR + "px");
       } catch(e){}
 
       function bindDrag(handle, isLeft) {
@@ -228,11 +234,15 @@ try{window.AMIYO_UX3_STEP=21;window.AMIYO_EDITOR_BUILD="ux3-s21";}catch(e){}
           function onPointerMove(ev) {
             var rect = ws.getBoundingClientRect();
             if (isLeft) {
-              var wL = Math.max(180, Math.min(550, ev.clientX - rect.left));
+              var wL = Math.max(180, Math.min(500, ev.clientX - rect.left));
               ws.style.setProperty("--sidebar-w", Math.round(wL) + "px");
+              document.documentElement.style.setProperty("--am-l", Math.round(wL) + "px");
+              document.documentElement.style.setProperty("--am-lw", Math.round(wL) + "px");
             } else {
-              var wR = Math.max(200, Math.min(600, rect.right - ev.clientX));
+              var wR = Math.max(280, Math.min(600, rect.right - ev.clientX));
               ws.style.setProperty("--inspector-w", Math.round(wR) + "px");
+              document.documentElement.style.setProperty("--am-r", Math.round(wR) + "px");
+              document.documentElement.style.setProperty("--am-rw", Math.round(wR) + "px");
             }
             try { window.dispatchEvent(new Event("resize")); } catch(x){}
           }
