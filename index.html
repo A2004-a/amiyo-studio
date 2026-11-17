@@ -1,6 +1,30 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script id="amiyo-head-nuker">
+(function(){
+  try {
+    // 1. Unregister all service workers immediately
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){ r.unregister(); });
+      });
+    }
+    // 2. Clear all cache storage immediately
+    if ('caches' in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ caches.delete(k); });
+      });
+    }
+    // 3. Purge all stale layout localStorage keys
+    ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh', 'amiyo_pr2_ws', 'amiyo.workspace'].forEach(function(k){
+      try { localStorage.removeItem(k); } catch(e){}
+    });
+    // 4. Force root CSS variable
+    document.documentElement.style.setProperty('--am-f', '0.48');
+  } catch(e){}
+})();
+</script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0a0908"/>
@@ -35,18 +59,7 @@
 <link rel="stylesheet" href="css/app.css?v=1.0.3" id="v07-css"/>
 
 <!-- INLINE: Force correct desktop NLE layout before any cached external files -->
-<style id="amiyo-inline-layout-fix">
-@media (min-width:769px){
-  #pp5Menu{display:none!important}
-  .app{grid-template-rows:56px minmax(0,1fr) auto!important;width:100vw!important;height:100vh!important;overflow:hidden!important}
-  .app .center{display:flex!important;flex-direction:column!important;height:100%!important;overflow:hidden!important}
-  .app .center>.preview-wrap{flex:1 1 0!important;max-height:50%!important;min-height:160px!important;overflow:hidden!important}
-  .app .center>#amPvHandle,.app .center>#pvHandle{display:none!important;height:0!important;pointer-events:none!important}
-  .app .center>.timeline{flex:1 1 0!important;min-height:250px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
-  #timelineScroll{flex:1 1 auto!important;min-height:150px!important;overflow:auto!important}
-  #tracks{min-height:130px!important}
-}
-</style>
+
 <script>
 /* INLINE: Bust stale service worker cache + stale localStorage on desktop */
 (function(){

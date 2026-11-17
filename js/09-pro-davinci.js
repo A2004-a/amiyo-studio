@@ -7878,7 +7878,7 @@ sync();if(had===null)show('tools');
 
 ;
 /* ==================== Script 1310 id="amiyo-pp-s09" ==================== */
-(function(){try{
+(function(){try{ return; // Disabled: #ppWs clutter
 var nav=document.getElementById('dvPages'),ws=document.getElementById('wsBtn');if(!nav||!ws||document.getElementById('ppWs'))return;
 var map=[['Assembly','Media'],['Cut','Cut'],['Editing','Edit'],['Color','Color'],['Audio','Fairlight'],['Export','Deliver']];
 function btn(n){return [].slice.call(nav.querySelectorAll('button')).filter(function(b){return(b.textContent||'').trim().replace(/^\S+\s+/,'')===n||(b.textContent||'').trim().endsWith(n)})[0]}
@@ -7940,7 +7940,7 @@ function apply(){
   L.l=clamp(L.l,220,Math.max(220,W*.32));L.r=clamp(L.r,280,Math.max(280,W*.36));
   var avail=(ct&&ct.clientHeight)||H-90;L.t=clamp(L.t,240,Math.max(240,avail-180));
   st.textContent='html body .app .workspace,html body .workspace{grid-template-columns:'+L.l+'px minmax(0,1fr) '+L.r+'px!important}'+
-   'html body .app .workspace>.center,html body .app .center{grid-template-rows:minmax(150px,1fr) '+L.t+'px!important}';
+   'html body .app .workspace>.center,html body .app .center{grid-template-rows:1fr 1fr!important}';
   place();
 }
 function place(){

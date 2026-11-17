@@ -1,3 +1,11 @@
+
+try {
+  ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh'].forEach(function(k){
+    try { localStorage.removeItem(k); } catch(e){}
+  });
+} catch(e){}
+window.__amiyoNukeStaleKeys = true;
+
 /* Amiyo Studio - 11-screen-touch.js */
 /* Responsive layouts, mobile touch and screen optimizations */
 /* Scripts 1600 to 1678 */
@@ -1089,7 +1097,7 @@ var DEF={stack:.52,phone:.42,side:.46}, MIN=.12, MAX=.9, f=.5, ev={}, raf=0;
 function mode(){ return SIDE.matches?"side":"stack"; }
 function key(){ return SIDE.matches?"side":(PHONE.matches?"phone":"stack"); }
 function def(){ return DEF[key()]; }
-function clamp(v){ if(typeof innerWidth==="number"&&innerWidth>=768) return 0.48; v=+v; if(!(v===v)) v=def(); return Math.min(MAX,Math.max(MIN,v)); }
+function clamp(v){ if(typeof window!=="undefined"&&window.innerWidth>=768) return 0.48; v=+v; if(!(v===v)) v=def(); return Math.min(MAX,Math.max(MIN,v)); }
 function emit(n,a){ (ev[n]||[]).slice().forEach(function(fn){ try{ fn(a); }catch(e){ try{console.warn("AMPV",e);}catch(x){} } }); }
 var lt=0;
 function refit(live){
