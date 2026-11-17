@@ -13,9 +13,9 @@
 | Phase | Description | Status | Verification / Notes |
 |---|---|---|---|
 | **Phase 1** | Complete Existing Application Audit & Stabilization | ✅ **Completed** | Full static analysis (88,636 lines across 11 modules), headless unit tests, and DOM anchor verifications passed. |
-| **Phase 2** | Professional User Interface & Workspace Management | 🟡 **In Progress** | Premiere / DaVinci workspace presets available (`Editing`, `Assembly`, `Color`, `Audio`, `Effects`, `Graphics`); panel docking and multi-monitor layout enhancements queued. |
-| **Phase 3** | Professional Multitrack Timeline Engine | 🟡 **In Progress** | Multitrack data models, selection, razor, slip, slide, roll, ripple delete, in/out trimming, and command history operational. |
-| **Phase 4** | Professional Video Playback Engine | 🟡 **In Progress** | Canvas preview, frame stepping, J/K/L shuttle scrubbing, and WebAudio synchronization active; Source vs. Program dual monitor layout refinement queued. |
+| **Phase 2** | Professional User Interface & Workspace Management | ✅ **Completed** | Fullscreen preview engine, dynamic draggable splitters (`--sidebar-w`, `--inspector-w`), and full workspace presets (`Editing`, `Color`, `Audio`, `Effects`, `Graphics`, `Export`, `Assembly`) implemented and tested. |
+| **Phase 3** | Professional Multitrack Timeline Engine | ✅ **Completed** | Complete Premiere Pro NLE toolbar (V, A, B, C, R, Y, U, N, P, H, Z), grouping (`Ctrl+G`), audio linking (`Ctrl+L`), track targeting (`V1`, `A1`), and inline track renaming active and verified. |
+| **Phase 4** | Professional Video Playback Engine | ✅ **Completed** | Side-by-side Dual Monitor (Source vs Program), playback resolution scaling (Full, 1/2, 1/4), broadcast safe zones (80% title, 90% action), loop playback, and frame stepping (Left/Right arrow) verified. |
 | **Phase 5** | Professional Video Editing Tools | 🟡 **In Progress** | Speed zones, time remapping, cropping, transforms, chroma keying, and adjustment layers present. |
 | **Phase 6** | Professional Color Correction and Grading | 🟡 **In Progress** | Lift/Gamma/Gain wheels, RGB curves, LUTs, and live scopes (waveform, vectorscope, RGB parade, histogram) active. |
 | **Phase 7** | Professional Audio Editing & DSP Lab | 🟡 **In Progress** | Multitrack audio mixing, parametric EQ, dynamics compression, noise gate, limiter, and loudness monitoring operational. |

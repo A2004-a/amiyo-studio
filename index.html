@@ -83,25 +83,62 @@
       </div>
       <div class="panel" id="leftPanel"></div>
     </aside>
+    <div class="amiyo-split-v amiyo-split-left" id="amiyoSplitLeft" role="separator" aria-label="Resize Media Panel" title="Drag to resize Media Panel"></div>
 
     <section class="center">
       <div class="preview-wrap">
         <div class="preview-toolbar">
-          <button class="toolbtn" id="playBtn">▶ Play</button>
-          <button class="toolbtn" id="stopBtn">■ Stop</button>
-          <button class="toolbtn" id="prevFrameBtn">◀ Frame</button>
-          <button class="toolbtn" id="nextFrameBtn">Frame ▶</button>
-          <button class="toolbtn" id="fitBtn">Fit</button>
-          <button class="toolbtn" id="gridBtn">Grid</button>
+          <button class="toolbtn" id="playBtn" title="Play / Pause (Space)">▶ Play</button>
+          <button class="toolbtn" id="stopBtn" title="Stop (K)">■ Stop</button>
+          <button class="toolbtn" id="prevFrameBtn" title="Step 1 Frame Backward (Left Arrow)">◀ Frame</button>
+          <button class="toolbtn" id="nextFrameBtn" title="Step 1 Frame Forward (Right Arrow)">Frame ▶</button>
+          <button class="toolbtn" id="loopBtn" title="Toggle Loop Playback">🔁 Loop</button>
+          <button class="toolbtn" id="safeZoneBtn" title="Toggle Safe Margins (Title 80%, Action 90%)">🛡 Safe</button>
+          <button class="toolbtn" id="gridBtn" title="Toggle Alignment Grid">Grid</button>
+          <button class="toolbtn" id="dualMonitorBtn" title="Toggle Dual Monitor (Source & Program side-by-side)">🗔 Dual</button>
+          <select id="playbackResolution" class="toolbtn" title="Playback Resolution (Full, 1/2, 1/4) for smooth real-time scrubbing" style="padding:3px 6px;height:26px">
+            <option value="1">1/1 Full</option>
+            <option value="2">1/2 Half</option>
+            <option value="4">1/4 Qtr</option>
+          </select>
+          <button class="toolbtn" id="fitBtn" title="Fit to stage">Fit</button>
+          <button class="toolbtn" id="fullscreenBtn" title="Full Screen Preview (~ or Ctrl+F)">⛶ Full</button>
           <span class="badge" id="engineBadge">Canvas Preview</span>
           <span class="badge" id="shuttleBadge" style="display:none">J/K/L</span>
-          <span class="playhead-time" id="timeReadout">00:00.000 / 00:30.000</span>
+          <span class="playhead-time" id="timeReadout" title="Click to jump to timecode">00:00.000 / 00:30.000</span>
         </div>
-        <div class="preview-stage">
+        <div class="preview-stage" id="previewStage">
+          <!-- Dual Monitor Layout (Source & Program side-by-side) -->
+          <div class="dual-monitor-wrap" id="dualMonitorWrap" style="display:none">
+            <div class="canvas-shell source-shell" id="sourceShell" style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
+              <div class="source-header" style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ffc06a;font-size:10px;font-weight:600;z-index:3;display:flex;justify-content:space-between">
+                <span>SOURCE MONITOR</span>
+                <span id="srcAssetTitle" style="color:#e4dcce;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">No Media Selected</span>
+              </div>
+              <video id="sourceVideoEl" playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;background:#050505"></video>
+              <div class="source-io-bar" style="position:absolute;bottom:0;left:0;right:0;height:26px;background:rgba(12,11,9,0.9);display:flex;align-items:center;gap:4px;padding:0 6px;z-index:3;border-top:1px solid #26221c">
+                <button class="toolbtn" id="srcInBtn" title="Mark In (I)" style="padding:2px 6px;font-size:10px">In</button>
+                <button class="toolbtn" id="srcOutBtn" title="Mark Out (O)" style="padding:2px 6px;font-size:10px">Out</button>
+                <button class="toolbtn" id="srcInsertBtn" title="Insert edit at playhead (,)" style="padding:2px 6px;font-size:10px">Insert ,</button>
+                <button class="toolbtn" id="srcOverwriteBtn" title="Overwrite edit at playhead (.)" style="padding:2px 6px;font-size:10px">Overwrite .</button>
+                <span id="srcTimecode" style="margin-left:auto;font-size:10px;color:#c4bcac;font-family:var(--font-mono)">00:00.000</span>
+              </div>
+            </div>
+            <div class="canvas-shell program-shell" id="programShellWrap" style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
+              <div class="program-header" style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ff7a3d;font-size:10px;font-weight:600;z-index:3">PROGRAM MONITOR (TIMELINE)</div>
+            </div>
+          </div>
+
+          <!-- Standard Canvas Shell -->
           <div class="canvas-shell" id="canvasShell">
             <canvas id="previewCanvas" width="1280" height="720"></canvas>
             <video id="videoEl" playsinline preload="metadata"></video>
-            <div class="preview-overlay"><div class="safe"></div><div class="grid-overlay" id="gridOverlay"></div></div>
+            <div class="preview-overlay" id="previewOverlay">
+              <div class="safe" id="defaultSafe"></div>
+              <div class="safe-zone-box safe-zone-action" id="actionSafe" style="display:none"></div>
+              <div class="safe-zone-box safe-zone-title" id="titleSafe" style="display:none"></div>
+              <div class="grid-overlay" id="gridOverlay"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -109,13 +146,19 @@
       <div class="timeline">
         <div class="timeline-toolbar" style="flex-wrap:wrap;height:auto;min-height:42px;row-gap:4px">
           <button class="toolbtn tool-active" id="toolSelect" title="Selection tool (V)">↖ V</button>
+          <button class="toolbtn" id="toolTrackSelect" title="Track Select Forward (A / Shift+A)">⇉ A</button>
+          <button class="toolbtn" id="toolRipple" title="Ripple Edit tool (B)">⇥ B</button>
           <button class="toolbtn" id="toolRazor" title="Razor / Cut tool (C)">✂ C</button>
-          <button class="toolbtn" id="toolHand" title="Hand tool (H)">✋ H</button>
-          <button class="toolbtn" id="toolZoom" title="Zoom tool (Z)">🔍 Zoom Z</button>
+          <button class="toolbtn" id="toolRateStretch" title="Rate Stretch tool (R)">↔ R</button>
           <button class="toolbtn" id="toolSlip" title="Slip tool — shift a clip's source In/Out under a fixed position (Y)">⇄ Slip Y</button>
           <button class="toolbtn" id="toolSlide" title="Slide tool — move a clip and let neighbors absorb the gap (U)">⇉ Slide U</button>
           <button class="toolbtn" id="toolRoll" title="Rolling Edit — drag the cut point between two clips (N)">⇕ Roll N</button>
+          <button class="toolbtn" id="toolPen" title="Pen tool — add/edit keyframes on timeline clips (P)">🖋 P</button>
+          <button class="toolbtn" id="toolHand" title="Hand tool (H)">✋ H</button>
+          <button class="toolbtn" id="toolZoom" title="Zoom tool (Z)">🔍 Zoom Z</button>
           <button class="toolbtn" id="snapToggle" title="Snap to clips/playhead (S)">🧲 Snap</button>
+          <button class="toolbtn" id="groupBtn" title="Group Selected Clips (Ctrl+G)">📦 Group</button>
+          <button class="toolbtn" id="linkBtn" title="Link/Unlink Audio (Ctrl+L)">🔗 Link</button>
           <span style="width:1px;height:20px;background:var(--line)"></span>
           <button class="toolbtn" id="setInBtn" title="Set In point (I)">In</button>
           <button class="toolbtn" id="setOutBtn" title="Set Out point (O)">Out</button>
@@ -140,7 +183,7 @@
         </div>
       </div>
     </section>
-
+    <div class="amiyo-split-v amiyo-split-right" id="amiyoSplitRight" role="separator" aria-label="Resize Inspector" title="Drag to resize Inspector"></div>
     <div class="inspector-col" id="inspectorCol"><aside class="inspector" id="inspector"></aside></div>
   </main>
   <nav class="mbar" id="mbar" aria-label="Editor actions">

@@ -41,7 +41,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .topbtn.primary{background:linear-gradient(155deg,var(--accent),#e8622a);color:#1a0c03;box-shadow:0 8px 24px rgba(255,122,61,.22);font-weight:700}
 .topbtn.primary:hover{background:linear-gradient(155deg,#ff8a52,var(--accent));border-color:transparent}
 .status{font-size:11px;color:var(--muted);min-width:96px;text-align:center;font-family:var(--font-mono)}
-.workspace{min-height:0;display:grid;grid-template-columns:250px minmax(0,1fr) 300px}
+.workspace{min-height:0;display:grid;grid-template-columns:var(--sidebar-w,250px) minmax(0,1fr) var(--inspector-w,300px);position:relative}
 .sidebar,.inspector{background:var(--panel);min-height:0;overflow:auto}
 .sidebar{border-right:1px solid var(--line)}
 .inspector{border-left:1px solid var(--line)}
@@ -4894,4 +4894,108 @@ html:root:not(#fx1):not(#fx2):not(#fx3):not(#fx4):not(#fx5):not(#fx6):not(#fx7):
 html:root:not(#fx1):not(#fx2):not(#fx3):not(#fx4):not(#fx5):not(#fx6):not(#fx7):not(#fx8):not(#fx9):not(#fx10):not(#fx11):not(#fx12):not(#fx13):not(#fx14):not(#fx15):not(#fx16):not(#fx17):not(#fx18):not(#fx19):not(#fx20):not(#fx21):not(#fx22):not(#fx23):not(#fx24):not(#fx25):not(#fx26):not(#fx27):not(#fx28):not(#fx29):not(#fx30):not(#fx31):not(#fx32):not(#fx33):not(#fx34):not(#fx35):not(#fx36):not(#fx37):not(#fx38):not(#fx39):not(#fx40):not(#fx41):not(#fx42):not(#fx43):not(#fx44):not(#fx45):not(#fx46):not(#fx47):not(#fx48):not(#fx49):not(#fx50):not(#fx51):not(#fx52):not(#fx53):not(#fx54):not(#fx55):not(#fx56):not(#fx57):not(#fx58):not(#fx59):not(#fx60):not(#fx61):not(#fx62):not(#fx63):not(#fx64):not(#fx65):not(#fx66):not(#fx67):not(#fx68):not(#fx69):not(#fx70):not(#fx71):not(#fx72):not(#fx73):not(#fx74):not(#fx75):not(#fx76):not(#fx77):not(#fx78):not(#fx79):not(#fx80):not(#fx81):not(#fx82):not(#fx83):not(#fx84):not(#fx85):not(#fx86):not(#fx87):not(#fx88):not(#fx89):not(#fx90):not(#fx91):not(#fx92):not(#fx93):not(#fx94):not(#fx95):not(#fx96):not(#fx97):not(#fx98):not(#fx99):not(#fx100):not(#fx101):not(#fx102):not(#fx103):not(#fx104):not(#fx105):not(#fx106):not(#fx107):not(#fx108):not(#fx109):not(#fx110):not(#fx111):not(#fx112):not(#fx113):not(#fx114):not(#fx115):not(#fx116):not(#fx117):not(#fx118):not(#fx119):not(#fx120):not(#fx121):not(#fx122):not(#fx123):not(#fx124):not(#fx125):not(#fx126):not(#fx127):not(#fx128):not(#fx129):not(#fx130):not(#fx131):not(#fx132):not(#fx133):not(#fx134):not(#fx135):not(#fx136):not(#fx137):not(#fx138):not(#fx139):not(#fx140):not(#fx141):not(#fx142):not(#fx143):not(#fx144):not(#fx145):not(#fx146):not(#fx147):not(#fx148):not(#fx149):not(#fx150):not(#fx151):not(#fx152):not(#fx153):not(#fx154):not(#fx155):not(#fx156):not(#fx157):not(#fx158):not(#fx159):not(#fx160):not(#fx161):not(#fx162):not(#fx163):not(#fx164):not(#fx165):not(#fx166):not(#fx167):not(#fx168):not(#fx169):not(#fx170):not(#fx171):not(#fx172):not(#fx173):not(#fx174):not(#fx175):not(#fx176):not(#fx177):not(#fx178):not(#fx179):not(#fx180):not(#fx181):not(#fx182):not(#fx183):not(#fx184):not(#fx185):not(#fx186):not(#fx187):not(#fx188):not(#fx189):not(#fx190):not(#fx191):not(#fx192):not(#fx193):not(#fx194):not(#fx195):not(#fx196):not(#fx197):not(#fx198):not(#fx199):not(#fx200) body.am-pv-thin section.center>.timeline{overflow:hidden!important}
 /* FIX 2: a thin white dashed line (clipped edge of the hidden brand text) showed beside the logo */
 html:root:not(#fx1):not(#fx2):not(#fx3):not(#fx4):not(#fx5):not(#fx6):not(#fx7):not(#fx8):not(#fx9):not(#fx10):not(#fx11):not(#fx12):not(#fx13):not(#fx14):not(#fx15):not(#fx16):not(#fx17):not(#fx18):not(#fx19):not(#fx20):not(#fx21):not(#fx22):not(#fx23):not(#fx24):not(#fx25):not(#fx26):not(#fx27):not(#fx28):not(#fx29):not(#fx30):not(#fx31):not(#fx32):not(#fx33):not(#fx34):not(#fx35):not(#fx36):not(#fx37):not(#fx38):not(#fx39):not(#fx40):not(#fx41):not(#fx42):not(#fx43):not(#fx44):not(#fx45):not(#fx46):not(#fx47):not(#fx48):not(#fx49):not(#fx50):not(#fx51):not(#fx52):not(#fx53):not(#fx54):not(#fx55):not(#fx56):not(#fx57):not(#fx58):not(#fx59):not(#fx60):not(#fx61):not(#fx62):not(#fx63):not(#fx64):not(#fx65):not(#fx66):not(#fx67):not(#fx68):not(#fx69):not(#fx70):not(#fx71):not(#fx72):not(#fx73):not(#fx74):not(#fx75):not(#fx76):not(#fx77):not(#fx78):not(#fx79):not(#fx80):not(#fx81):not(#fx82):not(#fx83):not(#fx84):not(#fx85):not(#fx86):not(#fx87):not(#fx88):not(#fx89):not(#fx90):not(#fx91):not(#fx92):not(#fx93):not(#fx94):not(#fx95):not(#fx96):not(#fx97):not(#fx98):not(#fx99):not(#fx100):not(#fx101):not(#fx102):not(#fx103):not(#fx104):not(#fx105):not(#fx106):not(#fx107):not(#fx108):not(#fx109):not(#fx110):not(#fx111):not(#fx112):not(#fx113):not(#fx114):not(#fx115):not(#fx116):not(#fx117):not(#fx118):not(#fx119):not(#fx120):not(#fx121):not(#fx122):not(#fx123):not(#fx124):not(#fx125):not(#fx126):not(#fx127):not(#fx128):not(#fx129):not(#fx130):not(#fx131):not(#fx132):not(#fx133):not(#fx134):not(#fx135):not(#fx136):not(#fx137):not(#fx138):not(#fx139):not(#fx140):not(#fx141):not(#fx142):not(#fx143):not(#fx144):not(#fx145):not(#fx146):not(#fx147):not(#fx148):not(#fx149):not(#fx150):not(#fx151):not(#fx152):not(#fx153):not(#fx154):not(#fx155):not(#fx156):not(#fx157):not(#fx158):not(#fx159):not(#fx160):not(#fx161):not(#fx162):not(#fx163):not(#fx164):not(#fx165):not(#fx166):not(#fx167):not(#fx168):not(#fx169):not(#fx170):not(#fx171):not(#fx172):not(#fx173):not(#fx174):not(#fx175):not(#fx176):not(#fx177):not(#fx178):not(#fx179):not(#fx180):not(#fx181):not(#fx182):not(#fx183):not(#fx184):not(#fx185):not(#fx186):not(#fx187):not(#fx188):not(#fx189):not(#fx190):not(#fx191):not(#fx192):not(#fx193):not(#fx194):not(#fx195):not(#fx196):not(#fx197):not(#fx198):not(#fx199):not(#fx200) body .topbar .brand>div:not(.logo){display:none!important}
+
+/* ==================== Style 378 id="amiyo-phase234-nle-suite" ==================== */
+/* Phase 2: Professional NLE Resizable Splitters & Fullscreen */
+.amiyo-split-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  cursor: col-resize;
+  z-index: 45;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: transparent;
+  transition: background .12s;
+}
+.amiyo-split-v:hover, .amiyo-split-v.dragging {
+  background: var(--accent, #ff7a3d);
+}
+.amiyo-split-left {
+  right: -4px;
+}
+.amiyo-split-right {
+  left: -4px;
+}
+.canvas-shell.amiyo-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  z-index: 999999 !important;
+  background: #000 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.canvas-shell.amiyo-fullscreen #previewCanvas {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  object-fit: contain !important;
+}
+
+/* Phase 3: Premiere Pro Tool States on Timeline */
+.tracks.tool-trackselect .clip { cursor: e-resize !important; }
+.tracks.tool-ripple .clip { cursor: col-resize !important; }
+.tracks.tool-ratestretch .clip { cursor: w-resize !important; }
+.tracks.tool-pen .clip { cursor: crosshair !important; }
+.track-target-badge {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #25221c;
+  color: #a49a89;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  user-select: none;
+}
+.track-target-badge.active {
+  background: var(--accent, #ff7a3d);
+  color: #140802;
+  font-weight: 700;
+  border-color: #ff9d6e;
+}
+.track-lock-btn {
+  background: transparent;
+  border: none;
+  color: #7a7263;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px;
+}
+.track-lock-btn.locked {
+  color: #ff6a2c;
+}
+
+/* Phase 4: Dual Monitor & Safe Margins */
+.dual-monitor-wrap {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  padding: 6px;
+  box-sizing: border-box;
+}
+.safe-zone-box {
+  position: absolute;
+  pointer-events: none;
+}
+.safe-zone-action {
+  inset: 5%;
+  border: 1px dashed rgba(255, 200, 100, 0.35);
+}
+.safe-zone-title {
+  inset: 10%;
+  border: 1px solid rgba(100, 200, 255, 0.4);
+}
+
 

@@ -159,6 +159,14 @@ check('Android build.gradle and app/build.gradle exist and match target SDK 34',
   return appContent.includes('compileSdk 34') && appContent.includes('targetSdk 34');
 });
 
+console.log('\n5. Verifying Phase 2, 3, 4 NLE Professional Systems...');
+check('Phase 2, 3, 4 NLE Suite tests pass (UI, Multitrack Timeline & Playback)', () => {
+  const testScript = path.join(rootDir, 'scripts', 'test-phase234.js');
+  const { execSync } = require('child_process');
+  execSync(`node "${testScript}"`, { stdio: 'inherit' });
+  return true;
+});
+
 console.log('\n========================================');
 if (hasErrors) {
   console.error('Validation FAILED. Please review the errors above.');
