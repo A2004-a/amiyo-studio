@@ -31,12 +31,12 @@ Originally bundled into a single massive 9.2 MB file containing 93,700+ lines, t
 Choose your platform to download Amiyo Studio directly or install via a single terminal command:
 
 ### 1. 🪟 Windows (Windows 11, 10, 8.1, 7)
-- **64-bit Installer (x64)**: [⬇️ **Download Amiyo-Studio-win-x64.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-x64.exe)
-- **32-bit Installer (x86 / ia32)**: [⬇️ **Download Amiyo-Studio-win-ia32.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-win-ia32.exe)
+- **64-bit Installer (x64)**: [⬇️ **Download Amiyo-Studio-win-x64.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-win-x64.exe) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-win-x64.exe))*
+- **32-bit Installer (x86 / ia32)**: [⬇️ **Download Amiyo-Studio-win-ia32.exe**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-win-ia32.exe) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-win-ia32.exe))*
 - **Portable ZIP (Zero Installation)**: [⬇️ **Download Amiyo-Studio-Source.zip**](https://github.com/A2004-a/amiyo-studio/archive/refs/heads/main.zip) *(Extract and double-click `index.html` to run instantly!)*
 - **⚡ 1-Line PowerShell Auto-Installer (Recommended)**:
   ```powershell
-  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex
+  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=1.0.0 | iex
   ```
 - **💻 1-Line Command Prompt (CMD)**:
   ```cmd
@@ -46,7 +46,7 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 ---
 
 ### 2. 🍎 macOS (Apple Silicon M1/M2/M3 & Intel)
-- **Universal Disk Image (.dmg)**: [⬇️ **Download Amiyo-Studio-mac.dmg**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-mac.dmg)
+- **Universal Disk Image (.dmg)**: [⬇️ **Download Amiyo-Studio-mac.dmg**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-mac.dmg) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-mac.dmg))*
 - **⚡ 1-Line Terminal (Bash/Zsh)**:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
@@ -55,7 +55,7 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 ---
 
 ### 3. 🐧 Linux (Ubuntu, Debian, Fedora, Arch, etc.)
-- **Universal 64-bit (.AppImage)**: [⬇️ **Download Amiyo-Studio-linux-x86_64.AppImage**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-linux-x86_64.AppImage)
+- **Universal 64-bit (.AppImage)**: [⬇️ **Download Amiyo-Studio-linux-x86_64.AppImage**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-linux-x86_64.AppImage) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-linux-x86_64.AppImage))*
 - **⚡ 1-Line Terminal (Bash)**:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.sh | bash
@@ -64,7 +64,7 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 ---
 
 ### 4. 📱 Android (Phones, Tablets & Foldables)
-- **Direct APK Package**: [⬇️ **Download Amiyo-Studio-android.apk**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-android.apk)
+- **Direct APK Package**: [⬇️ **Download Amiyo-Studio-android.apk**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-android.apk) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-android.apk))*
 - **Automatic 1-Command Build (Cross-Platform)**:
   ```bash
   npm run build:android
@@ -217,12 +217,12 @@ amiyo-studio/
 Run this single command in **Windows PowerShell**. It automatically detects if Amiyo Studio is already installed (desktop app or portable), sets up the global `amiyo` command across your system, and launches the app:
 
 ```powershell
-irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=1.0.0 | iex
 ```
 
 > [!TIP]
-> - **Already Installed?** Skips downloading and **directly opens** Amiyo Studio in under a second!
-> - **New Computer?** Automatically downloads the latest `v0.0.1` release, configures the terminal command, and launches.
+> - **Already Installed?** Checks for updates and **directly opens** Amiyo Studio in under a second!
+> - **New Computer?** Automatically downloads the latest `v1.0.0` release, configures the terminal command, and launches.
 
 **Windows Command Prompt (CMD):**
 ```cmd
@@ -241,7 +241,8 @@ Once set up, launch Amiyo Studio anytime from **any terminal window** (PowerShel
 
 ```bash
 amiyo                 # Directly open Amiyo Studio
-amiyo --version       # Show installed version (outputs: Amiyo Studio v0.0.1)
+amiyo --version       # Show installed version (outputs: Amiyo Studio v1.0.0)
+amiyo update          # Update installation to latest release
 amiyo --help          # View all CLI options
 amiyo -p 8080         # Start local server on custom port
 ```
@@ -253,7 +254,7 @@ Check the latest release version and your local installation status directly:
 
 **Windows PowerShell:**
 ```powershell
-irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.ps1?v=0.0.1 | iex
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/version.ps1?v=1.0.0 | iex
 ```
 
 **Windows Command Prompt (CMD):**

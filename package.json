@@ -1,6 +1,6 @@
 {
   "name": "amiyo-studio",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Private, high-performance in-browser and desktop multi-track video and audio editor.",
   "main": "main.js",
   "browser": "index.html",

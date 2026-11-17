@@ -1,4 +1,5 @@
-$appVersion = "0.0.1"
+# Amiyo Studio Installer
+$appVersion = "1.0.0"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
 
@@ -30,58 +31,81 @@ $nativeExe = ""
 
 $searchLocations = @(
     (Get-Location).Path,
+    (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2"),
+    (Join-Path $env:LOCALAPPDATA "AmiyoStudio"),
     (Join-Path $env:LOCALAPPDATA "Programs\amiyo-studio"),
     (Join-Path $env:LOCALAPPDATA "Programs\Amiyo Studio"),
     "C:\Program Files\Amiyo Studio",
     "C:\Program Files (x86)\Amiyo Studio",
-    (Join-Path $env:LOCALAPPDATA "AmiyoStudio"),
-    (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2"),
     (Join-Path $env:USERPROFILE "amiyo-studio")
 )
 
 foreach ($loc in $searchLocations) {
     if (Test-Path $loc) {
-        # Check for native desktop executable
+        # Check for modern native desktop executable (>= 1.0.0)
         $exe1 = Join-Path $loc "Amiyo Studio.exe"
         $exe2 = Join-Path $loc "amiyo-studio.exe"
-        if (Test-Path $exe1) {
-            $nativeExe = $exe1
-            $targetDir = $loc
-            break
-        } elseif (Test-Path $exe2) {
-            $nativeExe = $exe2
-            $targetDir = $loc
-            break
-        } elseif ((Test-Path (Join-Path $loc "index.html")) -and (Test-Path (Join-Path $loc "bin\cli.js"))) {
-            $targetDir = $loc
-            break
-        } elseif (Test-Path (Join-Path $loc "index.html")) {
-            $targetDir = $loc
-            break
+        $cand = ""
+        if (Test-Path $exe1) { $cand = $exe1 }
+        elseif (Test-Path $exe2) { $cand = $exe2 }
+
+        if ($cand) {
+            try {
+                $ver = (Get-Item $cand).VersionInfo.ProductVersion
+                if ($ver) {
+                    $major = [int]($ver.Split('.')[0])
+                    if ($major -ge 1) {
+                        $nativeExe = $cand
+                        $targetDir = $loc
+                        break
+                    }
+                }
+            } catch {}
+        }
+
+        # Check for web / node application workspace
+        $pkgPath = Join-Path $loc "package.json"
+        if ((Test-Path (Join-Path $loc "index.html")) -and (Test-Path $pkgPath)) {
+            try {
+                $pkgContent = Get-Content $pkgPath -Raw | ConvertFrom-Json
+                if ($pkgContent.version -eq $appVersion -or $loc -eq (Get-Location).Path -or $loc -like "*amiyo studio 2*") {
+                    $targetDir = $loc
+                    break
+                }
+            } catch {}
         }
     }
 }
 
-if ($targetDir) {
-    Write-Host "[OK] Detected Amiyo Studio installation at: $targetDir" -ForegroundColor Green
-    Write-Host "[OK] Skipping download - configuring terminal commands directly." -ForegroundColor Green
+if ($targetDir -and (Test-Path (Join-Path $targetDir "index.html"))) {
+    Write-Host "[OK] Detected Amiyo Studio v$appVersion at: $targetDir" -ForegroundColor Green
+    if (Test-Path (Join-Path $targetDir ".git")) {
+        try {
+            Write-Host "[INFO] Syncing latest updates via git..." -ForegroundColor Cyan
+            Push-Location $targetDir
+            git pull --rebase origin main 2>&1 | Out-Null
+            Pop-Location
+        } catch {}
+    }
 } else {
-    # NOT INSTALLED -> Download and install now
-    Write-Host "[INFO] Amiyo Studio is not installed on this system." -ForegroundColor Yellow
-    Write-Host "[INFO] Downloading and installing Amiyo Studio v$appVersion..." -ForegroundColor Cyan
-
+    # NOT INSTALLED OR OUTDATED -> Download and install latest v1.0.0 now
     $targetDir = Join-Path $env:LOCALAPPDATA "AmiyoStudio"
+    Write-Host "[INFO] Installing / Updating Amiyo Studio v$appVersion to: $targetDir" -ForegroundColor Cyan
 
     $downloadSuccess = $false
     if (Get-Command git -ErrorAction SilentlyContinue) {
         try {
             if (Test-Path (Join-Path $targetDir ".git")) {
                 Push-Location $targetDir
-                git pull --rebase origin main 2>&1 | Out-Null
+                git fetch origin main 2>&1 | Out-Null
+                git reset --hard origin/main 2>&1 | Out-Null
                 Pop-Location
                 $downloadSuccess = (Test-Path (Join-Path $targetDir "index.html"))
             } elseif (Test-Path (Join-Path $targetDir "index.html")) {
-                $downloadSuccess = $true
+                Push-Location $targetDir
+                git clone --depth 1 "https://github.com/$githubRepo.git" . 2>&1 | Out-Null
+                Pop-Location
+                $downloadSuccess = (Test-Path (Join-Path $targetDir "index.html"))
             } else {
                 if (Test-Path $targetDir) {
                     Remove-Item $targetDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -151,6 +175,10 @@ if /i "%~1"=="/v" (echo Amiyo Studio v$appVersion & exit /b 0)
 if /i "%~1"=="--help" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
 if /i "%~1"=="-h" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
 if /i "%~1"=="help" (echo Amiyo Studio CLI v$appVersion & exit /b 0)
+if /i "%~1"=="update" (
+  powershell -NoProfile -Command "irm https://raw.githubusercontent.com/$githubRepo/main/update.ps1 | iex"
+  exit /b 0
+)
 "@
 if ($nativeExe) {
     $cmdContent += "`r`nstart `"`" `"$nativeExe`" %*`r`nexit /b 0`r`n"
@@ -172,9 +200,14 @@ exit /b 0
 
 # Generate amiyo.ps1
 $ps1Content = @"
+# Amiyo Studio CLI Launcher
 `$appVersion = "$appVersion"
 if (`$args -contains "--version" -or `$args -contains "-v" -or `$args -contains "version" -or `$args -contains "-version" -or `$args -contains "/v") {
     Write-Host "Amiyo Studio v`$appVersion" -ForegroundColor Green
+    return
+}
+if (`$args -contains "update" -or `$args -contains "upgrade" -or `$args -contains "--update") {
+    irm https://raw.githubusercontent.com/$githubRepo/main/update.ps1 | iex
     return
 }
 if (`$args -contains "--help" -or `$args -contains "-h" -or `$args -contains "help" -or `$args -contains "-help" -or `$args -contains "/?") {
@@ -182,6 +215,7 @@ if (`$args -contains "--help" -or `$args -contains "-h" -or `$args -contains "he
     Write-Host ""
     Write-Host "Usage:"
     Write-Host "  amiyo                 Directly open Amiyo Studio"
+    Write-Host "  amiyo update          Update existing installation to latest version"
     Write-Host "  amiyo --version, -v   Show installed version"
     Write-Host "  amiyo --help, -h      Show this help message"
     Write-Host "  amiyo -p 8080         Start local server on port 8080"
@@ -198,34 +232,41 @@ if ($nativeExe) {
 if ((Get-Command node -ErrorAction SilentlyContinue) -and (Test-Path `$cli)) {
     node `$cli @args
 } else {
+    Write-Host "Opening Amiyo Studio v`$appVersion..." -ForegroundColor Cyan
     Start-Process `$html
 }
 "@
 }
 [System.IO.File]::WriteAllText($amiyoPs1Path, $ps1Content, [System.Text.Encoding]::ASCII)
 
-# Register across Windows system locations
+# Register in user environments
 try {
-    # Layer 1: npm global bin (standard Windows dev PATH)
+    # Layer 1: npm global bin
     $npmDir = Join-Path $env:APPDATA "npm"
     if (Test-Path $npmDir) {
-        Copy-Item $amiyoCmdPath (Join-Path $npmDir "amiyo.cmd") -Force -ErrorAction SilentlyContinue
-        Copy-Item $amiyoPs1Path (Join-Path $npmDir "amiyo.ps1") -Force -ErrorAction SilentlyContinue
+        try {
+            Copy-Item $amiyoCmdPath (Join-Path $npmDir "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item $amiyoPs1Path (Join-Path $npmDir "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        } catch {}
     }
 
     # Layer 2: WindowsApps
     $windowsApps = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps"
     if (Test-Path $windowsApps) {
-        Copy-Item $amiyoCmdPath (Join-Path $windowsApps "amiyo.cmd") -Force -ErrorAction SilentlyContinue
-        Copy-Item $amiyoPs1Path (Join-Path $windowsApps "amiyo.ps1") -Force -ErrorAction SilentlyContinue
+        try {
+            Copy-Item $amiyoCmdPath (Join-Path $windowsApps "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item $amiyoPs1Path (Join-Path $windowsApps "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        } catch {}
     }
 
     # Layer 3: User Home bin
     $userBin = Join-Path $env:USERPROFILE "bin"
     if (-not (Test-Path $userBin)) { New-Item -ItemType Directory -Path $userBin -Force -ErrorAction SilentlyContinue | Out-Null }
     if (Test-Path $userBin) {
-        Copy-Item $amiyoCmdPath (Join-Path $userBin "amiyo.cmd") -Force -ErrorAction SilentlyContinue
-        Copy-Item $amiyoPs1Path (Join-Path $userBin "amiyo.ps1") -Force -ErrorAction SilentlyContinue
+        try {
+            Copy-Item $amiyoCmdPath (Join-Path $userBin "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item $amiyoPs1Path (Join-Path $userBin "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        } catch {}
     }
 
     # Layer 4: Permanent User PATH in Windows Registry
@@ -261,17 +302,7 @@ try {
             }
         } catch {}
     }
-
-    # Set execution policy for CurrentUser so user scripts run without admin prompts
-    try {
-        $curPol = Get-ExecutionPolicy -Scope CurrentUser
-        if ($curPol -eq "Restricted" -or $curPol -eq "Undefined") {
-            Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue
-        }
-    } catch {}
-} catch {
-    # Non-fatal registration
-}
+} catch {}
 
 # Define function in current session for instant terminal use
 function global:amiyo {
@@ -287,7 +318,7 @@ function global:amiyo {
 }
 
 # 4. DIRECTLY OPEN AMIYO STUDIO
-Write-Host "[->] Directly opening Amiyo Studio..." -ForegroundColor Cyan
+Write-Host "[->] Directly opening Amiyo Studio v$appVersion..." -ForegroundColor Cyan
 
 if ($nativeExe) {
     Start-Process $nativeExe
@@ -307,6 +338,6 @@ Write-Host "==========================================" -ForegroundColor Green
 Write-Host "   Amiyo Studio is now ACTIVE and READY!  " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Green
 Write-Host "Terminal commands are now working! Try typing:" -ForegroundColor White
-Write-Host "  amiyo --version   (Check installed version)" -ForegroundColor Cyan
+Write-Host "  amiyo --version   (Check installed version: v$appVersion)" -ForegroundColor Cyan
 Write-Host "  amiyo             (Open Amiyo Studio)" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Green

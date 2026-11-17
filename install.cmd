@@ -4,24 +4,24 @@ setlocal enabledelayedexpansion
 echo        /\
 echo       /  \
 echo      / /\ \       [^>] AMIYO STUDIO
-echo     / /  \ \          Professional Video Editor v0.0.1
+echo     / /  \ \          Professional Video Editor v1.0.0
 echo    / /____\ \
 echo   /_/      \_\
 echo ==========================================
-echo           Amiyo Studio v0.0.1
+echo           Amiyo Studio v1.0.0
 echo ==========================================
 
 rem Check version flag
 if /i "%~1"=="--version" (
-  echo Installed Version: v0.0.1
+  echo Installed Version: v1.0.0
   exit /b 0
 )
 if /i "%~1"=="-v" (
-  echo Installed Version: v0.0.1
+  echo Installed Version: v1.0.0
   exit /b 0
 )
 if /i "%~1"=="version" (
-  echo Installed Version: v0.0.1
+  echo Installed Version: v1.0.0
   exit /b 0
 )
 
@@ -29,17 +29,25 @@ set "TARGET_DIR=%CD%"
 set "STANDARD_DIR=%LOCALAPPDATA%\AmiyoStudio"
 set "NATIVE_EXE="
 
-if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
-  set "NATIVE_EXE=%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe"
-  set "TARGET_DIR=%LOCALAPPDATA%\Programs\amiyo-studio"
-  echo [OK] Detected desktop installation at: !TARGET_DIR!
-  goto :setup_cmd
+rem Check for modern native installation (>= 1.0.0)
+set "CANDIDATE="
+if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" set "CANDIDATE=%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe"
+if not defined CANDIDATE if exist "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" set "CANDIDATE=%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe"
+
+if defined CANDIDATE (
+  for /f "usebackq delims=" %%v in (`powershell -NoProfile -Command "(Get-Item '%CANDIDATE%').VersionInfo.ProductVersion" 2^>nul`) do (
+    set "EXE_VER=%%v"
+  )
+  if defined EXE_VER (
+    for /f "tokens=1 delims=." %%m in ("!EXE_VER!") do (
+      if %%m geq 1 set "NATIVE_EXE=!CANDIDATE!"
+    )
+  )
 )
 
-if exist "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" (
-  set "NATIVE_EXE=%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe"
-  set "TARGET_DIR=%ProgramFiles%\Amiyo Studio"
-  echo [OK] Detected desktop installation at: !TARGET_DIR!
+if defined NATIVE_EXE (
+  set "TARGET_DIR=!CANDIDATE!\.."
+  echo [OK] Detected modern desktop installation v1.0.0+
   goto :setup_cmd
 )
 
@@ -50,14 +58,19 @@ if exist "%TARGET_DIR%\index.html" if exist "%TARGET_DIR%\bin\cli.js" (
 
 if exist "%STANDARD_DIR%\index.html" (
   set "TARGET_DIR=%STANDARD_DIR%"
-  echo [OK] Amiyo Studio is already installed at: !TARGET_DIR!
-  echo [OK] Skipping download - directly opening installed app.
+  echo [OK] Found Amiyo Studio installation at: !TARGET_DIR!
+  if exist "%STANDARD_DIR%\.git" (
+    echo [INFO] Pulling latest updates via git...
+    cd /d "%STANDARD_DIR%"
+    git pull --rebase origin main >nul 2>&1
+    cd /d "%~dp0"
+  )
   goto :setup_cmd
 )
 
 rem Not installed -> Download now
 echo [INFO] Amiyo Studio is not installed on this system.
-echo [INFO] Downloading and installing Amiyo Studio v0.0.1...
+echo [INFO] Downloading and installing Amiyo Studio v1.0.0...
 if not exist "%STANDARD_DIR%" mkdir "%STANDARD_DIR%"
 
 where git >nul 2>&1
@@ -88,7 +101,7 @@ if exist "%USERPROFILE%\bin" (
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($p -notlike '*%TARGET_DIR%\bin*') { [Environment]::SetEnvironmentVariable('Path', '%TARGET_DIR%\bin;' + $p, 'User') }" >nul 2>&1
 
 :launch
-echo [-^>] Directly opening Amiyo Studio...
+echo [-^>] Directly opening Amiyo Studio v1.0.0...
 if defined NATIVE_EXE (
   start "" "!NATIVE_EXE!"
   exit /b 0
@@ -105,4 +118,3 @@ if %ERRORLEVEL% equ 0 (
 echo [OK] Opening in default browser...
 start "" "%TARGET_DIR%\index.html"
 exit /b 0
-

@@ -4,13 +4,13 @@ setlocal
 echo        /\
 echo       /  \
 echo      / /\ \       [^>] AMIYO STUDIO
-echo     / /  \ \          Professional Video Editor v0.0.1
+echo     / /  \ \          Professional Video Editor v1.0.0
 echo    / /____\ \
 echo   /_/      \_\
 echo ==========================================
 echo          Amiyo Studio Version Check       
 echo ==========================================
-echo Latest Release: v0.0.1
+echo Latest Release: v1.0.0
 
 if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
   set "FOUND_DIR=%LOCALAPPDATA%\Programs\amiyo-studio"

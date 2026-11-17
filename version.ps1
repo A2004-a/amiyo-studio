@@ -1,4 +1,5 @@
-$appVersion = "0.0.1"
+# Amiyo Studio Version Check
+$appVersion = "1.0.0"
 
 Write-Host "       ▲                                           " -ForegroundColor Yellow
 Write-Host "      /█\                                          " -ForegroundColor Yellow
@@ -46,6 +47,6 @@ if ($foundPath) {
     Write-Host "Installed: NO (Not downloaded yet)" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "To download and open immediately, run:" -ForegroundColor White
-    Write-Host "  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=0.0.1 | iex" -ForegroundColor Cyan
+    Write-Host "  irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install.ps1?v=1.0.0 | iex" -ForegroundColor Cyan
 }
 

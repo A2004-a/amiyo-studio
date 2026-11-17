@@ -1,4 +1,5 @@
-$appVersion = "0.0.1"
+# Amiyo Studio CLI Launcher
+$appVersion = "1.0.0"
 
 # Check version requests
 if ($args -contains "--version" -or $args -contains "-v" -or $args -contains "version" -or $args -contains "-version" -or $args -contains "/v") {
@@ -32,19 +33,20 @@ if ($args -contains "--help" -or $args -contains "-h" -or $args -contains "help"
     return
 }
 
-# Resolve application root directory & native executable
+# Resolve application root directory & modern native executable
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $rootDir = Split-Path -Parent $scriptDir
 $nativeExe = ""
 
 $searchLocations = @(
+    (Get-Location).Path,
     $rootDir,
+    (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2"),
+    (Join-Path $env:LOCALAPPDATA "AmiyoStudio"),
     (Join-Path $env:LOCALAPPDATA "Programs\amiyo-studio"),
     (Join-Path $env:LOCALAPPDATA "Programs\Amiyo Studio"),
     "C:\Program Files\Amiyo Studio",
     "C:\Program Files (x86)\Amiyo Studio",
-    (Join-Path $env:LOCALAPPDATA "AmiyoStudio"),
-    (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2"),
     (Join-Path $env:USERPROFILE "amiyo-studio")
 )
 
@@ -52,9 +54,31 @@ foreach ($loc in $searchLocations) {
     if (Test-Path $loc) {
         $exe1 = Join-Path $loc "Amiyo Studio.exe"
         $exe2 = Join-Path $loc "amiyo-studio.exe"
-        if (Test-Path $exe1) { $nativeExe = $exe1; $rootDir = $loc; break }
-        if (Test-Path $exe2) { $nativeExe = $exe2; $rootDir = $loc; break }
-        if (Test-Path (Join-Path $loc "index.html")) { $rootDir = $loc; break }
+        $candidateExe = ""
+        if (Test-Path $exe1) { $candidateExe = $exe1 }
+        elseif (Test-Path $exe2) { $candidateExe = $exe2 }
+
+        if ($candidateExe) {
+            try {
+                $verStr = (Get-Item $candidateExe).VersionInfo.ProductVersion
+                if ($verStr) {
+                    $major = [int]($verStr.Split('.')[0])
+                    if ($major -ge 1) {
+                        $nativeExe = $candidateExe
+                        $rootDir = $loc
+                        break
+                    }
+                }
+            } catch {}
+        }
+
+        if ((Test-Path (Join-Path $loc "index.html")) -and (Test-Path (Join-Path $loc "bin\cli.js"))) {
+            $rootDir = $loc
+            break
+        } elseif (Test-Path (Join-Path $loc "index.html")) {
+            $rootDir = $loc
+            break
+        }
     }
 }
 
@@ -66,7 +90,7 @@ if ($nativeExe) {
     if ((Get-Command node -ErrorAction SilentlyContinue) -and (Test-Path $cliPath)) {
         node $cliPath @args
     } else {
-        Write-Host "Opening Amiyo Studio in default browser..." -ForegroundColor Cyan
+        Write-Host "Opening Amiyo Studio v$appVersion..." -ForegroundColor Cyan
         Start-Process $htmlPath
     }
 }

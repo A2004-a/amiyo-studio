@@ -4,7 +4,7 @@
 - **Application Name**: Amiyo Studio
 - **Architecture**: Client-side offline-capable Non-Linear Video & Audio Editor (NLE) with PWA, Electron Desktop, and Android APK support
 - **Core Technology Stack**: Vanilla JavaScript (ES2022+), WebCodecs, Canvas 2D / WebGL2, WebAudio DSP, IndexedDB persistent storage, Service Workers, Electron, Gradle / Android WebView
-- **Current Version**: `0.0.1`
+- **Current Version**: `1.0.0`
 
 ---
 

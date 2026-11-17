@@ -12,10 +12,10 @@ const { execSync } = require('child_process');
 
 const rootDir = path.resolve(__dirname, '..');
 const pkgPath = path.join(rootDir, 'package.json');
-let currentVersion = '0.0.1';
+let currentVersion = '1.0.0';
 try {
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  currentVersion = pkg.version || '0.0.1';
+  currentVersion = pkg.version || '1.0.0';
 } catch (_) {}
 
 console.log(`

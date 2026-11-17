@@ -20,33 +20,40 @@ if /i "%~1"=="help" goto :show_help
 if /i "%~1"=="-help" goto :show_help
 if /i "%~1"=="/?" goto :show_help
 
-rem Check native desktop app installations
-if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" (
-  start "" "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" %*
-  exit /b 0
-)
-if exist "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" (
-  start "" "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" %*
-  exit /b 0
-)
-if exist "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" (
-  start "" "%ProgramFiles%\Amiyo Studio\Amiyo Studio.exe" %*
-  exit /b 0
-)
-
 rem Resolve application root directory
 set "APP_DIR=%~dp0.."
 if not exist "%APP_DIR%\index.html" (
-  if exist "%LOCALAPPDATA%\AmiyoStudio\index.html" (
-    set "APP_DIR=%LOCALAPPDATA%\AmiyoStudio"
-  ) else if exist "%USERPROFILE%\Desktop\amiyo studio 2\index.html" (
+  if exist "%USERPROFILE%\Desktop\amiyo studio 2\index.html" (
     set "APP_DIR=%USERPROFILE%\Desktop\amiyo studio 2"
+  ) else if exist "%LOCALAPPDATA%\AmiyoStudio\index.html" (
+    set "APP_DIR=%LOCALAPPDATA%\AmiyoStudio"
   ) else if exist "%USERPROFILE%\amiyo-studio\index.html" (
     set "APP_DIR=%USERPROFILE%\amiyo-studio"
   )
 )
 
-rem If Node.js is installed, use cli.js for full features
+rem Check modern native desktop app installations (v1.0.0+)
+set "NATIVE_EXE="
+if exist "%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe" set "CANDIDATE=%LOCALAPPDATA%\Programs\amiyo-studio\Amiyo Studio.exe"
+if not defined CANDIDATE if exist "%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe" set "CANDIDATE=%LOCALAPPDATA%\Programs\Amiyo Studio\Amiyo Studio.exe"
+
+if defined CANDIDATE (
+  for /f "usebackq delims=" %%v in (`powershell -NoProfile -Command "(Get-Item '%CANDIDATE%').VersionInfo.ProductVersion" 2^>nul`) do (
+    set "EXE_VER=%%v"
+  )
+  if defined EXE_VER (
+    for /f "tokens=1 delims=." %%m in ("!EXE_VER!") do (
+      if %%m geq 1 set "NATIVE_EXE=!CANDIDATE!"
+    )
+  )
+)
+
+if defined NATIVE_EXE (
+  start "" "!NATIVE_EXE!" %*
+  exit /b 0
+)
+
+rem If Node.js is installed, use cli.js for full NLE engine
 where node >nul 2>&1
 if %ERRORLEVEL% equ 0 (
   if exist "%APP_DIR%\bin\cli.js" (
@@ -56,16 +63,16 @@ if %ERRORLEVEL% equ 0 (
 )
 
 rem If Node.js is not installed, open index.html directly in browser
-echo Opening Amiyo Studio...
+echo Opening Amiyo Studio v1.0.0...
 start "" "%APP_DIR%\index.html"
 exit /b 0
 
 :show_version
-echo Amiyo Studio v0.0.1
+echo Amiyo Studio v1.0.0
 exit /b 0
 
 :show_help
-echo Amiyo Studio CLI v0.0.1
+echo Amiyo Studio CLI v1.0.0
 echo.
 echo Usage:
 echo   amiyo                 Directly open Amiyo Studio

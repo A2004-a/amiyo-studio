@@ -47,6 +47,14 @@ if exist "%APPDATA%\npm" (
   copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%APPDATA%\npm\amiyo.cmd" >nul 2>&1
   copy /y "%TARGET_DIR%\bin\amiyo.ps1" "%APPDATA%\npm\amiyo.ps1" >nul 2>&1
 )
+if exist "%LOCALAPPDATA%\Microsoft\WindowsApps" (
+  copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%LOCALAPPDATA%\Microsoft\WindowsApps\amiyo.cmd" >nul 2>&1
+  copy /y "%TARGET_DIR%\bin\amiyo.ps1" "%LOCALAPPDATA%\Microsoft\WindowsApps\amiyo.ps1" >nul 2>&1
+)
+if exist "%USERPROFILE%\bin" (
+  copy /y "%TARGET_DIR%\bin\amiyo.cmd" "%USERPROFILE%\bin\amiyo.cmd" >nul 2>&1
+  copy /y "%TARGET_DIR%\bin\amiyo.ps1" "%USERPROFILE%\bin\amiyo.ps1" >nul 2>&1
+)
 
 echo.
 echo ==========================================

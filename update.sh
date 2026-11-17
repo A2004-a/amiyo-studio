@@ -4,7 +4,7 @@
 
 set -e
 
-APP_VERSION="0.0.1"
+APP_VERSION="1.0.0"
 
 echo -e "\033[33m       ▲\033[0m"
 echo -e "\033[33m      /█\\\033[0m"
