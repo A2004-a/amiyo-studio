@@ -42,7 +42,7 @@ This document tracks all identified bugs, root causes, applied remediations, and
 - **Component**: `install.cmd`
 - **Root Cause**: `install.cmd` initially copied `amiyo.cmd` only into `%APPDATA%\npm` and `%LOCALAPPDATA%\Microsoft\WindowsApps`. If Node/npm was not installed, neither directory was in `%PATH%`, preventing `amiyo` from running in CMD.
 - **Fix Applied**: Added `%USERPROFILE%\bin` directory creation and registered it directly into the Windows User `Path` registry environment (`HKCU\Environment\Path`).
-- **Verification**: Tested in CMD subshell; `amiyo --version` prints `Amiyo Studio v0.0.1`.
+- **Verification**: Tested in CMD subshell; `amiyo --version` prints `Amiyo Studio v1.0.0`.
 - **Status**: ✅ **VERIFIED & FIXED** (Commit `b66481c`).
 
 ---
@@ -51,7 +51,7 @@ This document tracks all identified bugs, root causes, applied remediations, and
 - **Severity**: P2 (Deployment Staleness)
 - **Component**: `README.md`, `version.ps1`
 - **Root Cause**: Fastly edge cache on `raw.githubusercontent.com` caches raw files for up to 300 seconds. Users running the one-line installer immediately after a commit received cached, older scripts.
-- **Fix Applied**: Appended query string version tag `?v=0.0.1` to all one-line installer URLs in `README.md` and `version.ps1` to force immediate cache bypass.
+- **Fix Applied**: Appended query string version tag `?v=1.0.0` to all one-line installer URLs in `README.md` and `version.ps1` to force immediate cache bypass.
 - **Verification**: HTTP requests with query strings confirmed to return fresh commit content.
 - **Status**: ✅ **VERIFIED & FIXED** (Commit `906fe1b`).
 

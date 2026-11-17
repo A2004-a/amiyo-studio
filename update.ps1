@@ -1,4 +1,4 @@
-# Amiyo Studio Auto-Updater
+﻿# Amiyo Studio Auto-Updater
 $appVersion = "1.0.0"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
@@ -50,8 +50,7 @@ if (Test-Path (Join-Path $targetDir ".git")) {
     try {
         Write-Host "[INFO] Pulling latest updates via git..." -ForegroundColor Cyan
         Push-Location $targetDir
-        git fetch origin main 2>&1 | Out-Null
-        git reset --hard origin/main 2>&1 | Out-Null
+        git pull --rebase origin main 2>&1 | Out-Null
         Pop-Location
         $updated = $true
     } catch {
@@ -85,12 +84,12 @@ $amiyoCmd = Join-Path $binDir "amiyo.cmd"
 $amiyoPs1 = Join-Path $binDir "amiyo.ps1"
 
 foreach ($loc in @($npmDir, $winApps, $userBin)) {
-    if (Test-Path $loc) {
-        try {
-            Copy-Item $amiyoCmd (Join-Path $loc "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
-            Copy-Item $amiyoPs1 (Join-Path $loc "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
-        } catch {}
-    }
+    try {
+        if ($loc -and (Test-Path -LiteralPath $loc -ErrorAction SilentlyContinue)) {
+            Copy-Item -LiteralPath $amiyoCmd -Destination (Join-Path $loc "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item -LiteralPath $amiyoPs1 -Destination (Join-Path $loc "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        }
+    } catch {}
 }
 
 Write-Host ""
