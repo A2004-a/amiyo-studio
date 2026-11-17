@@ -98,6 +98,33 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 
 ---
 
+## 🔄 Update to Latest Version (1 Terminal Command)
+
+Upgrade an existing or older version to the latest release with a single terminal command:
+
+### ⚡ Using the Global CLI (All Platforms):
+```bash
+amiyo update
+```
+*(or run `npm run update` from inside the project directory)*
+
+### 🪟 Windows PowerShell:
+```powershell
+irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.ps1 | iex
+```
+
+### 💻 Windows Command Prompt (CMD):
+```cmd
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.cmd -o "%TEMP%\amiyo_update.cmd" && call "%TEMP%\amiyo_update.cmd"
+```
+
+### 🍎 / 🐧 Linux & macOS (Terminal):
+```bash
+curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.sh | bash
+```
+
+---
+
 ## ✨ Features
 
 - **🎬 Non-Linear Multi-Track Timeline**

@@ -8,6 +8,11 @@ if /i "%~1"=="version" goto :show_version
 if /i "%~1"=="-version" goto :show_version
 if /i "%~1"=="/v" goto :show_version
 
+rem Check update requests
+if /i "%~1"=="update" goto :do_update
+if /i "%~1"=="upgrade" goto :do_update
+if /i "%~1"=="--update" goto :do_update
+
 rem Check help requests
 if /i "%~1"=="--help" goto :show_help
 if /i "%~1"=="-h" goto :show_help
@@ -64,8 +69,25 @@ echo Amiyo Studio CLI v0.0.1
 echo.
 echo Usage:
 echo   amiyo                 Directly open Amiyo Studio
+echo   amiyo update          Update existing installation to latest version
 echo   amiyo --version, -v   Show installed version
 echo   amiyo --help, -h      Show help message
 echo   amiyo -p 8080         Start local server on port 8080
 echo.
 exit /b 0
+
+:do_update
+if exist "%APP_DIR%\update.cmd" (
+  call "%APP_DIR%\update.cmd"
+  exit /b %ERRORLEVEL%
+)
+where node >nul 2>&1
+if %ERRORLEVEL% equ 0 (
+  if exist "%APP_DIR%\scripts\update.js" (
+    node "%APP_DIR%\scripts\update.js"
+    exit /b %ERRORLEVEL%
+  )
+)
+echo Updating Amiyo Studio from GitHub...
+powershell -NoProfile -Command "irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.ps1 | iex"
+exit /b %ERRORLEVEL%

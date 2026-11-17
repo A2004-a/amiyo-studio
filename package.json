@@ -16,6 +16,8 @@
     "test": "node scripts/validate.js",
     "test:features": "node scripts/test-all-features.js",
     "build": "node scripts/build.js",
+    "update": "node scripts/update.js",
+    "upgrade": "node scripts/update.js",
     "sync:android": "node scripts/sync-android.js",
     "build:android": "node scripts/build-android.js",
     "dist:win64": "electron-builder --win --x64",

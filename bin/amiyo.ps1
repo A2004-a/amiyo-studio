@@ -6,12 +6,26 @@ if ($args -contains "--version" -or $args -contains "-v" -or $args -contains "ve
     return
 }
 
+# Check update requests
+if ($args -contains "update" -or $args -contains "upgrade" -or $args -contains "--update" -or $args -contains "-update") {
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $rootDir = Split-Path -Parent $scriptDir
+    $updatePs1 = Join-Path $rootDir "update.ps1"
+    if (Test-Path $updatePs1) {
+        & $updatePs1
+    } else {
+        irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.ps1 | iex
+    }
+    return
+}
+
 # Check help requests
 if ($args -contains "--help" -or $args -contains "-h" -or $args -contains "help" -or $args -contains "-help" -or $args -contains "/?") {
     Write-Host "Amiyo Studio CLI v$appVersion" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Usage:"
     Write-Host "  amiyo                 Directly open Amiyo Studio"
+    Write-Host "  amiyo update          Update existing installation to latest version"
     Write-Host "  amiyo --version, -v   Show installed version"
     Write-Host "  amiyo --help, -h      Show this help message"
     Write-Host "  amiyo -p 8080         Start local server on port 8080"

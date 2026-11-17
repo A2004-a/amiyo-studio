@@ -1,4 +1,4 @@
-﻿$appVersion = "0.0.1"
+$appVersion = "0.0.1"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
 

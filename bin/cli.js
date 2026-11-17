@@ -26,6 +26,15 @@ for (let i = 0; i < args.length; i++) {
     port = parseInt(args[++i], 10) || 3000;
   } else if (arg === '--no-open') {
     autoOpen = false;
+  } else if (arg === 'update' || arg === 'upgrade' || arg === '--update') {
+    const updateScript = path.join(rootDir, 'scripts', 'update.js');
+    if (fs.existsSync(updateScript)) {
+      require(updateScript);
+    } else {
+      console.log('Update script not found.');
+      process.exit(1);
+    }
+    break;
   } else if (arg === '-v' || arg === '--version' || arg === 'version') {
     console.log(`Amiyo Studio v${pkg.version}`);
     process.exit(0);
@@ -34,15 +43,18 @@ for (let i = 0; i < args.length; i++) {
 🎬 Amiyo Studio CLI v${pkg.version}
 
 Usage:
-  npx github:A2004-a/amiyo-studio [options]
-  amiyo-studio [options]
-  npm start
+  amiyo                 Launch Amiyo Studio in default browser
+  amiyo update          Update existing installation to latest version
+  amiyo --version, -v   Show installed version
+  amiyo --help, -h      Show this help message
+  amiyo -p 8080         Start local server on port 8080
 
 Options:
   -p, --port <number>   Port to listen on (default: 3000)
   --no-open             Do not automatically open the browser
   -v, --version         Show version
   -h, --help            Show this help message
+  update, upgrade       Update to latest release from GitHub
 `);
     process.exit(0);
   }
