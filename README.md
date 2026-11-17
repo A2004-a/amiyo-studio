@@ -65,11 +65,24 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 
 ### 4. 📱 Android (Phones, Tablets & Foldables)
 - **Direct APK Package**: [⬇️ **Download Amiyo-Studio-android.apk**](https://github.com/A2004-a/amiyo-studio/releases/download/v0.0.1/Amiyo-Studio-android.apk)
-- **Build from Source (Gradle 8.5 & AGP 8.2)**:
+- **Automatic 1-Command Build (Cross-Platform)**:
   ```bash
-  cd android
-  ./gradlew assembleDebug
+  npm run build:android
   ```
+- **Manual Build from Source (Requires JDK 17 & Android SDK 34)**:
+  - **Windows (PowerShell / CMD)**:
+    ```cmd
+    cd android
+    gradlew.bat assembleDebug
+    ```
+  - **Linux / macOS (Bash / Zsh)**:
+    ```bash
+    cd android
+    chmod +x gradlew
+    ./gradlew assembleDebug
+    ```
+  > [!IMPORTANT]
+  > Always use **Gradle 8.5** (`gradle-8.5-bin.zip` configured in `android/gradle/wrapper/gradle-wrapper.properties`). Do NOT set Gradle to 9.x, as Android Gradle Plugin (AGP) 8.2.2 requires Gradle 8.2–8.5.
 
 ---
 

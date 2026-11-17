@@ -167,6 +167,14 @@ check('Phase 2, 3, 4 NLE Suite tests pass (UI, Multitrack Timeline & Playback)',
   return true;
 });
 
+console.log('\n6. Verifying Exhaustive 46-Feature NLE Test Suite...');
+check('All 46 NLE Studio individual features pass', () => {
+  const testScript = path.join(rootDir, 'scripts', 'test-all-features.js');
+  const { execSync } = require('child_process');
+  execSync(`node "${testScript}"`, { stdio: 'inherit' });
+  return true;
+});
+
 console.log('\n========================================');
 if (hasErrors) {
   console.error('Validation FAILED. Please review the errors above.');
