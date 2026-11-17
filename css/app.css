@@ -1339,7 +1339,9 @@ body.vs-probing #previewCanvas{ cursor:crosshair; }
 
 /* ==================== Style 80 id="amiyo-pwa-css" ==================== */
 #pwaInstallBtn,#pwaOffBtn{display:inline-flex;align-items:center;gap:6px}
-#pwaInstallBtn{color:#ffb454;border-color:rgba(255,180,84,.35);background:rgba(255,122,61,.08)}
+#pwaInstallBtn{display:none !important}
+#amiInstBtn{display:none !important}
+#pwaOffBtn{color:#ffb454;border-color:rgba(255,180,84,.35);background:rgba(255,122,61,.08)}
 #pwaInstallBtn[hidden],#pwaOffBtn[hidden]{display:none}
 #pwaInstallBtn svg,#pwaOffBtn svg{width:14px;height:14px;flex:none}
 #pwaInstallBtn:hover{color:#fff}

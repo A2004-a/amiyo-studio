@@ -8383,7 +8383,7 @@ if(bar&&grid&&!document.getElementById("loopBtn")){
 (function(){
   var bar=document.querySelector("header.topbar"); if(!bar) return;
   var mq=window.matchMedia("(max-width:1024px)"), collapsed=false;
-  var KEEP={projectName:1,saveStatus:1,saveDot:1,undoBtn:1,redoBtn:1,exportBtn:1,topMoreBtn:1,vsThemeBtn:1,vsColorBtn:1,pwaInstallBtn:1,wsBtn:1};
+  var KEEP={projectName:1,saveStatus:1,saveDot:1,undoBtn:1,redoBtn:1,exportBtn:1,topMoreBtn:1,vsThemeBtn:1,vsColorBtn:1,wsBtn:1};
   var more=document.createElement("button"); more.type="button"; more.id="topMoreBtn"; more.className="topbtn"; more.textContent="⋯"; more.setAttribute("aria-label","More actions"); more.setAttribute("aria-haspopup","true"); more.setAttribute("aria-expanded","false");
   var menu=document.createElement("div"); menu.className="top-more"; menu.id="topMore"; menu.setAttribute("role","group"); menu.setAttribute("aria-label","More actions");
   var scrim=document.createElement("div"); scrim.className="top-more-scrim";

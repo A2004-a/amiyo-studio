@@ -64,6 +64,14 @@ Choose your platform to download Amiyo Studio directly or install via a single t
 ---
 
 ### 4. 📱 Android (Phones, Tablets & Foldables)
+- **⚡ 1-Line Android Terminal Installer (Termux)**:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/install-android.sh | bash
+  ```
+- **⚡ 1-Line ADB Install from PC Terminal**:
+  ```bash
+  curl -fsSL https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-android.apk -o amiyo.apk && adb install -r amiyo.apk
+  ```
 - **Direct APK Package**: [⬇️ **Download Amiyo-Studio-android.apk**](https://github.com/A2004-a/amiyo-studio/releases/download/v1.0.0/Amiyo-Studio-android.apk) *([Latest Mirror](https://github.com/A2004-a/amiyo-studio/releases/latest/download/Amiyo-Studio-android.apk))*
 - **Automatic 1-Command Build (Cross-Platform)**:
   ```bash

@@ -91,6 +91,7 @@ check('Terminal installers, auto-updaters, and version tools exist', () => {
   return fs.existsSync(path.join(rootDir, 'install.ps1')) &&
          fs.existsSync(path.join(rootDir, 'install.sh')) &&
          fs.existsSync(path.join(rootDir, 'install.cmd')) &&
+         fs.existsSync(path.join(rootDir, 'install-android.sh')) &&
          fs.existsSync(path.join(rootDir, 'update.ps1')) &&
          fs.existsSync(path.join(rootDir, 'update.sh')) &&
          fs.existsSync(path.join(rootDir, 'update.cmd')) &&

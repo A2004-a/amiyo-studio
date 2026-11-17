@@ -2013,14 +2013,7 @@ f();document.addEventListener('DOMContentLoaded',f);setTimeout(f,1500);})();
     var f=back.querySelector("button[data-b]")||back.querySelector("#amiInstClose"); if(f) f.focus();
   }
   function addButton(){
-    var tb=document.querySelector(".topbar"); if(!tb) return false;
-    if(document.getElementById("amiInstBtn")) return true;
-    var b=document.createElement("button"); b.type="button"; b.id="amiInstBtn"; b.className="topbtn";
-    b.title="Download an installer for Linux, Windows or Mac"; b.setAttribute("aria-label","Download installers");
-    b.innerHTML='<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="8.5" rx="1.3"/><path d="M8 4.5v4M6.2 7 8 8.8 9.8 7M5.5 13.5h5"/></svg><span>Installers</span>';
-    b.addEventListener("click",open);
-    tb.insertBefore(b,document.getElementById("pwaOffBtn")||document.getElementById("exportBtn")||null);
-    return true;
+    return true; // Installer button hidden from workspace per professional NLE layout
   }
   var n=0, iv=setInterval(function(){ if(addButton()||++n>120) clearInterval(iv); },250);
 

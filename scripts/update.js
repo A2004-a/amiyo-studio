@@ -16,7 +16,7 @@ let currentVersion = '1.0.0';
 try {
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   currentVersion = pkg.version || '1.0.0';
-} catch (_) {}
+} catch (_) { }
 
 console.log(`
        ▲
@@ -95,7 +95,7 @@ async function runUpdate() {
   if (fs.existsSync(syncScript)) {
     try {
       require('./sync-android.js');
-    } catch (_) {}
+    } catch (_) { }
   }
 
   console.log('\n[4/4] Updating global terminal commands...');
@@ -106,7 +106,7 @@ async function runUpdate() {
       try {
         fs.copyFileSync(path.join(binDir, 'amiyo.cmd'), path.join(appDataNpm, 'amiyo.cmd'));
         fs.copyFileSync(path.join(binDir, 'amiyo.ps1'), path.join(appDataNpm, 'amiyo.ps1'));
-      } catch (_) {}
+      } catch (_) { }
     }
   }
 

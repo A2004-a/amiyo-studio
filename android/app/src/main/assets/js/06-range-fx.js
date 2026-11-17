@@ -3207,8 +3207,8 @@ X.add({id:"selftest",group:"Info",label:"Run PiP+ self-test",needs:false,run:sho
   function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function fmt(n){ if(!isFinite(n)) return "?"; var u=["B","KB","MB","GB","TB"],i=0; while(n>=1024&&i<4){ n/=1024; i++; } return (n>=100||i===0?Math.round(n):n.toFixed(1))+" "+u[i]; }
   function pageUrl(){ return location.href.split("#")[0]; }
-  function canOffer(){ if(standalone()||!web) return false; return !!window.__amiyoInstallEvt||dismissedOnce||(iOS&&safari); }
-  function refresh(){ if(btn) btn.hidden=!canOffer(); }
+  function canOffer(){ return false; }
+  function refresh(){ if(btn){ btn.hidden=true; btn.style.display="none"; } }
   function protect(quiet){
     try{ if(navigator.storage&&navigator.storage.persist) return navigator.storage.persist().then(function(ok){ if(!quiet) say(ok?"Storage is protected - the browser will not clear your projects":"The browser declined for now. Installing the app or using it more often usually helps."); return ok; }); }catch(e){}
     return Promise.resolve(false);
@@ -3304,11 +3304,11 @@ X.add({id:"selftest",group:"Info",label:"Run PiP+ self-test",needs:false,run:sho
     offBtn.title="Offline mode, device storage and install"; offBtn.setAttribute("aria-label","Offline mode and device storage");
     offBtn.innerHTML='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="9.5" width="12" height="4" rx="1.2"/><path d="M4.5 11.5h.01M8 2.5v5M5.8 5.6 8 7.8l2.2-2.2"/></svg><span>Offline</span>';
     offBtn.addEventListener("click",openPanel);
-    btn=document.createElement("button"); btn.type="button"; btn.id="pwaInstallBtn"; btn.className="topbtn"; btn.hidden=true;
+    btn=document.createElement("button"); btn.type="button"; btn.id="pwaInstallBtn"; btn.className="topbtn"; btn.hidden=true; btn.style.display="none";
     btn.title="Install Amiyo Editor as an app"; btn.setAttribute("aria-label","Install Amiyo Editor as an app");
     btn.innerHTML='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg><span>Install</span>';
     btn.addEventListener("click",install);
-    tb.insertBefore(offBtn,ref||null); tb.insertBefore(btn,ref||null);
+    tb.insertBefore(offBtn,ref||null);
     return true;
   }
   window.addEventListener("amiyo-install-ready",function(){ build(); refresh(); });
