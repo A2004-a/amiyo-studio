@@ -1,4 +1,5 @@
-﻿$appVersion = "0.0.1"
+# Amiyo Studio Auto-Updater
+$appVersion = "0.0.1"
 $githubRepo = "A2004-a/amiyo-studio"
 $zipUrl = "https://github.com/$githubRepo/archive/refs/heads/main.zip"
 
@@ -74,12 +75,22 @@ if (-not $updated) {
     $updated = $true
 }
 
-# 3. Update global CLI command
+# 3. Update global CLI commands
 $binDir = Join-Path $targetDir "bin"
 $npmDir = Join-Path $env:APPDATA "npm"
-if (Test-Path $npmDir) {
-    Copy-Item (Join-Path $binDir "amiyo.cmd") (Join-Path $npmDir "amiyo.cmd") -Force -ErrorAction SilentlyContinue
-    Copy-Item (Join-Path $binDir "amiyo.ps1") (Join-Path $npmDir "amiyo.ps1") -Force -ErrorAction SilentlyContinue
+$winApps = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps"
+$userBin = Join-Path $env:USERPROFILE "bin"
+
+$amiyoCmd = Join-Path $binDir "amiyo.cmd"
+$amiyoPs1 = Join-Path $binDir "amiyo.ps1"
+
+foreach ($loc in @($npmDir, $winApps, $userBin)) {
+    if (Test-Path $loc) {
+        try {
+            Copy-Item $amiyoCmd (Join-Path $loc "amiyo.cmd") -Force -ErrorAction SilentlyContinue 2>$null
+            Copy-Item $amiyoPs1 (Join-Path $loc "amiyo.ps1") -Force -ErrorAction SilentlyContinue 2>$null
+        } catch {}
+    }
 }
 
 Write-Host ""
