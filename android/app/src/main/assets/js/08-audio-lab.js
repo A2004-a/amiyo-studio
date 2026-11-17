@@ -8945,3 +8945,58 @@ window.renderInspector=function(){
 };
 try{ renderInspector(); }catch(e){}
 })();
+
+;
+/* ==================== Script 1100 id="amiyo-master-audio-dynamics" ==================== */
+(function(){
+  "use strict";
+  try {
+    var DYNAMICS_PRESETS = {
+      broadcast_voice: { threshold: -24, ratio: 4, attack: 0.005, release: 0.1, knee: 12, label: "Broadcast Voice (Crisp & Intelligible)" },
+      music_punch: { threshold: -16, ratio: 2.5, attack: 0.02, release: 0.2, knee: 6, label: "Music Bed (Smooth Leveler)" },
+      brickwall_limiter: { threshold: -1, ratio: 20, attack: 0.001, release: 0.05, knee: 0, label: "Brickwall Limiter (0dB Clip Protection)" },
+      off: { threshold: 0, ratio: 1, attack: 0.01, release: 0.1, knee: 0, label: "Dynamics Off (Bypass)" }
+    };
+    window.AMIYO_DYNAMICS_PRESETS = DYNAMICS_PRESETS;
+    window.__amiyoDynamicsState = {
+      enabled: false,
+      preset: "off",
+      node: null
+    };
+
+    window.amiyoSetAudioDynamics = function(presetOrOpts) {
+      var state = window.__amiyoDynamicsState;
+      var opts = typeof presetOrOpts === "string" ? DYNAMICS_PRESETS[presetOrOpts] : presetOrOpts;
+      if (!opts) opts = DYNAMICS_PRESETS.off;
+
+      state.enabled = (presetOrOpts !== "off" && (opts.ratio > 1 || opts.threshold < 0));
+      state.preset = typeof presetOrOpts === "string" ? presetOrOpts : "custom";
+
+      var actx = (typeof window.ac !== "undefined" && window.ac) || (window.AMIYO_AUDIO_CTX || null);
+      if (actx && typeof actx.createDynamicsCompressor === "function") {
+        if (!state.node) {
+          state.node = actx.createDynamicsCompressor();
+          try {
+            if (actx.destination) {
+              state.node.connect(actx.destination);
+            }
+          } catch(_) {}
+        }
+        var comp = state.node;
+        var t = actx.currentTime || 0;
+        if (comp.threshold) comp.threshold.setTargetAtTime(opts.threshold || 0, t, 0.01);
+        if (comp.ratio) comp.ratio.setTargetAtTime(opts.ratio || 1, t, 0.01);
+        if (comp.attack) comp.attack.setTargetAtTime(opts.attack || 0.005, t, 0.01);
+        if (comp.release) comp.release.setTargetAtTime(opts.release || 0.1, t, 0.01);
+        if (comp.knee) comp.knee.setTargetAtTime(opts.knee || 0, t, 0.01);
+      }
+      try {
+        var label = opts.label || (state.enabled ? "Dynamics active" : "Dynamics bypassed");
+        (window.notify || window.toast)("Audio dynamics: " + label);
+      } catch(_) {}
+      return state;
+    };
+  } catch(e) {
+    try { console.warn("amiyo-master-audio-dynamics", e); } catch(_) {}
+  }
+})();

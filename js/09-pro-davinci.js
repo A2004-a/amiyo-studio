@@ -1434,7 +1434,7 @@ try{window.AMIYO_EDITOR_BUILD="dv-step12-power-windows"}catch(e){}
 if(window.AMIYO_DV_S13) return;
 var tries=0; (function wait(){ if(window.AMIYO_DV_S13) return; if(window.AMIYO_DV_S12&&window.AMIYO_DV_GRADE&&window.__amiyoPostHooks){ init(); return; } if(++tries<200) setTimeout(wait,100); })();
 function init(){
-var G=window.AMIYO_DV_GRADE, MODES=[["parade","Parade"],["wave","Waveform"],["vector","Vector"],["hist","Histogram"]], mode="parade", last=0, SW=280, SH=150;
+var G=window.AMIYO_DV_GRADE, MODES=[["parade","Parade"],["wave","Waveform"],["vector","Vector"],["hist","Histogram"],["quad","Quad Scopes"]], mode="parade", last=0, SW=280, SH=150;
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
 function open(){ var d=document.getElementById("dvGrade"); return !!d&&d.classList.contains("open")&&!!document.getElementById("dvScopeCv"); }
 function sample(){ if(typeof canvas==="undefined") return null; var W=canvas.width,H=canvas.height, sx=Math.max(1,Math.round(W/320)), sy=Math.max(1,Math.round(H/180)), img;
@@ -1459,7 +1459,7 @@ function paint(){
     c.putImageData(id,0,0);
     /* skin line: from centre toward the I-axis (about 123°) */ c.strokeStyle="rgba(255,190,120,.85)"; c.lineWidth=1.5; c.beginPath(); c.moveTo(cx,cy); c.lineTo(cx+Math.cos(2.15)*R, cy-Math.sin(2.15)*R*-1); c.stroke();
     c.fillStyle="rgba(255,255,255,.5)"; c.font="9px sans-serif"; c.fillText("R",cx+R*.55,cy-R*.62); c.fillText("B",cx-R*.1,cy+R*.95); c.fillText("G",cx-R*.78,cy-R*.62);
-  } else { var cols=mode==="parade"?3:1, wcol=SW/cols, acc2=new Float32Array(SW*SH*(mode==="parade"?1:1)), mx2=1, accs=[]; for(var q=0;q<cols;q++) accs.push(new Float32Array(Math.ceil(wcol)*SH));
+  } else if(mode==="parade"||mode==="wave"){ var cols=mode==="parade"?3:1, wcol=SW/cols, acc2=new Float32Array(SW*SH*(mode==="parade"?1:1)), mx2=1, accs=[]; for(var q=0;q<cols;q++) accs.push(new Float32Array(Math.ceil(wcol)*SH));
     var cw=Math.ceil(wcol);
     for(y=0;y<H;y+=sy) for(x=0;x<W;x+=sx){ i=(y*W+x)*4; var px2=Math.min(cw-1,Math.floor(x/W*cw));
       if(mode==="parade"){ for(var m=0;m<3;m++){ var py2=Math.round((1-d[i+m]/255)*(SH-1)); var vv=++accs[m][py2*cw+px2]; if(vv>mx2) mx2=vv; } }
@@ -1469,12 +1469,35 @@ function paint(){
     for(var m2=0;m2<cols;m2++) for(var yy2=0;yy2<SH;yy2++) for(var xx=0;xx<cw;xx++){ var a2=accs[m2][yy2*cw+xx]; if(!a2) continue; var t2=Math.min(1,Math.sqrt(a2/mx2)*1.5)*.9+.1; var X=Math.round(m2*wcol)+xx; if(X>=SW) continue; var k2=(yy2*SW+X)*4; o2[k2]=Math.min(255,o2[k2]+tint[m2][0]*t2); o2[k2+1]=Math.min(255,o2[k2+1]+tint[m2][1]*t2); o2[k2+2]=Math.min(255,o2[k2+2]+tint[m2][2]*t2); }
     c.putImageData(id2,0,0);
     if(cols===3){ c.strokeStyle="rgba(255,255,255,.2)"; for(var z=1;z<3;z++){ c.beginPath(); c.moveTo(z*wcol,0); c.lineTo(z*wcol,SH); c.stroke(); } }
+  } else if(mode==="quad"){
+    var hw=SW/2, hh=SH/2;
+    c.strokeStyle="rgba(255,255,255,.25)"; c.lineWidth=1;
+    c.beginPath(); c.moveTo(hw,0); c.lineTo(hw,SH); c.moveTo(0,hh); c.lineTo(SW,hh); c.stroke();
+    c.fillStyle="rgba(255,255,255,.6)"; c.font="8px sans-serif";
+    c.fillText("PARADE", 4, 9); c.fillText("VECTOR", hw + 4, 9);
+    c.fillText("WAVE", 4, hh + 9); c.fillText("HIST", hw + 4, hh + 9);
+
+    // Q2 Vectorscope (hw,0,hw,hh)
+    var cx2=hw+hw/2, cy2=hh/2, R2=hh/2-6;
+    c.strokeStyle="rgba(255,255,255,.15)"; c.beginPath(); c.arc(cx2,cy2,R2,0,7); c.stroke();
+
+    // Q4 Histogram (hw,hh,hw,hh)
+    var h4=[new Uint32Array(128),new Uint32Array(128),new Uint32Array(128)], mx4=1;
+    for(y=0;y<H;y+=sy*2) for(x=0;x<W;x+=sx*2){
+      i=(y*W+x)*4; h4[0][d[i]>>1]++; h4[1][d[i+1]>>1]++; h4[2][d[i+2]>>1]++;
+      total++; if(d[i]>=254||d[i+1]>=254||d[i+2]>=254) hi++; if(d[i]<=1&&d[i+1]<=1&&d[i+2]<=1) lo++;
+    }
+    for(var ch4=0;ch4<3;ch4++) for(var b4=1;b4<127;b4++) if(h4[ch4][b4]>mx4) mx4=h4[ch4][b4];
+    c.globalCompositeOperation="lighter"; var cols4=["rgba(255,70,60,.7)","rgba(70,230,90,.7)","rgba(90,140,255,.7)"];
+    for(ch4=0;ch4<3;ch4++){ c.fillStyle=cols4[ch4]; for(b4=0;b4<128;b4++){ var bh4=Math.min(1,h4[ch4][b4]/mx4)*(hh-4); c.fillRect(hw+b4/128*hw,SH-bh4,Math.ceil(hw/128)+.5,bh4); } }
+    c.globalCompositeOperation="source-over";
   }
   var st=document.getElementById("dvScopeSt"); if(st&&total){ var hp=hi/total*100, lp=lo/total*100; st.innerHTML='<span class="'+(hp>1?"warn":"")+'">Highlights clipped '+hp.toFixed(1)+'%</span><span class="'+(lp>5?"warn":"")+'">Shadows crushed '+lp.toFixed(1)+'%</span>'; }
 }
 /* run last, after every grade and effect, at most ~8 times a second */
 function hook(vc){ if(!open()) return; var now=performance.now(); if(now-last<120) return; last=now; try{ paint(); }catch(e){} }
 window.__amiyoPostHooks.push(hook);
+window.amiyoRenderQuadScopes = paint;
 G.addSection({id:"scopes",order:1,title:"Scopes",render:function(host,n,api){
   host.innerHTML='<div class="dvsT"></div><canvas id="dvScopeCv" width="'+SW+'" height="'+SH+'" role="img" aria-label="Colour scope of the graded picture"></canvas><div id="dvScopeSt" class="dvsS"></div>';
   var t=host.querySelector(".dvsT"); MODES.forEach(function(m){ var b=document.createElement("button"); b.type="button"; b.textContent=m[1]; b.setAttribute("aria-pressed",mode===m[0]); b.onclick=function(){ mode=m[0]; Array.prototype.forEach.call(t.children,function(x){ x.setAttribute("aria-pressed",x===b); }); last=0; paint(); }; t.appendChild(b); });

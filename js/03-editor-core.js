@@ -9143,6 +9143,27 @@ if(bar&&grid&&!document.getElementById("loopBtn")){
   var r=window.renderPreviewFrame;
   if(typeof r==="function") window.renderPreviewFrame=function(){
     if(document.visibilityState==="hidden"&&!window.__amiyoExporting) return Promise.resolve();
+    if(window.amiyoRenderCache && !window.amiyoRenderCache.isRendering && !window.__amiyoExporting) {
+      var curT = typeof currentTime === "number" ? currentTime : (window.currentTime || 0);
+      var cached = window.amiyoRenderCache.getCachedFrame(curT);
+      if(cached) {
+        var cv = document.getElementById("previewCanvas");
+        if(cv) {
+          var ctx = cv.getContext("2d");
+          if(ctx) {
+            try {
+              if(typeof ImageBitmap !== "undefined" && cached instanceof ImageBitmap) {
+                ctx.drawImage(cached, 0, 0, cv.width, cv.height);
+                return Promise.resolve();
+              } else if(cached.data) {
+                ctx.putImageData(cached, 0, 0);
+                return Promise.resolve();
+              }
+            } catch(_) {}
+          }
+        }
+      }
+    }
     return r.apply(this,arguments);
   };
   document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible"){ try{ window.renderPreviewFrame(); }catch(e){window.__swl&&window.__swl(e)} } });

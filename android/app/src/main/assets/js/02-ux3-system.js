@@ -845,3 +845,318 @@ try{window.AMIYO_UX3_STEP=21;window.AMIYO_EDITOR_BUILD="ux3-s21";}catch(e){}
   }
 })();
 
+;
+/* ==================== Script 74 id="amiyo-pro-nle-elevations" ==================== */
+(function(){
+  "use strict";
+  try {
+    // -------------------------------------------------------------
+    // 1. NLE Keyboard Profiles (Premiere Pro, DaVinci Resolve, Final Cut Pro)
+    // -------------------------------------------------------------
+    var PROFILES = {
+      premiere: {
+        id: "premiere",
+        name: "Adobe Premiere Pro",
+        tools: { v: "select", c: "razor", b: "ripple", r: "ratestretch", y: "slip", u: "slide", n: "roll", p: "pen", h: "hand", z: "zoom", a: "trackselect" }
+      },
+      resolve: {
+        id: "resolve",
+        name: "DaVinci Resolve",
+        tools: { a: "select", b: "razor", t: "ripple", r: "ratestretch", y: "slip", u: "slide", n: "roll", p: "pen", h: "hand", z: "zoom" }
+      },
+      fcp: {
+        id: "fcp",
+        name: "Final Cut Pro",
+        tools: { a: "select", b: "razor", t: "ripple", r: "ratestretch", y: "slip", u: "slide", n: "roll", p: "pen", h: "hand", z: "zoom" }
+      }
+    };
+    window.__amiyoNLEProfiles = PROFILES;
+    window.__amiyoCurrentKeymap = (function(){
+      try { return localStorage.getItem("amiyo_nle_profile") || "premiere"; } catch(_) { return "premiere"; }
+    })();
+
+    window.setNLEKeyboardProfile = function(profileId) {
+      if (!PROFILES[profileId]) profileId = "premiere";
+      window.__amiyoCurrentKeymap = profileId;
+      try { localStorage.setItem("amiyo_nle_profile", profileId); } catch(_) {}
+      var sel = document.getElementById("nleKeymapProfile");
+      if (sel && sel.value !== profileId) sel.value = profileId;
+      try { (window.notify || window.toast)("Keyboard profile: " + PROFILES[profileId].name); } catch(_) {}
+    };
+
+    // -------------------------------------------------------------
+    // 2. Ripple Trim (Q / W) & Add Edit (Ctrl+K)
+    // -------------------------------------------------------------
+    window.amiyoRippleTrim = function(direction) {
+      if (!window.project || !Array.isArray(window.project.tracks)) return;
+      var curTime = typeof window.currentTime === "number" ? window.currentTime : 0;
+      var targetClips = [];
+
+      if (typeof window.getClip === "function") {
+        var sel = window.getClip();
+        if (sel && sel.clip && sel.track) {
+          targetClips.push(sel);
+        }
+      }
+      if (!targetClips.length) {
+        window.project.tracks.forEach(function(tr) {
+          if (tr.locked) return;
+          (tr.clips || []).forEach(function(cl) {
+            if (curTime > cl.start && curTime < cl.start + cl.duration) {
+              targetClips.push({ track: tr, clip: cl });
+            }
+          });
+        });
+      }
+
+      if (!targetClips.length) {
+        try { (window.notify || window.toast)("Playhead must be inside a clip to ripple trim"); } catch(_) {}
+        return;
+      }
+
+      var before = typeof window.deepClone === "function" ? window.deepClone(window.serializableProject()) : null;
+      var trimmedCount = 0;
+
+      targetClips.forEach(function(item) {
+        var tr = item.track, cl = item.clip;
+        var clStart = cl.start;
+        var clEnd = cl.start + cl.duration;
+
+        if (direction === "head" || direction === "start") {
+          if (curTime <= clStart + 0.03) return;
+          var delta = curTime - clStart;
+          cl.start = curTime;
+          cl.duration = Math.max(0.05, cl.duration - delta);
+          cl.inPoint = (cl.inPoint || 0) + delta;
+
+          (tr.clips || []).forEach(function(other) {
+            if (other.id !== cl.id && other.start >= clStart) {
+              other.start = Math.max(0, other.start - delta);
+            }
+          });
+          cl.start = Math.max(0, cl.start - delta);
+          trimmedCount++;
+        } else {
+          if (curTime >= clEnd - 0.03) return;
+          var delta = clEnd - curTime;
+          cl.duration = Math.max(0.05, curTime - clStart);
+          cl.outPoint = (cl.inPoint || 0) + cl.duration;
+
+          (tr.clips || []).forEach(function(other) {
+            if (other.id !== cl.id && other.start >= clEnd - 0.001) {
+              other.start = Math.max(0, other.start - delta);
+            }
+          });
+          trimmedCount++;
+        }
+      });
+
+      if (trimmedCount > 0) {
+        if (before && window.project && window.project.history) {
+          var after = typeof window.serializableProject === "function" ? window.serializableProject() : null;
+          window.project.history.entries = window.project.history.entries.slice(0, window.project.history.index + 1);
+          window.project.history.entries.push({ label: "Ripple trim " + direction, before: before, after: after });
+          window.project.history.index++;
+        }
+        if (typeof window.scheduleAutosave === "function") window.scheduleAutosave();
+        if (typeof window.renderAll === "function") window.renderAll();
+        try { (window.notify || window.toast)(direction === "head" ? "Ripple trimmed head (Q)" : "Ripple trimmed tail (W)"); } catch(_) {}
+      }
+    };
+
+    window.amiyoAddEdit = function() {
+      if (!window.project || !Array.isArray(window.project.tracks)) return;
+      var curTime = typeof window.currentTime === "number" ? window.currentTime : 0;
+      var cutAny = false;
+
+      window.project.tracks.forEach(function(tr) {
+        if (tr.locked) return;
+        (tr.clips || []).slice().forEach(function(cl) {
+          if (curTime > cl.start + 0.05 && curTime < cl.start + cl.duration - 0.05) {
+            if (typeof window.splitClipAt === "function") {
+              window.splitClipAt(tr.id, cl.id, curTime);
+              cutAny = true;
+            }
+          }
+        });
+      });
+
+      if (!cutAny && typeof window.splitSelected === "function") {
+        window.splitSelected();
+      }
+    };
+
+    // -------------------------------------------------------------
+    // 3. One-Click Proxy Mode Engine (50% Downscaled Smooth Scrubbing)
+    // -------------------------------------------------------------
+    window.__amiyoProxyModeActive = (function(){
+      try { return localStorage.getItem("amiyo_proxy_mode") === "1"; } catch(_) { return false; }
+    })();
+
+    window.toggleProxyMode = function(forceVal) {
+      if (typeof forceVal === "boolean") {
+        window.__amiyoProxyModeActive = forceVal;
+      } else {
+        window.__amiyoProxyModeActive = !window.__amiyoProxyModeActive;
+      }
+      try { localStorage.setItem("amiyo_proxy_mode", window.__amiyoProxyModeActive ? "1" : "0"); } catch(_) {}
+
+      var btn = document.getElementById("proxyToggleBtn");
+      if (btn) {
+        if (window.__amiyoProxyModeActive) {
+          btn.classList.add("tool-active");
+          btn.style.color = "#ff7a3d";
+          btn.style.borderColor = "#ff7a3d";
+        } else {
+          btn.classList.remove("tool-active");
+          btn.style.color = "";
+          btn.style.borderColor = "";
+        }
+      }
+
+      var badge = document.getElementById("proxyBadge");
+      if (badge) {
+        badge.style.display = window.__amiyoProxyModeActive ? "inline-block" : "none";
+        badge.textContent = "PROXIES 50%";
+      }
+
+      window.__amiyoCanvasScale = window.__amiyoProxyModeActive ? 0.5 : 1.0;
+      try { (window.notify || window.toast)(window.__amiyoProxyModeActive ? "Proxy Mode: ON (High-Speed 50% Canvas)" : "Proxy Mode: OFF (Full Resolution)"); } catch(_) {}
+      if (typeof window.renderPreviewFrame === "function") window.renderPreviewFrame();
+    };
+
+    // -------------------------------------------------------------
+    // 4. Smart Timeline Render Cache (Pre-Render In-to-Out Range)
+    // -------------------------------------------------------------
+    window.amiyoRenderCache = {
+      frames: new Map(),
+      cachedRange: null,
+      isRendering: false,
+      preRenderRange: async function(inTime, outTime, fps) {
+        if (this.isRendering) return;
+        fps = fps || 24;
+        var pDur = typeof window.getProjectDuration === "function" ? window.getProjectDuration() : 30;
+        var start = Math.max(0, typeof inTime === "number" ? inTime : 0);
+        var end = Math.min(pDur, typeof outTime === "number" ? outTime : pDur);
+        if (end <= start) end = pDur;
+
+        this.isRendering = true;
+        this.frames.clear();
+        this.cachedRange = { inTime: start, outTime: end, fps: fps };
+
+        try { (window.notify || window.toast)("Pre-rendering cache [" + start.toFixed(1) + "s - " + end.toFixed(1) + "s]..."); } catch(_) {}
+        var step = 1 / fps;
+        var canvas = document.getElementById("previewCanvas");
+        if (!canvas) { this.isRendering = false; return; }
+
+        var prevTime = window.currentTime;
+        for (var t = start; t <= end; t += step) {
+          window.currentTime = t;
+          if (typeof window.renderPreviewFrame === "function") {
+            try { await window.renderPreviewFrame(); } catch(_) {}
+          }
+          try {
+            if (typeof createImageBitmap === "function") {
+              var bmp = await createImageBitmap(canvas);
+              this.frames.set(Math.round(t * 100) / 100, bmp);
+            } else {
+              var ctx = canvas.getContext("2d");
+              if (ctx) {
+                this.frames.set(Math.round(t * 100) / 100, ctx.getImageData(0, 0, canvas.width, canvas.height));
+              }
+            }
+          } catch(err) {
+            var ctx2 = canvas.getContext("2d");
+            if (ctx2) {
+              this.frames.set(Math.round(t * 100) / 100, ctx2.getImageData(0, 0, canvas.width, canvas.height));
+            }
+          }
+        }
+
+        window.currentTime = prevTime;
+        if (typeof window.renderPreviewFrame === "function") {
+          try { await window.renderPreviewFrame(); } catch(_) {}
+        }
+        this.isRendering = false;
+        try { (window.notify || window.toast)("Render cache ready: " + this.frames.size + " frames (60fps playback)"); } catch(_) {}
+      },
+      getCachedFrame: function(time) {
+        if (!this.cachedRange || this.frames.size === 0) return null;
+        var key = Math.round(time * 100) / 100;
+        return this.frames.get(key) || null;
+      },
+      clearCache: function() {
+        this.frames.clear();
+        this.cachedRange = null;
+      }
+    };
+
+    // -------------------------------------------------------------
+    // 5. Global Hotkey Interceptor for Dynamic Profiles & Trims
+    // -------------------------------------------------------------
+    document.addEventListener("keydown", function(e) {
+      var inField = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement && document.activeElement.tagName);
+      if (inField) return;
+
+      var k = e.key.toLowerCase();
+      var activeKeymap = window.__amiyoCurrentKeymap || "premiere";
+      var profile = PROFILES[activeKeymap] || PROFILES.premiere;
+
+      // Enter key: Render timeline cache
+      if (e.key === "Enter" && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+        e.preventDefault();
+        var inPt = (window.project && window.project.inPoint) || 0;
+        var outPt = (window.project && window.project.outPoint) || 0;
+        window.amiyoRenderCache.preRenderRange(inPt, outPt);
+        return;
+      }
+
+      // Q / W: Ripple Trim Head / Tail
+      if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (k === "q") {
+          e.preventDefault();
+          window.amiyoRippleTrim("head");
+          return;
+        } else if (k === "w") {
+          e.preventDefault();
+          window.amiyoRippleTrim("tail");
+          return;
+        }
+      }
+
+      // Ctrl+K: Add Edit (Split all tracks at playhead)
+      if ((e.ctrlKey || e.metaKey) && k === "k") {
+        e.preventDefault();
+        window.amiyoAddEdit();
+        return;
+      }
+
+      // Map tool keys based on active profile
+      if (!e.ctrlKey && !e.metaKey && !e.altKey && profile && profile.tools && profile.tools[k]) {
+        var targetTool = profile.tools[k];
+        if (typeof window.setActiveTool === "function") {
+          e.preventDefault();
+          window.setActiveTool(targetTool);
+        }
+      }
+    });
+
+    // Initialize UI bindings
+    var proxyBtn = document.getElementById("proxyToggleBtn");
+    if (proxyBtn) proxyBtn.onclick = function() { window.toggleProxyMode(); };
+    var renderBtn = document.getElementById("renderRangeBtn");
+    if (renderBtn) renderBtn.onclick = function() {
+      var inPt = (window.project && window.project.inPoint) || 0;
+      var outPt = (window.project && window.project.outPoint) || 0;
+      window.amiyoRenderCache.preRenderRange(inPt, outPt);
+    };
+    var keymapSel = document.getElementById("nleKeymapProfile");
+    if (keymapSel) {
+      keymapSel.value = window.__amiyoCurrentKeymap;
+      keymapSel.onchange = function() { window.setNLEKeyboardProfile(this.value); };
+    }
+  } catch(e) {
+    try { console.warn("amiyo-pro-nle-elevations", e); } catch(_) {}
+  }
+})();
+

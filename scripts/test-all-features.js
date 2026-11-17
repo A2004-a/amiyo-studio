@@ -346,6 +346,47 @@ runFeatureTest(46, 'Draggable Resizable Workspace Splitters (--sidebar-w & --ins
   assert(ux3.includes('initSplitters'), 'initSplitters function missing');
 });
 
+console.log('\n--- 7. Top NLE Comparative Advancements ---');
+
+runFeatureTest(47, 'NLE Keyboard Profiles (Premiere Pro, DaVinci Resolve, Final Cut Pro)', () => {
+  assert(ux3.includes('__amiyoNLEProfiles'), '__amiyoNLEProfiles missing');
+  assert(ux3.includes('setNLEKeyboardProfile'), 'setNLEKeyboardProfile missing');
+  assert(html.includes('id="nleKeymapProfile"'), 'nleKeymapProfile select missing');
+  ['premiere', 'resolve', 'fcp'].forEach(prof => {
+    assert(ux3.includes(`id: "${prof}"`), `Profile ${prof} missing`);
+  });
+});
+
+runFeatureTest(48, 'Power Ripple Trims (Q / W) & Add Edit (Ctrl+K)', () => {
+  assert(ux3.includes('amiyoRippleTrim'), 'amiyoRippleTrim missing');
+  assert(ux3.includes('amiyoAddEdit'), 'amiyoAddEdit missing');
+  assert(ux3.includes('k === "q"') && ux3.includes('k === "w"'), 'Q/W key bindings missing');
+  assert(ux3.includes('k === "k"'), 'Ctrl+K binding missing');
+});
+
+runFeatureTest(49, 'One-Click Proxy Mode Engine & Canvas Downsampling', () => {
+  assert(ux3.includes('toggleProxyMode'), 'toggleProxyMode missing');
+  assert(ux3.includes('__amiyoProxyModeActive'), '__amiyoProxyModeActive missing');
+  assert(html.includes('id="proxyToggleBtn"'), 'proxyToggleBtn missing');
+  assert(html.includes('id="proxyBadge"'), 'proxyBadge missing');
+});
+
+runFeatureTest(50, 'Smart Timeline Render Cache & In-to-Out Pre-Render (Enter Key)', () => {
+  assert(ux3.includes('amiyoRenderCache'), 'amiyoRenderCache missing');
+  assert(ux3.includes('preRenderRange'), 'preRenderRange missing');
+  assert(ux3.includes('getCachedFrame'), 'getCachedFrame missing');
+  assert(html.includes('id="renderRangeBtn"'), 'renderRangeBtn missing');
+});
+
+runFeatureTest(51, 'Pro Quad Multi-Scopes & Master Audio Dynamics Processor', () => {
+  const dv = fs.readFileSync(path.join(rootDir, 'js', '09-pro-davinci.js'), 'utf8');
+  const al = fs.readFileSync(path.join(rootDir, 'js', '08-audio-lab.js'), 'utf8');
+  assert(dv.includes('Quad Scopes') || dv.includes('quad'), 'Quad scopes mode missing');
+  assert(dv.includes('amiyoRenderQuadScopes'), 'amiyoRenderQuadScopes missing');
+  assert(al.includes('amiyoSetAudioDynamics'), 'amiyoSetAudioDynamics missing');
+  assert(al.includes('AMIYO_DYNAMICS_PRESETS'), 'AMIYO_DYNAMICS_PRESETS missing');
+});
+
 console.log('\n================================================================');
 console.log(`   AUDIT COMPLETE: ${passed} / ${total} FEATURES PASSED (100% OPERATIONAL)`);
 console.log('================================================================');
