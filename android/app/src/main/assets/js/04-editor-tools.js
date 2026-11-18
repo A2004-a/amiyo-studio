@@ -55,8 +55,25 @@ addEventListener("dragleave",function(e){if(!files(e))return;n=Math.max(0,n-1);i
 /* Step 19: empty timeline shows what to do next */
 (function(){try{
 var ts=document.getElementById("timelineScroll");if(!ts)return;var host=ts.closest(".timeline")||ts.parentNode;
-var h=document.createElement("div");h.id="v19h";h.innerHTML='<b>Your timeline is empty</b><span>Drag media here, or add it from the Media panel</span><button type="button">＋ Add video / audio</button>';host.appendChild(h);
-h.querySelector("button").addEventListener("click",function(){var b=document.getElementById("addVideoBtn");if(b)b.click()});
+var h=document.createElement("div");h.id="v19h";
+h.innerHTML='<b>Your timeline is empty</b><span>Drag media here, load sample media, or create titles:</span><div class="v19-btns" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px"><button type="button" id="v19DemoBtn" class="primary" style="background:#ff7a3d;color:#fff;border:none;padding:7px 14px;border-radius:6px;font-weight:600;cursor:pointer">🎬 Load demo project</button><button type="button" id="v19AddBtn" style="background:#221e19;color:#e4dcce;border:1px solid #3d352a;padding:7px 12px;border-radius:6px;cursor:pointer">＋ Import media</button><button type="button" id="v19TextBtn" style="background:#221e19;color:#e4dcce;border:1px solid #3d352a;padding:7px 12px;border-radius:6px;cursor:pointer">T Add title</button><button type="button" id="v19StickerBtn" style="background:#221e19;color:#e4dcce;border:1px solid #3d352a;padding:7px 12px;border-radius:6px;cursor:pointer">🔥 Add sticker</button></div>';
+host.appendChild(h);
+h.addEventListener("click",function(e){
+  var t=e.target; if(!t||t.tagName!=="BUTTON") return;
+  if(t.id==="v19DemoBtn"||t.textContent.includes("Load demo")){
+    if(typeof window.loadDemo==="function") window.loadDemo();
+    else { var db=document.getElementById("demoBtn"); if(db) db.click(); }
+  } else if(t.id==="v19AddBtn"||t.textContent.includes("Import")){
+    var b=document.getElementById("addVideoBtn")||document.getElementById("fileInput");
+    if(b) b.click();
+  } else if(t.id==="v19TextBtn"||t.textContent.includes("title")){
+    if(typeof window.addTextClip==="function") window.addTextClip("Title Text");
+    else if(typeof window.amiyoAddTitle==="function") window.amiyoAddTitle();
+  } else if(t.id==="v19StickerBtn"||t.textContent.includes("sticker")){
+    if(typeof window.addElement==="function") window.addElement("stk_fire");
+    else if(typeof window.addTextClip==="function") window.addTextClip("🔥");
+  }
+});
 function u(){var n=0;project.tracks.forEach(function(t){n+=t.clips.length});var lw=labelW();
  h.style.left=lw+"px";h.style.right="0px";h.style.top=(ts.offsetTop+28)+"px";h.style.height=Math.max(40,ts.clientHeight-28)+"px";h.classList.toggle("on",n===0)}
 setInterval(u,400);u();
@@ -263,14 +280,16 @@ setInterval(function(){var c=find();b.classList.toggle("tool-active",!!(c&&(c.ef
    to remove it. Skipped in draft preview, always applied in the exported video. */
 (function(){
   "use strict";
-  window.amiyoAfterFrame(function(vc){
-    if(!vc||(window.__amiyoDraft&&window.__amiyoDraft())) return;
-    var fx=(vc.clip.effects||[]).find(function(e){ return e.enabled&&e.name==="denoise"; }); if(!fx) return;
-    var W=canvas.width,H=canvas.height, tmp=amiyoScratch("denoise",W,H);
-    tmp.getContext("2d").drawImage(canvas,0,0);
-    var k=Math.max(0,Math.min(1,fx.value==null?.5:fx.value));
-    ctx.save(); ctx.globalAlpha=.25+.5*k; ctx.filter="blur("+(.5+.9*k).toFixed(2)+"px)"; ctx.drawImage(tmp,0,0); ctx.restore();
-  });
+  if (typeof window.amiyoAfterFrame === "function") {
+    window.amiyoAfterFrame(function(vc){
+      if(!vc||(window.__amiyoDraft&&window.__amiyoDraft())) return;
+      var fx=(vc.clip.effects||[]).find(function(e){ return e.enabled&&e.name==="denoise"; }); if(!fx) return;
+      var W=canvas.width,H=canvas.height, tmp=amiyoScratch("denoise",W,H);
+      tmp.getContext("2d").drawImage(canvas,0,0);
+      var k=Math.max(0,Math.min(1,fx.value==null?.5:fx.value));
+      ctx.save(); ctx.globalAlpha=.25+.5*k; ctx.filter="blur("+(.5+.9*k).toFixed(2)+"px)"; ctx.drawImage(tmp,0,0); ctx.restore();
+    });
+  }
   function toggle(){
     var f=getClip(); if(!f||f.track.kind!=="video"){ toast("Select a video clip on the timeline first"); return; }
     var before=deepClone(serializableProject()), c=f.clip; c.effects=c.effects||[];
@@ -338,23 +357,25 @@ setInterval(function(){var c=find();b.classList.toggle("tool-active",!!(c&&(c.ef
    natural. Range -1 to 1; 0 = off. Slider sits in the Inspector "Clean-up" group. Skipped in draft preview. */
 (function(){
   "use strict";
-  window.amiyoAfterFrame(function(vc){
-    if(!vc||(window.__amiyoDraft&&window.__amiyoDraft())) return;
-    var fx=(vc.clip.effects||[]).find(function(e){ return e.enabled&&e.name==="vibrance"; }); if(!fx) return;
-    var v=Math.max(-1,Math.min(1,Number(fx.value)||0)); if(!v) return;
-    var W=canvas.width,H=canvas.height, img; try{ img=ctx.getImageData(0,0,W,H); }catch(e){ return; }
-    var d=img.data;
-    for(var i=0;i<d.length;i+=4){
-      var r=d[i],g=d[i+1],b=d[i+2], mx=r>g?(r>b?r:b):(g>b?g:b), mn=r<g?(r<b?r:b):(g<b?g:b);
-      if(mx===0) continue;
-      var sat=(mx-mn)/mx, amt=v*(1-sat);
-      if(r>=g&&g>=b&&(g-b)<=(r-b)*.75) amt*=.35;           /* orange-red band: skin */
-      var gray=.299*r+.587*g+.114*b, k=1+amt*1.2;
-      var nr=gray+(r-gray)*k, ng=gray+(g-gray)*k, nb=gray+(b-gray)*k;
-      d[i]=nr<0?0:nr>255?255:nr; d[i+1]=ng<0?0:ng>255?255:ng; d[i+2]=nb<0?0:nb>255?255:nb;
-    }
-    ctx.putImageData(img,0,0);
-  });
+  if (typeof window.amiyoAfterFrame === "function") {
+    window.amiyoAfterFrame(function(vc){
+      if(!vc||(window.__amiyoDraft&&window.__amiyoDraft())) return;
+      var fx=(vc.clip.effects||[]).find(function(e){ return e.enabled&&e.name==="vibrance"; }); if(!fx) return;
+      var v=Math.max(-1,Math.min(1,Number(fx.value)||0)); if(!v) return;
+      var W=canvas.width,H=canvas.height, img; try{ img=ctx.getImageData(0,0,W,H); }catch(e){ return; }
+      var d=img.data;
+      for(var i=0;i<d.length;i+=4){
+        var r=d[i],g=d[i+1],b=d[i+2], mx=r>g?(r>b?r:b):(g>b?g:b), mn=r<g?(r<b?r:b):(g<b?g:b);
+        if(mx===0) continue;
+        var sat=(mx-mn)/mx, amt=v*(1-sat);
+        if(r>=g&&g>=b&&(g-b)<=(r-b)*.75) amt*=.35;           /* orange-red band: skin */
+        var gray=.299*r+.587*g+.114*b, k=1+amt*1.2;
+        var nr=gray+(r-gray)*k, ng=gray+(g-gray)*k, nb=gray+(b-gray)*k;
+        d[i]=nr<0?0:nr>255?255:nr; d[i+1]=ng<0?0:ng>255?255:ng; d[i+2]=nb<0?0:nb>255?255:nb;
+      }
+      ctx.putImageData(img,0,0);
+    });
+  }
   function addRow(){
     var g=document.getElementById("cleanupGroup"); if(!g||document.getElementById("cu_vb")) return;
     var f=getClip(); if(!f||f.track.kind!=="video") return; var c=f.clip;

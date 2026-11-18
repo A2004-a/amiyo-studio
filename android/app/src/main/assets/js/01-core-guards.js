@@ -1,6 +1,9 @@
 /* Amiyo Studio - 01-core-guards.js */
 /* Head & core performance guards and throttlers */
-/* Scripts 0 to 38 */
+/* Global hook and state guards */
+window.__amiyoPostHooks = window.__amiyoPostHooks || [];
+window.amiyoAfterFrame = window.amiyoAfterFrame || function(fn){ if(typeof fn==="function") window.__amiyoPostHooks.push(fn); };
+
 
 
 ;

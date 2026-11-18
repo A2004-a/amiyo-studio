@@ -50,7 +50,8 @@ if (Test-Path (Join-Path $targetDir ".git")) {
     try {
         Write-Host "[INFO] Pulling latest updates via git..." -ForegroundColor Cyan
         Push-Location $targetDir
-        git pull --rebase origin main 2>&1 | Out-Null
+        git fetch origin main 2>&1 | Out-Null
+        git reset --hard origin/main 2>&1 | Out-Null
         Pop-Location
         $updated = $true
     } catch {

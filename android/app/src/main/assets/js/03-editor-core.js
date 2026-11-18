@@ -292,11 +292,17 @@ async function ensureUrl(asset){
   if(asset.runtimeUrl) return asset.runtimeUrl;
   if(asset.url) { try{ assetUrls.set(asset.id, asset.url); }catch(_){} return asset.url; }
   if(asset.fileData){
+    if(typeof asset.fileData==="string" && asset.fileData.startsWith("data:")){
+      asset.runtimeUrl=asset.fileData;
+      try{ assetUrls.set(asset.id, asset.fileData); }catch(_){}
+      return asset.fileData;
+    }
     const bin = atob(asset.fileData.split(",")[1]||"");
     const bytes = new Uint8Array(bin.length);
     for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
     const blob = new Blob([bytes],{type:asset.mime||"application/octet-stream"});
     asset.runtimeUrl=URL.createObjectURL(blob);
+    try{ assetUrls.set(asset.id, asset.runtimeUrl); }catch(_){}
     return asset.runtimeUrl;
   }
   return null;
@@ -495,7 +501,8 @@ function renderTracks(){
   } }
 }
 function renderTimeline(){
-  renderRuler(); renderTracks(); renderMarkerStrip();
+  renderRuler(); renderTracks();
+  try { if (typeof window.renderMarkerStrip === "function") window.renderMarkerStrip(); } catch(_) {}
 }
 function renderTime(){
   $("timeReadout").textContent=`${fmt(currentTime)} / ${fmt(getProjectDuration())}`;
@@ -612,7 +619,19 @@ async function amiyoPrimeFrame(v){
 const Amiyo_IMGS=new Map();
 function amiyoImage(url){
   let p=Amiyo_IMGS.get(url);
-  if(!p){ p=new Promise(res=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=()=>{ window.amiyoReportOnce&&window.amiyoReportOnce("img:"+String(url).slice(-40),"An image on the timeline could not be loaded","The file may be missing or damaged. Re-import it."); res(null); }; im.src=url; }); Amiyo_IMGS.set(url,p); }
+  if(!p){
+    p=new Promise(res=>{
+      const im=new Image();
+      im.onload=()=>res(im);
+      im.onerror=()=>{
+        window.amiyoReportOnce&&window.amiyoReportOnce("img:"+String(url).slice(-40),"An image on the timeline could not be loaded","The file may be missing or damaged. Re-import it.");
+        res(null);
+      };
+      im.src=url;
+      if(im.complete && (im.naturalWidth>0 || im.width>0)) res(im);
+    });
+    Amiyo_IMGS.set(url,p);
+  }
   return p;
 }
 function amiyoSeeked(v,ms){
@@ -1553,6 +1572,28 @@ function loadDemo(){
   const before2=deepClone(before), after=serializableProject();project.history.entries.push({label:"Load demo",before:before2,after});project.history.index++;
   currentTime=0; renderAll(); scheduleAutosave(); toast("Demo project loaded");
 }
+function togglePlay(){
+  try {
+    if (typeof isPlaying !== "undefined" && isPlaying) {
+      if (typeof pause === "function") pause();
+    } else {
+      if (typeof play === "function") play();
+    }
+  } catch(e) { try { console.error("togglePlay error:", e); } catch(_) {} }
+}
+window.loadDemo=loadDemo;
+window.renderAll=renderAll;
+window.renderPreviewFrame=renderPreviewFrame;
+window.renderTimeline=renderTimeline;
+window.addTextClip=addTextClip;
+window.splitSelected=splitSelected;
+window.deleteSelected=deleteSelected;
+window.duplicateSelected=duplicateSelected;
+window.setCurrentTime=setCurrentTime;
+window.getProjectDuration=getProjectDuration;
+window.play=play;
+window.pause=pause;
+window.togglePlay=togglePlay;
 
 function projectToMetadata(){
   const total=Object.values(project.assets).reduce((a,b)=>a+b.size,0);
@@ -2631,7 +2672,9 @@ function refreshInjectedUI(){
   const s=q("amiyoSequenceSelect");if(s){
     s.innerHTML=project.sequences.map(x=>`<option value="${x.id}" ${x.id===project.activeSequenceId?"selected":""}>${escapeHtml(x.name)}</option>`).join("");
   }
-  renderCanvasGuides();renderMarkerStrip();enhanceTimelineSelection();
+  try { if (typeof renderCanvasGuides === "function") renderCanvasGuides(); } catch(_) {}
+  try { if (typeof window.renderMarkerStrip === "function") window.renderMarkerStrip(); else if (typeof renderMarkerStrip === "function") renderMarkerStrip(); } catch(_) {}
+  try { if (typeof enhanceTimelineSelection === "function") enhanceTimelineSelection(); } catch(_) {}
 }
 
 /* ---------- startup recovery ---------- */
@@ -6884,22 +6927,44 @@ function fitShell(){
 }
 try{ new ResizeObserver(fitShell).observe(document.querySelector(".preview-stage")); }catch(e){window.__swl&&window.__swl(e)}
 window.addEventListener("resize",fitShell);
-const _ra=window.renderAll; window.renderAll=function(){ _ra.apply(this,arguments); fitShell(); };
+const _ra=window.renderAll || (typeof renderAll==="function"?renderAll:null);
+window.renderAll=function(){
+  if(typeof _ra==="function") _ra.apply(this,arguments);
+  else if(typeof renderAll==="function") renderAll.apply(this,arguments);
+  fitShell();
+};
 
 /* ---- show only finished frames: everything draws into an off-screen buffer, then one copy to the screen ---- */
 let rpfBusy=null, rpfAgain=false;
-const _rpf=window.renderPreviewFrame;
+const _rpf=window.renderPreviewFrame || (typeof renderPreviewFrame==="function"?renderPreviewFrame:null);
 function blit(){
-  const ex=window.__amiyoExportOpts, s=ex&&ex.h?ex.h/canvas.height:1;
-  const X=(ex&&window.__amiyoXSize)||null; const W=X?X.w:Math.max(2,Math.round(canvas.width*s/2)*2), H=X?X.h:Math.max(2,Math.round(canvas.height*s/2)*2);
-  if(viewCanvas.width!==W||viewCanvas.height!==H){ viewCanvas.width=W; viewCanvas.height=H; }
-  try{ viewCtx.imageSmoothingQuality=(window.__amiyoDraft&&window.__amiyoDraft())?"low":"high"; }catch(e){window.__swl&&window.__swl(e)}
-  if(X&&Math.abs(W/H-canvas.width/canvas.height)>.01){ viewCtx.fillStyle="#000"; viewCtx.fillRect(0,0,W,H); const k=Math.min(W/canvas.width,H/canvas.height), dw=Math.round(canvas.width*k), dh=Math.round(canvas.height*k); viewCtx.drawImage(canvas,Math.round((W-dw)/2),Math.round((H-dh)/2),dw,dh); } else viewCtx.drawImage(canvas,0,0,W,H);
+  try{
+    const ex=window.__amiyoExportOpts, s=ex&&ex.h?ex.h/canvas.height:1;
+    const X=(ex&&window.__amiyoXSize)||null; const W=X?X.w:Math.max(2,Math.round(canvas.width*s/2)*2), H=X?X.h:Math.max(2,Math.round(canvas.height*s/2)*2);
+    if(viewCanvas.width!==W||viewCanvas.height!==H){ viewCanvas.width=W; viewCanvas.height=H; }
+    try{ viewCtx.imageSmoothingQuality=(window.__amiyoDraft&&window.__amiyoDraft())?"low":"high"; }catch(e){window.__swl&&window.__swl(e)}
+    if(X&&Math.abs(W/H-canvas.width/canvas.height)>.01){ viewCtx.fillStyle="#000"; viewCtx.fillRect(0,0,W,H); const k=Math.min(W/canvas.width,H/canvas.height), dw=Math.round(canvas.width*k), dh=Math.round(canvas.height*k); viewCtx.drawImage(canvas,Math.round((W-dw)/2),Math.round((H-dh)/2),dw,dh); } else viewCtx.drawImage(canvas,0,0,W,H);
+  }catch(e){try{viewCtx.drawImage(canvas,0,0,viewCanvas.width,viewCanvas.height);}catch(_){}}
 }
+window.blit=blit;
 window.renderPreviewFrame=function(){
   if(rpfBusy){ rpfAgain=true; return rpfBusy; }
   const self=this, args=arguments;
-  rpfBusy=(async()=>{ try{ do{ rpfAgain=false; await _rpf.apply(self,args); blit(); }while(rpfAgain); } finally{ rpfBusy=null; } })();
+  rpfBusy=(async()=>{
+    try{
+      do{
+        rpfAgain=false;
+        if(typeof _rpf==="function") await _rpf.apply(self,args);
+        else if(typeof renderPreviewFrame==="function") await renderPreviewFrame.apply(self,args);
+        blit();
+      }while(rpfAgain);
+    }catch(err){
+      console.warn("renderPreviewFrame error:",err);
+    }finally{
+      blit();
+      rpfBusy=null;
+    }
+  })();
   return rpfBusy;
 };
 

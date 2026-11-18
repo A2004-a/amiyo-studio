@@ -5457,6 +5457,7 @@ try{window.AMIYO_W=window.AMIYO_W||{};window.AMIYO_W.step=20;}catch(e){}
 ;
 /* ==================== Script 1223 id="amiyo-ux-quick-js" ==================== */
 (function(){try{
+  return; // Disabled: #uxQuick floating duplicate buttons that overlap topbar
   function build(){
     if(document.getElementById('uxQuick')) return true; if(!document.getElementById('undoBtn')) return false;
     var box=document.createElement('div'); box.id='uxQuick'; box.setAttribute('role','group'); box.setAttribute('aria-label','Quick actions');
