@@ -5570,3 +5570,237 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   overflow: hidden !important;
   white-space: nowrap !important;
 }
+
+
+/* === AMYIO DEFINITIVE WORKSPACE GRID & TOPBAR FIX v2.0 === */
+/* 1. Root .app Layout */
+html:root body > .app,
+html body .app {
+  display: grid !important;
+  grid-template-rows: 48px minmax(0, 1fr) 26px !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* 2. Topbar Clean Layout */
+html:root body > .app > header.topbar,
+html body .topbar {
+  grid-row: 1 / 2 !important;
+  height: 48px !important;
+  max-height: 48px !important;
+  min-height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 16px !important;
+  background: #0d0c0a !important;
+  border-bottom: 1px solid #24201a !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+html body .topbar .brand {
+  order: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 140px !important;
+  flex: 0 0 auto !important;
+}
+html body .topbar #projectName {
+  order: 2 !important;
+  width: 140px !important;
+  flex: 0 0 auto !important;
+}
+html body .topbar #saveStatus {
+  order: 3 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+  margin: 0 4px !important;
+}
+html body .topbar #vsThemeBtn,
+html body .topbar #vsColorBtn {
+  order: 4 !important;
+  flex: 0 0 auto !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+html body .topbar #nleKeymapProfile {
+  order: 5 !important;
+  width: auto !important;
+  max-width: 130px !important;
+  flex: 0 0 auto !important;
+  height: 26px !important;
+}
+html body .topbar .top-spacer {
+  order: 6 !important;
+  flex: 1 1 auto !important;
+}
+html body .topbar #exportBtn {
+  order: 7 !important;
+  flex: 0 0 auto !important;
+  background: #ff7a3d !important;
+  color: #1a0c03 !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  padding: 6px 18px !important;
+  box-shadow: 0 4px 12px rgba(255,122,61,0.3) !important;
+  cursor: pointer !important;
+  border: none !important;
+}
+html body #uxQuick {
+  order: 8 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  position: static !important;
+  margin-left: 12px !important;
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+html body #uxQuick button {
+  background: transparent !important;
+  border: none !important;
+  color: #9c9284 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  padding: 4px 6px !important;
+}
+html body #uxQuick button:hover {
+  color: #ffc06a !important;
+}
+html body #uxQuick button.uxcc {
+  color: #ffc06a !important;
+}
+html body .topbar > :is(#versionsBtn, #shareBtn, #settingsBtn, #helpBtn, #agentBtn, #amQaBtn, #storageBtn, #renderQueueBtn, #ui20More, #pr2Ws, #undoBtn, #redoBtn) {
+  display: none !important;
+}
+
+/* 3. Workspace 3-Column Layout */
+html:root body > .app > :is(main, .workspace, #amiyoMain),
+html body .workspace {
+  grid-row: 2 / 3 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: grid !important;
+  grid-template-columns: var(--sidebar-w, 240px) minmax(320px, 1fr) var(--inspector-w, 280px) !important;
+  grid-template-rows: 1fr !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+html body .workspace > .sidebar {
+  grid-column: 1 / 2 !important;
+  grid-row: 1 / 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: auto !important;
+  background: #100f0c !important;
+  border-right: 1px solid #24201a !important;
+}
+html body .workspace > .center {
+  grid-column: 2 / 3 !important;
+  grid-row: 1 / 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: #0c0b09 !important;
+}
+html body .workspace > .inspector-col {
+  grid-column: 3 / 4 !important;
+  grid-row: 1 / 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: auto !important;
+  background: #13110d !important;
+  border-left: 1px solid #24201a !important;
+}
+
+/* 4. Resizers Positioned Absolutely */
+html body .workspace > .amiyo-split-v {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 6px !important;
+  z-index: 50 !important;
+  cursor: col-resize !important;
+  background: transparent !important;
+}
+html body .workspace > .amiyo-split-left {
+  left: calc(var(--sidebar-w, 240px) - 3px) !important;
+}
+html body .workspace > .amiyo-split-right {
+  right: calc(var(--inspector-w, 280px) - 3px) !important;
+}
+
+/* 5. Center Column: 50/50 Dual-Pane Split */
+html body .center > .preview-wrap {
+  flex: 1 1 50% !important;
+  height: 50% !important;
+  max-height: 50% !important;
+  min-height: 140px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: #000 !important;
+}
+html body .center > .preview-wrap .preview-stage {
+  flex: 1 1 auto !important;
+  height: calc(100% - 34px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  background: #000 !important;
+  padding: 6px !important;
+}
+html body .center > .timeline {
+  flex: 1 1 50% !important;
+  height: 50% !important;
+  max-height: 50% !important;
+  min-height: 140px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: #0c0b09 !important;
+  border-top: 1px solid #24201a !important;
+  padding-left: 36px !important;
+}
+
+/* 6. Footer Status Bar */
+html:root body > .app > :is(#footerBar, #oneBar, .status-bar, footer) {
+  grid-row: 3 / 4 !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  max-height: 26px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #0d0c0a !important;
+  border-top: 1px solid #24201a !important;
+  z-index: 10 !important;
+}
+
+/* 7. Hide Rogue and Mobile Elements */
+html body :is(#mbar, nav.mbar, .mbar, #pp5Menu, .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess, #amFocusX) {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}

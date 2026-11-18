@@ -8,13 +8,13 @@ try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 } catch {}
 
-Write-Host "       ▲                                           " -ForegroundColor Yellow
-Write-Host "      /█\                                          " -ForegroundColor Yellow
-Write-Host "     /███\        ▶  AMIYO STUDIO                  " -ForegroundColor Red
-Write-Host "    /██ █ \          Professional Video Editor      " -ForegroundColor Cyan
-Write-Host "   /███████\         v$appVersion                   " -ForegroundColor Gray
-Write-Host "  /███   ███\                                      " -ForegroundColor Yellow
-Write-Host " ═════════════                                     " -ForegroundColor DarkYellow
+Write-Host "       /\                                           " -ForegroundColor Yellow
+Write-Host "      /#\                                          " -ForegroundColor Yellow
+Write-Host "     /###\        >>  AMIYO STUDIO                  " -ForegroundColor Red
+Write-Host "    /## # \          Professional Video Editor      " -ForegroundColor Cyan
+Write-Host "   /#######\         v$appVersion                   " -ForegroundColor Gray
+Write-Host "  /###   ###\                                      " -ForegroundColor Yellow
+Write-Host " =============                                     " -ForegroundColor DarkYellow
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "          Amiyo Studio v$appVersion       " -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan

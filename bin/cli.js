@@ -160,18 +160,18 @@ function startServer(initialPort) {
     const networkUrl = netAddr ? `http://${netAddr}:${initialPort}` : null;
 
     console.log(`
-       ▲
-      /█\\
-     /███\\        ▶  AMIYO STUDIO
-    /██ █ \\          Professional Non-Linear Video Editor
-   /███████\\         v${pkg.version}
-  /███   ███\\
- ═════════════
-=============================================================
-             🎬 Amiyo Studio - In-Browser Video Editor
-=============================================================
-  ✓ Local:   ${localUrl}
-  ${networkUrl ? `✓ Network: ${networkUrl}\n` : ''}  ✓ Editor:  ${localUrl}/editor.html
+       /\
+      /  \
+     / /\ \       >>  AMIYO STUDIO
+    / /  \ \          Professional Non-Linear Video Editor
+   / /----\ \         v${pkg.version}
+  / /      \ \
+ =============
+=============================================================;
+             AMIYO STUDIO - In-Browser Video Editor
+=============================================================;
+  [OK] Local:   ${localUrl}
+  ${networkUrl ? `[OK] Network: ${networkUrl}\n` : ''}  [OK] Editor:  ${localUrl}/editor.html
 
   Press Ctrl+C to stop the server
 =============================================================
