@@ -3297,6 +3297,7 @@ X.add({id:"selftest",group:"Info",label:"Run PiP+ self-test",needs:false,run:sho
     function row(k,t,d){ return '<div class="pwa-r"><i class="'+k+'"></i><div><b>'+esc(t)+'</b><span>'+esc(d)+'</span></div></div>'; }
   }
   function build(){
+    return false; // Disabled topbar injection
     var tb=document.querySelector(".topbar"); if(!tb) return false;
     if(document.getElementById("pwaInstallBtn")){ btn=document.getElementById("pwaInstallBtn"); offBtn=document.getElementById("pwaOffBtn"); return true; }
     var ref=document.getElementById("exportBtn");

@@ -695,7 +695,8 @@ try{ window.AMIYO_EDITOR_BUILD="ls-step57-more-sfx"; }catch(e){}
 /* ==================== Script 720 id="amiyo-s78-tour-menu" ==================== */
 /* Step 14: the guided tour was only reachable from the empty start screen. It is now also in the top "More" menu, next to Help, so it can be replayed any time. */
 (function(){ try{
-  function add(){ var h=document.getElementById("helpBtn"); if(!h||document.getElementById("tourMenuBtn")) return;
+  function add(){ return; // Disabled tour in topbar
+ var h=document.getElementById("helpBtn"); if(!h||document.getElementById("tourMenuBtn")) return;
     var b=document.createElement("button"); b.type="button"; b.id="tourMenuBtn"; b.className=h.className; b.textContent="\u2753 Tour"; b.title="Replay the quick guided tour";
     b.addEventListener("click",function(){ try{ document.getElementById("topMore").classList.remove("open"); var mb=document.getElementById("topMoreBtn"); if(mb) mb.setAttribute("aria-expanded","false"); }catch(e){} setTimeout(function(){ window.amiyoStartTour&&window.amiyoStartTour(); },120); });
     h.insertAdjacentElement("afterend",b); }

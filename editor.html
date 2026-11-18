@@ -25,7 +25,7 @@
 
     // 5. Active DOM sentinel: aggressively prune topbar clutter and rogue workspace bars
     function prune() {
-      ['ui20Ws', 'amOneRow', 'ppWs', 'wsBtn', 'pp5Menu', 'pvSizes', 'amiyoCrashBar'].forEach(function(id){
+      ['ui20Ws', 'amOneRow', 'ppWs', 'wsBtn', 'pp5Menu', 'pvSizes', 'amiyoCrashBar', 'pwaOffBtn', 'pwaInstallBtn', 'topMoreBtn', 'tourMenuBtn', 'focusBtn', 'amFocusBtn', 'amFocusX', 'offlineBtn'].forEach(function(id){
         var el = document.getElementById(id);
         if (el) el.remove();
       });

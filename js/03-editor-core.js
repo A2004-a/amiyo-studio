@@ -8459,7 +8459,8 @@ if(bar&&grid&&!document.getElementById("loopBtn")){
 ;
 /* ==================== Script 114 ==================== */
 /* Editor step 6: on phones, secondary top-bar controls move into a "More" menu instead of being clipped */
-(function(){
+(function(){ return; // Disabled: topbar collapse on <=1024px
+
   var bar=document.querySelector("header.topbar"); if(!bar) return;
   var mq=window.matchMedia("(max-width:1024px)"), collapsed=false;
   var KEEP={projectName:1,saveStatus:1,saveDot:1,undoBtn:1,redoBtn:1,exportBtn:1,topMoreBtn:1,vsThemeBtn:1,vsColorBtn:1,wsBtn:1};

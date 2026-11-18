@@ -3154,7 +3154,8 @@ setTimeout(function(){var ids=['pTc','pTh','pFollow','pGap','pAround','pMap','pM
 
 ;
 /* ==================== Script 1524 id="amiyo-pp4-s01" ==================== */
-(function(){var n=0;function go(){if(!(document.querySelector("#amiyoMain .center>.timeline")&&document.getElementById("timelineScroll")&&document.getElementById("oneBar"))){if(n++<150)return setTimeout(go,100)}try{(function(){
+(function(){var n=0;function go(){ return; // Disabled legacy split override
+if(!(document.querySelector("#amiyoMain .center>.timeline")&&document.getElementById("timelineScroll")&&document.getElementById("oneBar"))){if(n++<150)return setTimeout(go,100)}try{(function(){
 var K='amiyo-pp4-tlh';
 function lsGet(){try{return parseFloat(localStorage.getItem(K))}catch(e){return NaN}}
 function lsSet(v){try{localStorage.setItem(K,String(v))}catch(e){}}
@@ -3264,7 +3265,8 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
 ;
 /* ==================== Script 1531 id="amiyo-pp5-s02" ==================== */
 /* Premiere-style PP5 step 2: a real menu bar (File Edit Clip Sequence Markers Graphics View Window Help) and a top bar that no longer hides workspace tabs. */
-(function(){var n=0;function go(){
+(function(){var n=0;function go(){ return; // Disabled pp5-s02 menu and topbar overrides
+
  var app=document.querySelector('.app'),top=document.querySelector('header.topbar');
  if(!(app&&top&&document.getElementById('amiyoMain'))){if(n++<150)return setTimeout(go,100);return}
  if(window.__pp5s02)return;window.__pp5s02=1;
@@ -3372,7 +3374,8 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
 ;
 /* ==================== Script 1532 id="amiyo-pp5-s03" ==================== */
 /* Premiere-style PP5 step 3: every panel header gets a panel menu and a maximize button. Maximize any panel to the whole workspace, Esc or the pill brings it back. */
-(function(){var n=0;function go(){
+(function(){var n=0;function go(){ return; // Disabled pp5-s03 panel maximize and layout resets
+
  var main=document.getElementById('amiyoMain'),ctr=main&&main.querySelector('.center');
  if(!(main&&ctr&&ctr.querySelector('.timeline'))){if(n++<150)return setTimeout(go,100);return}
  if(window.__pp5s03)return;window.__pp5s03=1;

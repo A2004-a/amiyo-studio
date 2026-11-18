@@ -19,13 +19,13 @@ try {
 } catch (_) { }
 
 console.log(`
-       ▲
-      /█\\
-     /███\\        ▶  AMIYO STUDIO UPDATER
-    /██ █ \\          Checking for updates & upgrading...
-   /███████\\         Current installed version: v${currentVersion}
-  /███   ███\\
- ═════════════
+       /\\
+      /  \\
+     / /\\ \\       >>  AMIYO STUDIO UPDATER
+    / /  \\ \\          Checking for updates & upgrading...
+   / /----\\ \\         Current installed version: v${currentVersion}
+  / /      \\ \\
+ ===============
 =============================================================
 `);
 
