@@ -257,7 +257,18 @@
       </div>
     </section>
     <div class="amiyo-split-v amiyo-split-right" id="amiyoSplitRight" role="separator" aria-label="Resize Inspector" title="Drag to resize Inspector"></div>
-    <div class="inspector-col" id="inspectorCol"><aside class="inspector" id="inspector"></aside></div>
+    <div class="inspector-col" id="inspectorCol">
+      <div id="ppInspTabs" role="tablist" aria-label="Right panel">
+        <button type="button" data-t="fx" role="tab" aria-selected="true">Effect Controls</button>
+        <button type="button" data-t="pp6fx" role="tab">Effects</button>
+        <button type="button" data-t="pp6gfx" role="tab">Essential Graphics</button>
+        <button type="button" data-t="pp6lum" role="tab">Lumetri Color</button>
+        <button type="button" data-t="pp6lib" role="tab">Libraries</button>
+        <button type="button" data-t="tools" role="tab">Tools</button>
+      </div>
+      <div id="pp6Dock" role="tabpanel" style="display:none"></div>
+      <aside class="inspector" id="inspector"></aside>
+    </div>
   </main>
   <nav class="mbar" id="mbar" aria-label="Editor actions">
     <button type="button" id="mbLib"><i>☰</i>Library</button>

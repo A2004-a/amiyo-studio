@@ -7862,19 +7862,41 @@ bar.parentNode.insertBefore(s,bar.nextSibling);
 ;
 /* ==================== Script 1309 id="amiyo-pp-s08" ==================== */
 (function(){try{
-var col=document.getElementById('inspectorCol'),ins=document.getElementById('inspector');if(!col||!ins||document.getElementById('ppInspTabs'))return;
-var bar=document.createElement('div');bar.id='ppInspTabs';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Right panel');
-function tab(t,label){var b=document.createElement('button');b.type='button';b.dataset.t=t;b.setAttribute('role','tab');b.innerHTML=label+(t==='fx'?'<i class="pp-dot"></i>':'');
- b.addEventListener('click',function(){show(t)});bar.appendChild(b)}
-tab('fx','Effect Controls');tab('tools','Tools');
-col.insertBefore(bar,col.firstChild);
-function show(t){col.classList.toggle('pp-tab-fx',t==='fx');col.classList.toggle('pp-tab-tools',t==='tools');
- bar.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.t===t))});col.scrollTop=0}
-var had=null;
-function sync(){var has=!/Select a clip to edit/i.test(ins.textContent||'');col.classList.toggle('pp-has-clip',has);
- if(has!==had){had=has;show('fx')}}
-new MutationObserver(function(){requestAnimationFrame(sync)}).observe(ins,{childList:true,subtree:true,characterData:true});
-sync();show('fx');
+function init(){
+  var col=document.getElementById('inspectorCol'),ins=document.getElementById('inspector');
+  if(!col||!ins) return false;
+  var bar=document.getElementById('ppInspTabs');
+  if(!bar){
+    bar=document.createElement('div');bar.id='ppInspTabs';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Right panel');
+    col.insertBefore(bar,col.firstChild);
+  }
+  function tab(t,label){
+    var b=bar.querySelector('[data-t="'+t+'"]');
+    if(!b){
+      b=document.createElement('button');b.type='button';b.dataset.t=t;b.setAttribute('role','tab');b.innerHTML=label+(t==='fx'?'<i class="pp-dot"></i>':'');
+      bar.appendChild(b);
+    }
+    if(!b.__ppBound){
+      b.__ppBound=1;
+      b.addEventListener('click',function(){show(t)});
+    }
+  }
+  tab('fx','Effect Controls');tab('tools','Tools');
+  function show(t){
+    col.classList.toggle('pp-tab-fx',t==='fx');col.classList.toggle('pp-tab-tools',t==='tools');
+    if(t==='fx'||t==='tools') col.classList.remove('pp6-dock-on');
+    bar.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.t===t))});
+    col.scrollTop=0;
+  }
+  var had=null;
+  function sync(){var has=!/Select a clip to edit/i.test(ins.textContent||'');col.classList.toggle('pp-has-clip',has);
+   if(has!==had){had=has;show('fx')}}
+  new MutationObserver(function(){requestAnimationFrame(sync)}).observe(ins,{childList:true,subtree:true,characterData:true});
+  sync();show('fx');
+  return true;
+}
+var n=0;(function t(){if(init()||n++>60)return;setTimeout(t,200)})();
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
 }catch(e){console.warn('pp08',e)}})();
 
 ;

@@ -3582,7 +3582,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    },true);
   }catch(e){ try{console.warn('pp6-s01',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -3649,7 +3649,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    },true);
   }catch(e){ try{console.warn('pp6-s02',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -3700,7 +3700,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    fix(); setInterval(fix,800);
   }catch(e){ try{console.warn('pp6-s03',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -3811,7 +3811,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    window.AMIYO_PP6.decorateEC=decorate;
   }catch(e){ try{console.warn('pp6-s04',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -3846,8 +3846,8 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
     P+'#pp6Dock .pp6-sl label{display:flex;justify-content:space-between}'+
     P+'#pp6Dock .pp6-note{opacity:.7;line-height:1.45;margin:6px 0}';
    var st=document.createElement('style'); st.id='amiyo-pp6-s05-css'; st.textContent=css; document.head.appendChild(st);
-   var dock=document.createElement('div'); dock.id='pp6Dock'; dock.setAttribute('role','tabpanel');
-   col.insertBefore(dock,ins);
+   var dock=document.getElementById('pp6Dock')||document.createElement('div'); dock.id='pp6Dock'; dock.setAttribute('role','tabpanel');
+   if(!dock.parentNode) col.insertBefore(dock,ins);
    var TABS=[['pp6fx','Effects'],['pp6gfx','Essential Graphics'],['pp6lum','Lumetri Color'],['pp6lib','Libraries']];
    var cur=null, q='', NOREF={pp6fx:1,pp6lib:1};
    function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}); }
@@ -3932,10 +3932,17 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    function closeDock(){ cur=null; col.classList.remove('pp6-dock-on'); }
    function build(){
     var ph=tabs.querySelector(':scope>.pp5-ph');
-    TABS.forEach(function(t){ if(tabs.querySelector('[data-t="'+t[0]+'"]')) return;
-     var b=document.createElement('button'); b.type='button'; b.dataset.t=t[0]; b.setAttribute('role','tab'); b.textContent=t[1]; b.title=t[1];
-     b.addEventListener('click',function(){ openTab(t[0]); });
-     var tools=tabs.querySelector('[data-t="tools"]'); tabs.insertBefore(b,tools||ph||null); });
+    TABS.forEach(function(t){
+     var b=tabs.querySelector('[data-t="'+t[0]+'"]');
+     if(!b){
+      b=document.createElement('button'); b.type='button'; b.dataset.t=t[0]; b.setAttribute('role','tab'); b.textContent=t[1]; b.title=t[1];
+      var tools=tabs.querySelector('[data-t="tools"]'); tabs.insertBefore(b,tools||ph||null);
+     }
+     if(!b.__pp6Click){
+      b.__pp6Click=1;
+      b.addEventListener('click',function(){ openTab(t[0]); });
+     }
+    });
     var fxb=tabs.querySelector('[data-t="fx"]'), tl=tabs.querySelector('[data-t="tools"]');
     [fxb,tl].forEach(function(b){ if(b&&!b.__pp6){ b.__pp6=1; b.addEventListener('click',closeDock); } });
     if(tl&&ph&&tl.nextSibling!==ph) tabs.insertBefore(tl,ph);
@@ -3947,7 +3954,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    window.AMIYO_PP6.openTab=openTab; window.AMIYO_PP6.current=function(){return cur}; window.AMIYO_PP6.render=render; window.AMIYO_PP6.setView=function(id,h,b,nr){ VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; }; window.AMIYO_PP6.addTab=function(id,label,h,b,nr){ if(!VIEWS[id]) TABS.push([id,label]); VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; build(); };
   }catch(e){ try{console.warn('pp6-s05',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -3991,7 +3998,7 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
    deco(); setInterval(function(){ try{deco()}catch(e){} },1500);
   }catch(e){ try{console.warn('pp6-s06',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -4043,7 +4050,7 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
    var cur=window.currentTool||'select'; window.setTool(cur);
   }catch(e){ try{console.warn('pp6-s07',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -4091,7 +4098,7 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
    deco(); setInterval(function(){ try{deco()}catch(e){} },1500);
   }catch(e){ try{console.warn('pp6-s08',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -4139,7 +4146,7 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
    place(); window.AMIYO_PP6.workspaces={apply:apply,reset:reset,snap:snap};
   }catch(e){ try{console.warn('pp6-s09',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;
@@ -4187,7 +4194,7 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
    applyHide(); setInterval(applyHide,2000);
   }catch(e){ try{console.warn('pp6-s10',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,1200); else addEventListener('load',function(){ setTimeout(go,1200); });
+ go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
 })();
 
 ;

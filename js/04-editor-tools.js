@@ -11961,7 +11961,15 @@ window.__amiyoKeyCap=window.__amiyoKeyCap||function(d){return d;};
   function cur(){ return {text:S.text.trim(),voice:S.voice,rate:S.rate,pitch:S.pitch,vol:S.vol}; }
   function mount(){
     var lp=document.getElementById("leftPanel"); if(!lp||activePanel!=="audio") return;
-    var old=document.getElementById("nrRoot"); if(old) old.remove(); lp.insertAdjacentHTML("afterbegin",card());
+    var curTab = window.__amiyoAudioTab || "sfx";
+    var old = document.getElementById("nrRoot");
+    if(curTab !== "narration"){
+      if(old) old.remove();
+      return;
+    }
+    var host = document.getElementById("nrRootHost") || document.getElementById("auList") || lp;
+    if(old) old.remove();
+    host.innerHTML = card();
     var r=document.getElementById("nrRoot"); if(!r||!ok) return;
     function q(s){ return r.querySelector(s); }
     q("#nrMute").onchange=function(e){ project.narrationMuted=!!e.target.checked; if(project.narrationMuted) stop(); try{ scheduleAutosave(); }catch(x){window.__swl&&window.__swl(x)} renderStrip(); };
@@ -12002,6 +12010,7 @@ window.__amiyoKeyCap=window.__amiyoKeyCap||function(d){return d;};
   setInterval(renderStrip,400);
   if(ok){ var unlock=function(){ try{ var u=new SpeechSynthesisUtterance(" "); u.volume=0; SS.speak(u); }catch(e){window.__swl&&window.__swl(e)} }; document.addEventListener("pointerdown",unlock,{once:true,capture:true}); }
   window.amiyoNarration={list:lst,speak:speak,stop:stop,strip:renderStrip};
+  window.amiyoMountNarration=mount;
   try{ if(activePanel==="audio") renderLeftPanel(); }catch(e){window.__swl&&window.__swl(e)}
 })();
 

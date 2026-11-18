@@ -1402,7 +1402,20 @@ function applyBrand(){project.settings.brand={colors:["#ff7a3d","#ffb454"],prima
 
 function renderInspector(){
   const f=getClip();
-  if(!f){$("inspector").innerHTML=`<div class="inspector-empty"><b style="color:#fff">Inspector</b><br/><br/>Select a clip to edit its properties. You can also tap the ＋ on a media item to add it to the timeline.</div>`;return}
+  if(!f){
+    $("inspector").innerHTML=`<div class="inspector-empty" style="padding:16px 12px;text-align:center">
+      <div style="font-size:24px;margin-bottom:8px">🎛️</div>
+      <b style="color:#fff;font-size:13px;display:block;margin-bottom:6px">Effect Controls</b>
+      <div style="color:var(--muted);font-size:11px;line-height:1.45;margin-bottom:14px">Select a clip on the timeline to edit motion, scale, speed and color, or use quick tools:</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button type="button" class="chip" onclick="window.loadDemo&&window.loadDemo()" style="justify-content:center;padding:7px 12px;font-weight:600">🎬 Load Demo Project</button>
+        <button type="button" class="chip" onclick="document.querySelector('#ppInspTabs button[data-t=\\'pp6gfx\\']')?.click()||window.switchLeftTab&&window.switchLeftTab('text')" style="justify-content:center;padding:7px 12px;font-weight:600">T Essential Graphics Titles</button>
+        <button type="button" class="chip" onclick="document.querySelector('#ppInspTabs button[data-t=\\'pp6fx\\']')?.click()||window.switchLeftTab&&window.switchLeftTab('effects')" style="justify-content:center;padding:7px 12px;font-weight:600">✨ Video Effects Library</button>
+        <button type="button" class="chip" onclick="document.querySelector('#ppInspTabs button[data-t=\\'pp6lum\\']')?.click()||window.switchLeftTab&&window.switchLeftTab('color')" style="justify-content:center;padding:7px 12px;font-weight:600">🎨 Lumetri Color Grading</button>
+      </div>
+    </div>`;
+    return;
+  }
   const c=f.clip, a=getAsset(c.assetId);
   let html=`<div class="group"><h3>${escapeHtml(c.name||a?.name||"Selected clip")}</h3><div class="badge">${f.track.kind}</div></div>`;
   if(f.track.kind==="video"||f.track.kind==="audio"){
@@ -12599,19 +12612,22 @@ function guard(fn,what,btn){ if(btn){ btn.disabled=true; btn.dataset.t=btn.textC
 function row(def,kind,sub){ return '<div class="au-row"><button type="button" class="chip au-play" data-play="'+esc(def.id)+'" aria-label="Preview '+esc(def.name)+'">▶</button><div class="au-name"><b>'+esc(def.name)+'</b><span>'+esc(sub)+'</span></div><button type="button" class="chip" data-add="'+esc(def.id)+'" data-kind="'+kind+'" aria-label="Add '+esc(def.name)+' to timeline">＋ Add</button></div>'; }
 function renderAudioPanel(){
   const lp=$("leftPanel"); if(!lp) return;
+  window.__amiyoAudioTab = st.tab;
   const yours=Object.values(project.assets).filter(a=>a.type==="audio"&&!(a.tags||[]).some(t=>t==="sfx"||t==="music"));
   const ctl=(st.tab==="sfx")?'<input type="search" id="auQ" class="search" placeholder="Search sounds…" aria-label="Search sounds" value="'+esc(st.q)+'" style="margin-top:8px"><div class="mini-row" id="auCats" style="margin-top:8px">'+["All","Transitions","Cinematic","UI","Fun","Ambience"].map(c=>'<button type="button" class="chip'+(st.cat===c?" on":"")+'" data-acat="'+c+'">'+c+'</button>').join("")+'</div>':"";
-  const vol='<label style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);margin-top:8px">Preview volume<input type="range" id="auVol" min="0" max="1" step=".05" value="'+(window.__auVol==null?.8:window.__auVol)+'" aria-label="Preview volume"></label>';
+  const vol=(st.tab!=="narration")?'<label style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);margin-top:8px">Preview volume<input type="range" id="auVol" min="0" max="1" step=".05" value="'+(window.__auVol==null?.8:window.__auVol)+'" aria-label="Preview volume"></label>':"";
   let list="";
   if(st.tab==="sfx") list=SFX.filter(d=>(st.cat==="All"||d.cat===st.cat)&&(!st.q||(d.name+" "+d.cat).toLowerCase().indexOf(st.q)>=0)).map(d=>row(d,"sfx",d.cat+" · "+DUR[d.id]+" s")).join("")||'<div class="el-empty">No sound matches.</div>';
   else if(st.tab==="music") list=BEDS.map(d=>row(d,"bed","Music bed · 20 s · auto fades")).join("");
+  else if(st.tab==="narration") list='<div id="nrRootHost"></div>';
   else list=yours.length?yours.map(a=>'<div class="au-row"><div class="au-name" style="margin-left:4px"><b>'+esc(a.name)+'</b><span>'+Math.round(a.duration*10)/10+' s</span></div><button type="button" class="chip" data-asset="'+esc(a.id)+'">＋ Add</button></div>').join(""):'<div class="el-empty">No imported audio yet. Use Media → Import files to bring in music or voice.</div>';
-  lp.innerHTML='<div class="panel-card"><h3 style="margin:0 0 8px;font-size:12px">Audio</h3><div class="mini-row" id="auTabs">'+[["sfx","Sound effects"],["music","Music beds"],["yours","Your audio"]].map(t=>'<button type="button" class="chip'+(st.tab===t[0]?" on":"")+'" data-tab="'+t[0]+'">'+t[1]+'</button>').join("")+'</div>'+
-   ctl+vol+'<div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">Generated in your browser — royalty-free. Clips land on the audio track at the playhead; fine-tune volume, fades and speed in the Inspector. Tip: \u2606 stars favourites, Recent and Loop help while auditioning, \u2191/\u2193 move between sounds and Esc stops the preview.</div></div><div id="auList">'+list+'</div>';
-  $("auTabs").addEventListener("click",e=>{ const b=e.target.closest("[data-tab]"); if(b){ stopPreview(); st.tab=b.dataset.tab; renderAudioPanel(); } });
+  const tabsList = [["sfx","Sound effects"],["music","Music beds"],["narration","Narration (TTS)"],["yours","Your audio"]];
+  lp.innerHTML='<div class="panel-card"><h3 style="margin:0 0 8px;font-size:12px">Audio</h3><div class="mini-row" id="auTabs">'+tabsList.map(t=>'<button type="button" class="chip'+(st.tab===t[0]?" on":"")+'" data-tab="'+t[0]+'">'+t[1]+'</button>').join("")+'</div>'+
+   ctl+vol+'<div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">Generated in your browser — royalty-free. Clips land on the audio track at the playhead; fine-tune volume, fades and speed in the Inspector.</div></div><div id="auList">'+list+'</div>';
+  $("auTabs").addEventListener("click",e=>{ const b=e.target.closest("[data-tab]"); if(b){ stopPreview(); st.tab=b.dataset.tab; window.__amiyoAudioTab=st.tab; renderAudioPanel(); if(typeof window.amiyoMountNarration==="function") window.amiyoMountNarration(); } });
   const q=$("auQ"); if(q) q.addEventListener("input",e=>{ st.q=e.target.value.trim().toLowerCase(); renderAudioPanel(); const n=$("auQ"); if(n){ n.focus(); n.setSelectionRange(n.value.length,n.value.length); } });
   const ac=$("auCats"); if(ac) ac.addEventListener("click",e=>{ const b=e.target.closest("[data-acat]"); if(b){ st.cat=b.dataset.acat; renderAudioPanel(); } });
-  $("auVol").addEventListener("input",e=>{ window.__auVol=+e.target.value; if(prev){ try{ prev.el.volume=window.__auVol; }catch(x){window.__swl&&window.__swl(x)} } });
+  const vEl=$("auVol"); if(vEl) vEl.addEventListener("input",e=>{ window.__auVol=+e.target.value; if(prev){ try{ prev.el.volume=window.__auVol; }catch(x){window.__swl&&window.__swl(x)} } });
   $("auList").addEventListener("click",e=>{
     const p=e.target.closest("[data-play]"), a=e.target.closest("[data-add]"), y=e.target.closest("[data-asset]");
     const find=id=>SFX.concat(BEDS).find(d=>d&&d.id===id);
@@ -12619,6 +12635,9 @@ function renderAudioPanel(){
     else if(a){ const d=find(a.dataset.add); if(d) guard(()=>addToTimeline(d,a.dataset.kind),"add",a); }
     else if(y) addAsset(y.dataset.asset);
   });
+  if(st.tab==="narration" && typeof window.amiyoMountNarration==="function"){
+    window.amiyoMountNarration();
+  }
 }
 (function(){ if(document.getElementById("amiyo-au-css")) return; const s=document.createElement("style"); s.id="amiyo-au-css";
  s.textContent=".au-row{display:flex;align-items:center;gap:8px;padding:6px 4px;border-bottom:1px solid var(--line-soft,#1f1d1a)}.au-name{flex:1;min-width:0;display:flex;flex-direction:column}.au-name b{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.au-name span{font-size:10px;color:var(--muted)}.au-play{min-width:40px;justify-content:center}"; document.head.appendChild(s); })();
