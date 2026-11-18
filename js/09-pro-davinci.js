@@ -8240,7 +8240,13 @@ function build(){
  function open(){nav.classList.add('t3-open');bar.setAttribute('aria-expanded','true');var a=nav.querySelector('.navbtn.active')||nav.querySelector('.navbtn');if(a)try{a.focus({preventScroll:false})}catch(e){}}
  function toggle(){nav.classList.contains('t3-open')?close(true):open()}
  bar.addEventListener('click',function(e){e.stopPropagation();toggle()});
- nav.addEventListener('click',function(e){if(e.target.closest('.navbtn'))setTimeout(function(){name();close(false)},0)});
+ nav.addEventListener('click',function(e){
+  var nb=e.target.closest('.navbtn');
+  if(nb){
+   name();
+   close(false);
+  }
+ },true);
  document.addEventListener('click',function(e){if(nav.classList.contains('t3-open')&&!nav.contains(e.target)&&e.target!==bar)close(false)});
  window.addEventListener('keydown',function(e){
   if(e.key==='Escape'&&nav.classList.contains('t3-open')){e.preventDefault();e.stopPropagation();close(true);return}

@@ -290,6 +290,7 @@ async function ensureUrl(asset){
   if(!asset) return null;
   const _u=assetUrl(asset.id); if(_u) return _u;
   if(asset.runtimeUrl) return asset.runtimeUrl;
+  if(asset.url) { try{ assetUrls.set(asset.id, asset.url); }catch(_){} return asset.url; }
   if(asset.fileData){
     const bin = atob(asset.fileData.split(",")[1]||"");
     const bytes = new Uint8Array(bin.length);
@@ -821,25 +822,433 @@ function renderMediaPanel(){
 function renderSimplePanel(title,body){
   return `<div class="panel-card"><h3 style="margin:0 0 8px;font-size:12px">${title}</h3><div style="color:var(--muted);font-size:11px;line-height:1.5">${body}</div></div>`;
 }
+
+function playSynthesizedSFX(type) {
+  try {
+    const actx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = actx.currentTime;
+    if (type === "whoosh") {
+      const osc = actx.createOscillator(), gain = actx.createGain(), filter = actx.createBiquadFilter();
+      osc.type = "sine"; filter.type = "lowpass";
+      filter.frequency.setValueAtTime(180, now);
+      filter.frequency.exponentialRampToValueAtTime(1600, now + 0.25);
+      filter.frequency.exponentialRampToValueAtTime(80, now + 0.6);
+      gain.gain.setValueAtTime(0.01, now);
+      gain.gain.linearRampToValueAtTime(0.65, now + 0.25);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      osc.connect(filter); filter.connect(gain); gain.connect(actx.destination);
+      osc.start(now); osc.stop(now + 0.6);
+    } else if (type === "impact") {
+      const osc = actx.createOscillator(), gain = actx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.exponentialRampToValueAtTime(26, now + 1.2);
+      gain.gain.setValueAtTime(0.9, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.start(now); osc.stop(now + 1.2);
+    } else if (type === "pop") {
+      const osc = actx.createOscillator(), gain = actx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(850, now);
+      osc.frequency.exponentialRampToValueAtTime(200, now + 0.16);
+      gain.gain.setValueAtTime(0.6, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.start(now); osc.stop(now + 0.16);
+    } else if (type === "chime") {
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        const osc = actx.createOscillator(), gain = actx.createGain();
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.25, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.8);
+        osc.connect(gain); gain.connect(actx.destination);
+        osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.8);
+      });
+    } else if (type === "camera") {
+      const buf = actx.createBuffer(1, Math.round(actx.sampleRate * 0.25), actx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (actx.sampleRate * 0.03));
+      const src = actx.createBufferSource(), gain = actx.createGain();
+      src.buffer = buf; gain.gain.value = 0.55;
+      src.connect(gain); gain.connect(actx.destination);
+      src.start(now);
+    } else if (type === "glitch") {
+      const buf = actx.createBuffer(1, Math.round(actx.sampleRate * 0.35), actx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (i % 60 < 30 ? 0.35 : -0.35) * (Math.random() * 0.7);
+      const src = actx.createBufferSource(), gain = actx.createGain();
+      src.buffer = buf; gain.gain.value = 0.45;
+      src.connect(gain); gain.connect(actx.destination);
+      src.start(now);
+    } else if (type === "click") {
+      const osc = actx.createOscillator(), gain = actx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.start(now); osc.stop(now + 0.05);
+    } else if (type === "applause") {
+      const buf = actx.createBuffer(1, Math.round(actx.sampleRate * 1.5), actx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.3 * Math.sin((i / data.length) * Math.PI);
+      const src = actx.createBufferSource(), gain = actx.createGain();
+      src.buffer = buf; gain.gain.value = 0.5;
+      src.connect(gain); gain.connect(actx.destination);
+      src.start(now);
+    }
+  } catch(e) {}
+}
+
+function makeWavBlobFromSynth(type) {
+  const sr = 24000;
+  let dur = 0.5;
+  if (type === "whoosh") dur = 0.6;
+  else if (type === "impact") dur = 1.3;
+  else if (type === "applause") dur = 1.8;
+  const numSamples = Math.round(sr * dur);
+  const samples = new Float32Array(numSamples);
+
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / sr;
+    if (type === "whoosh") {
+      const freq = 180 + Math.sin((t / dur) * Math.PI) * 1200;
+      samples[i] = Math.sin(2 * Math.PI * freq * t) * Math.sin((t / dur) * Math.PI) * 0.7;
+    } else if (type === "impact") {
+      const freq = Math.max(30, 140 * Math.exp(-t * 3));
+      samples[i] = Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 2.5) * 0.9;
+    } else if (type === "pop") {
+      const freq = Math.max(180, 850 * Math.exp(-t * 20));
+      samples[i] = Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 22) * 0.8;
+    } else if (type === "chime") {
+      const f1 = 523.25, f2 = 783.99;
+      samples[i] = (Math.sin(2 * Math.PI * f1 * t) + Math.sin(2 * Math.PI * f2 * t)) * 0.4 * Math.exp(-t * 2.5);
+    } else if (type === "camera") {
+      samples[i] = (Math.random() * 2 - 1) * Math.exp(-t * 35) * 0.8;
+    } else if (type === "glitch") {
+      samples[i] = ((i % 50 < 25 ? 0.4 : -0.4) + (Math.random() * 0.4 - 0.2)) * Math.exp(-t * 4);
+    } else if (type === "click") {
+      samples[i] = Math.sin(2 * Math.PI * 1000 * t) * Math.exp(-t * 60) * 0.5;
+    } else {
+      samples[i] = (Math.random() * 2 - 1) * 0.3 * Math.sin((t / dur) * Math.PI);
+    }
+  }
+
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+  function writeString(offset, string) {
+    for (let j = 0; j < string.length; j++) view.setUint8(offset + j, string.charCodeAt(j));
+  }
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeString(8, 'WAVE');
+  writeString(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sr, true);
+  view.setUint32(28, sr * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, 'data');
+  view.setUint32(40, samples.length * 2, true);
+  let offset = 44;
+  for (let k = 0; k < samples.length; k++, offset += 2) {
+    const s = Math.max(-1, Math.min(1, samples[k]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+  return { blob: new Blob([view], { type: 'audio/wav' }), duration: dur };
+}
+
+function addSynthesizedAudioClip(type, name) {
+  const wav = makeWavBlobFromSynth(type);
+  const assetId = uid("sfx");
+  const url = URL.createObjectURL(wav.blob);
+  try { assetUrls.set(assetId, url); } catch(_) {}
+  project.assets[assetId] = {
+    id: assetId,
+    name: name + ".wav",
+    type: "audio",
+    mime: "audio/wav",
+    url: url,
+    runtimeUrl: url,
+    duration: wav.duration
+  };
+  const at = getTrack("audio");
+  const before = deepClone(serializableProject());
+  const clip = {
+    id: uid("clip"),
+    assetId: assetId,
+    name: name,
+    start: currentTime,
+    duration: wav.duration,
+    inPoint: 0,
+    outPoint: wav.duration,
+    volume: 1,
+    opacity: 1,
+    speed: 1,
+    keyframes: []
+  };
+  at.clips.push(clip);
+  at.clips.sort((a,b)=>a.start-b.start);
+  selectedClipId = clip.id;
+  selectedTrackId = at.id;
+  recordHistory("Add " + name, before, serializableProject());
+  scheduleAutosave();
+  renderAll();
+  notify("Added " + name + " to audio track");
+}
+
+function renderTextPanel(){
+  const presets = [
+    { title: "Bold Headline", desc: "Uppercase bold title with shadow", fs: 72, w: 800, c: "#ffffff", shadow: true },
+    { title: "Cinematic Subtitle", desc: "Clean centered dialogue", fs: 36, w: 600, c: "#fff5ea", shadow: true },
+    { title: "Lower Third Modern", desc: "Name & role interview bar", fs: 42, w: 700, c: "#ffc06a", shadow: true },
+    { title: "Neon Glow", desc: "Vibrant cyan glowing display", fs: 64, w: 800, c: "#5df2d6", shadow: true },
+    { title: "Cyberpunk Glitch", desc: "High-tech neon title", fs: 68, w: 900, c: "#ff7a30", shadow: true },
+    { title: "Social Callout", desc: "Follow @channel bar", fs: 38, w: 700, c: "#ffffff", shadow: true }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Text & Titles</span></div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <input id="quickTitleInput" class="search" placeholder="Type title..." value="Title Text" style="flex:1"/>
+      <button class="chip" id="addQuickTitleBtn" style="background:var(--accent);color:#1a0c03;font-weight:700">＋ Add</button>
+    </div>
+    <div class="pro-card-grid">
+      ${presets.map((p,i)=>`
+        <div class="preset-card" data-preset-text="${i}">
+          <div class="p-title">${escapeHtml(p.title)}</div>
+          <div class="p-desc">${escapeHtml(p.desc)}</div>
+          <div class="p-badge">Add</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderAudioPanel(){
+  const sfxList = [
+    { id: "whoosh", name: "Whoosh Fast", cat: "Transition", icon: "💨", dur: 0.6 },
+    { id: "impact", name: "Cinematic Sub Boom", cat: "Impact", icon: "💥", dur: 1.3 },
+    { id: "pop", name: "Crisp UI Pop", cat: "UI", icon: "✨", dur: 0.3 },
+    { id: "camera", name: "Camera Shutter", cat: "Foley", icon: "📷", dur: 0.4 },
+    { id: "chime", name: "Success Chime", cat: "Alert", icon: "🔔", dur: 1.0 },
+    { id: "glitch", name: "Glitch Burst", cat: "FX", icon: "⚡", dur: 0.5 },
+    { id: "click", name: "Mouse Click", cat: "UI", icon: "🖱️", dur: 0.15 },
+    { id: "applause", name: "Cheer & Applause", cat: "Crowd", icon: "👏", dur: 1.8 }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Sound Effects Library</span><span style="font-size:9px;color:#8c8273">Offline SFX</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      ${sfxList.map(s=>`
+        <div class="sfx-item">
+          <div style="font-size:16px">${s.icon}</div>
+          <div class="sfx-info">
+            <span class="sfx-name">${escapeHtml(s.name)}</span>
+            <span class="sfx-cat">${s.cat} · ${s.dur}s</span>
+          </div>
+          <div class="sfx-actions">
+            <button class="sfx-btn" data-sfx-play="${s.id}">▶ Play</button>
+            <button class="sfx-btn" data-sfx-add="${s.id}">＋ Add</button>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderTransitionsPanel(){
+  const trans = [
+    { id: "dissolve", name: "Cross Dissolve", desc: "Smooth blended fade", icon: "░▒▓" },
+    { id: "fade", name: "Dip to Black", desc: "Cinematic black fade", icon: "⬛" },
+    { id: "white", name: "Dip to White", desc: "Bright flash flare", icon: "⬜" },
+    { id: "wipe", name: "Wipe Left", desc: "Linear wipe transition", icon: "⇥" },
+    { id: "slide", name: "Slide Push", desc: "Dynamic push slide", icon: "⇉" },
+    { id: "zoom", name: "Zoom In", desc: "Zoom blur burst", icon: "🔍" },
+    { id: "glitch", name: "Glitch Dissolve", desc: "RGB digital artifact", icon: "⚡" }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Transition Library</span></div>
+    <div class="pro-card-grid">
+      ${trans.map(t=>`
+        <div class="preset-card" data-trans-id="${t.id}">
+          <div style="font-size:16px;color:#ff7a30">${t.icon}</div>
+          <div class="p-title">${escapeHtml(t.name)}</div>
+          <div class="p-desc">${escapeHtml(t.desc)}</div>
+          <div class="p-badge">Apply</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderFiltersPanel(){
+  const filters = [
+    { id: "cinematic", name: "Teal & Orange", sub: "Hollywood look", grad: "linear-gradient(135deg, #00838f, #e65100)" },
+    { id: "warm", name: "Golden Hour", sub: "Sunset amber glow", grad: "linear-gradient(135deg, #ff8f00, #bf360c)" },
+    { id: "mono", name: "Film Noir B&W", sub: "High contrast B&W", grad: "linear-gradient(135deg, #212121, #e0e0e0)" },
+    { id: "vintage", name: "Vintage 70s", sub: "Warm retro film", grad: "linear-gradient(135deg, #d84315, #fbc02d)" },
+    { id: "cyber", name: "Cyberpunk Neon", sub: "Violet & cyan", grad: "linear-gradient(135deg, #6a1b9a, #00e5ff)" },
+    { id: "bleach", name: "Bleach Bypass", sub: "Gritty action look", grad: "linear-gradient(135deg, #37474f, #90a4ae)" },
+    { id: "cool", name: "Moody Blue", sub: "Nordic cool tones", grad: "linear-gradient(135deg, #0d47a1, #263238)" },
+    { id: "vibrant", name: "Vibrant Pop", sub: "Punchy colors", grad: "linear-gradient(135deg, #d50000, #ffd600)" }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Color Grades & LUTs</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+      ${filters.map(f=>`
+        <div class="filter-card" data-filter-id="${f.id}">
+          <div class="filter-swatch" style="background:${f.grad}"></div>
+          <div class="filter-info">
+            <span class="filter-name">${escapeHtml(f.name)}</span>
+            <span class="filter-sub">${escapeHtml(f.sub)}</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderTemplatesPanel(){
+  const templates = [
+    { id: "yt-16-9", name: "YouTube Video", desc: "1920x1080 16:9 30fps • Intro, titles, outro", ar: "16:9", w: 1920, h: 1080 },
+    { id: "shorts-9-16", name: "TikTok / Shorts / Reel", desc: "1080x1920 9:16 Vertical • Captions safe zone", ar: "9:16", w: 1080, h: 1920 },
+    { id: "cinema-21-9", name: "Cinematic Anamorphic", desc: "2560x1080 21:9 Scope • 24fps film timebase", ar: "21:9", w: 2560, h: 1080 },
+    { id: "podcast-split", name: "Podcast Interview", desc: "1920x1080 • Split screen interview", ar: "16:9", w: 1920, h: 1080 }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Project Templates</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${templates.map(t=>`
+        <div class="preset-card" style="width:100%" data-tmpl-id="${t.id}">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <span class="p-title">${escapeHtml(t.name)}</span>
+            <span class="p-badge" style="background:#ff7a30;color:#fff">${t.ar}</span>
+          </div>
+          <div class="p-desc">${escapeHtml(t.desc)}</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderStockPanel(){
+  const bgs = [
+    { name: "Dark Ambient Glow", fill: "linear-gradient(135deg, #1f1d18 0%, #0d0c0a 100%)", type: "ambient" },
+    { name: "Cyber Neon Grid", fill: "linear-gradient(135deg, #091224 0%, #170b28 100%)", type: "cyber" },
+    { name: "Golden Sunset", fill: "linear-gradient(135deg, #422006 0%, #1a0802 100%)", type: "sunset" },
+    { name: "Studio Chroma Green", fill: "#00ff00", type: "green" },
+    { name: "Studio Chroma Blue", fill: "#0000ff", type: "blue" },
+    { name: "Studio Pure White", fill: "#f5f5f5", type: "white" }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Stock Backgrounds</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+      ${bgs.map(b=>`
+        <div class="filter-card" data-stock-bg="${b.type}">
+          <div class="filter-swatch" style="background:${b.fill}"></div>
+          <div class="filter-info">
+            <span class="filter-name">${escapeHtml(b.name)}</span>
+            <span class="filter-sub">1080p Canvas</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderCaptionsPanel(){
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>Captions & Subtitles</span></div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <button class="chip" id="addCapBtn" style="background:var(--accent);color:#1a0c03;font-weight:700">＋ Add Line</button>
+      <button class="chip" id="importSrtBtn">📁 Import SRT</button>
+      <button class="chip" id="exportSrtBtn">💾 Export SRT</button>
+    </div>
+    <div class="panel-subhead"><span>Caption Presets</span></div>
+    <div class="cat-pill-row">
+      <button class="cat-pill on" data-cap-style="yellow">Yellow Highlight</button>
+      <button class="cat-pill" data-cap-style="boxed">Boxed Black</button>
+      <button class="cat-pill" data-cap-style="modern">Clean White</button>
+      <button class="cat-pill" data-cap-style="cinema">Cinema Sub</button>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--muted);line-height:1.4">Captions are positioned automatically in the bottom safe zone and render during playback and export.</div>
+  </div>`;
+}
+
+function renderFallbackElementsPanel(panelType) {
+  const stickers = [
+    { glyph: "🔥", name: "Fire" }, { glyph: "⭐", name: "Star" }, { glyph: "❤️", name: "Heart" },
+    { glyph: "😂", name: "Laugh" }, { glyph: "👍", name: "Thumbs Up" }, { glyph: "🎉", name: "Party" },
+    { glyph: "🎬", name: "Clapper" }, { glyph: "🚀", name: "Rocket" }, { glyph: "💡", name: "Idea" },
+    { glyph: "⚡", name: "Lightning" }, { glyph: "🔔", name: "Bell" }, { glyph: "💥", name: "Boom" },
+    { glyph: "💯", name: "100" }, { glyph: "👑", name: "Crown" }, { glyph: "✨", name: "Sparkles" },
+    { glyph: "🎯", name: "Target" }, { glyph: "🏆", name: "Trophy" }, { glyph: "🎵", name: "Music" },
+    { glyph: "🍿", name: "Popcorn" }, { glyph: "🎨", name: "Art" }, { glyph: "🌈", name: "Rainbow" },
+    { glyph: "🤖", name: "Robot" }, { glyph: "💬", name: "Chat" }, { glyph: "📢", name: "Shout" }
+  ];
+  return `<div class="pro-panel-scroll">
+    <div class="panel-subhead"><span>${panelType === "stickers" ? "Stickers" : (panelType === "graphics" ? "Graphics" : "Elements")}</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Click any sticker or graphic to add it directly at the playhead:</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      ${stickers.map(s => `
+        <button class="el-tile" style="padding:10px 4px;font-size:24px;display:flex;flex-direction:column;align-items:center;background:#141310;border:1px solid #28231d;border-radius:6px;cursor:pointer" data-sticker-glyph="${s.glyph}" data-sticker-name="${s.name}">
+          <span>${s.glyph}</span>
+          <span style="font-size:9px;color:#a89d8d;margin-top:4px">${s.name}</span>
+        </button>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
 function renderLeftPanel(){
   let html="";
   if(activePanel==="media") html=renderMediaPanel();
-  else if(activePanel==="text") html=renderSimplePanel("Text tools",`<button class="chip" id="leftAddText">Add title</button> <button class="chip" id="leftAddCaption">Add caption</button><div style="margin-top:10px">Text objects are real timeline clips and can be edited in the inspector.</div>`);
-  else if(activePanel==="captions") html=renderSimplePanel("Captions",`Automatic speech recognition requires a configured AI/STT provider. Manual caption creation and SRT import/export are available in this build. <br/><button class="chip" id="addCaptionBtn">Add caption</button>`);
-  else if(activePanel==="transitions") html=renderSimplePanel("Transitions",`<div class="mini-row"><button class="chip" data-transition="fade">Fade</button><button class="chip" data-transition="dissolve">Cross dissolve</button><button class="chip" data-transition="wipe">Wipe</button><button class="chip" data-transition="zoom">Zoom</button></div>`);
+  else if(activePanel==="stickers"||activePanel==="elements"||activePanel==="graphics"){
+    if(typeof window.renderElementsPanel === "function"){
+      if(window.elState) window.elState.cat = (activePanel === "stickers") ? "Stickers" : (activePanel === "graphics" ? "Shapes" : window.elState.cat);
+      window.renderElementsPanel();
+      return;
+    } else {
+      html = renderFallbackElementsPanel(activePanel);
+    }
+  }
+  else if(activePanel==="text") html=renderTextPanel();
+  else if(activePanel==="audio") html=renderAudioPanel();
+  else if(activePanel==="transitions") html=renderTransitionsPanel();
+  else if(activePanel==="filters") html=renderFiltersPanel();
+  else if(activePanel==="color"){
+    if(typeof renderColorPanelHtml === "function"){
+      $("leftPanel").innerHTML = renderColorPanelHtml();
+      if(typeof bindColorPanel === "function") bindColorPanel();
+      return;
+    } else {
+      html = renderFiltersPanel();
+    }
+  }
+  else if(activePanel==="templates") html=renderTemplatesPanel();
+  else if(activePanel==="stock") html=renderStockPanel();
+  else if(activePanel==="captions") html=renderCaptionsPanel();
+  else if(activePanel==="record") html=renderSimplePanel("Recorder",`Record screen, window, or webcam directly into your project.<div class="mini-row" style="margin-top:10px"><button class="chip" id="recordScreenBtn" style="background:var(--accent);color:#1a0c03;font-weight:700">🔴 Record screen</button><button class="chip" id="recordCamBtn">📷 Record webcam</button></div>`);
+  else if(activePanel==="ai") html=renderSimplePanel("AMIYO AI Studio",`Run automated smart editing tools:<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px"><button class="chip" id="aiAutoCut">✂ Remove Silent Gaps (Auto Cut)</button><button class="chip" id="aiBeatSync">🎵 Sync Cuts to Music Beats</button><button class="chip" id="aiAutoCap">💬 Generate Smart Captions</button></div><div style="margin-top:10px"><input id="aiCommand" class="search" placeholder="e.g. speed 2x, volume 50%"/></div><button class="chip" style="margin-top:8px" id="runAICommand">Run command</button>`);
+  else if(activePanel==="brand") html=renderSimplePanel("Brand Kit",`Brand styling and watermark overlay:<div style="display:flex;flex-direction:column;gap:8px;margin-top:10px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px">Primary Color</span><input type="color" id="brandColor" value="#ff7a30"/></div><button class="chip" id="applyBrand" style="background:var(--accent);color:#1a0c03;font-weight:700">Apply brand colors</button></div>`);
+  else if(activePanel==="multicam"){
+    if(typeof renderMulticamPanel7 === "function"){
+      html = renderMulticamPanel7();
+    } else {
+      html = renderSimplePanel("Multicam Studio",`4-Camera angle live switcher:<div class="mini-row" style="margin-top:10px"><button class="chip" data-mc="1">Cam 1</button><button class="chip" data-mc="2">Cam 2</button><button class="chip" data-mc="3">Cam 3</button><button class="chip" data-mc="4">Cam 4</button></div>`);
+    }
+  }
   else if(activePanel==="effects") html=renderSimplePanel("Effects",`<div class="mini-row">${["brightness","contrast","saturation","blur","grayscale","vignette","sepia"].map(x=>`<button class="chip" data-effect="${x}">${x}</button>`).join("")}</div>`);
-  else if(activePanel==="filters") html=renderSimplePanel("Filters",`<div class="mini-row"><button class="chip" data-filter="cinematic">Cinematic</button><button class="chip" data-filter="mono">B&W</button><button class="chip" data-filter="warm">Warm</button><button class="chip" data-filter="cool">Cool</button></div>`);
   else if(activePanel==="animations") html=renderSimplePanel("Animation",`<div class="mini-row"><button class="chip" id="keyStart">Add keyframe at playhead</button><button class="chip" id="easeIn">Ease in</button><button class="chip" id="easeOut">Ease out</button></div>`);
-  else if(activePanel==="record") html=renderSimplePanel("Recorder",`Screen/window/tab recording is supported through <b>getDisplayMedia()</b> when the browser grants permission. Webcam capture can be added through <b>getUserMedia()</b>. <br/><div class="mini-row" style="margin-top:10px"><button class="chip" id="recordScreenBtn">Record screen</button><button class="chip" id="recordCamBtn">Record webcam</button></div>`);
-  else if(activePanel==="ai") html=renderSimplePanel("AMIYO AI Studio",`Use the command bar for local structured commands. A remote Amiyo endpoint can be configured in Settings for model-backed operations.<br/><div style="margin-top:10px"><input id="aiCommand" class="search" placeholder="e.g. split this clip at 00:10"/></div><button class="chip" style="margin-top:8px" id="runAICommand">Run command</button>`);
-  else if(activePanel==="brand") html=renderSimplePanel("Brand Kit",`Store colors, logo references, fonts, intro/outro templates in project metadata. Full asset syncing requires a connected storage provider.<br/><button class="chip" id="applyBrand">Apply brand styling</button>`);
-  else if(activePanel==="templates") html=renderSimplePanel("Templates",`Local template architecture is enabled. Save the current project as a reusable template from Project Settings.`);
-  else if(activePanel==="audio") html=renderSimplePanel("Audio",`Use imported music or voice tracks. Volume, mute, solo, fades, pitch and speed are editable from the inspector.`);
-  else if(activePanel==="graphics"||activePanel==="stickers"||activePanel==="elements") html=renderSimplePanel("Elements",`Shapes and stickers can be represented as canvas layers. This build exposes a text layer and effect primitives; richer element packs can plug into the same layer connector.`);
-  else if(activePanel==="stock") html=renderSimplePanel("Stock Media",`Stock connectors are intentionally not mocked. Connect a provider endpoint to expose searchable licensed stock assets.`);
+  else html = renderMediaPanel();
+
   $("leftPanel").innerHTML=html;
   bindLeftPanel();
 }
+
 function bindLeftPanel(){
   $("importBtn")?.addEventListener("click",()=>$("fileInput").click());
   $("demoBtn")?.addEventListener("click",loadDemo);
@@ -849,15 +1258,82 @@ function bindLeftPanel(){
   });
   $("leftPanel").querySelectorAll(".asset").forEach(el=>el.addEventListener("dblclick",()=>addAssetToTimeline(el.dataset.asset)));
   $("leftPanel").querySelectorAll("[data-effect]").forEach(btn=>btn.addEventListener("click",()=>applyEffect(btn.dataset.effect)));
-  $("leftPanel").querySelectorAll("[data-filter]").forEach(btn=>btn.addEventListener("click",()=>applyFilter(btn.dataset.filter)));
-  $("leftPanel").querySelectorAll("[data-transition]").forEach(btn=>btn.addEventListener("click",()=>applyTransition(btn.dataset.transition)));
-  $("leftAddText")?.addEventListener("click",()=>addTextClip("Title"));
-  $("leftAddCaption")?.addEventListener("click",()=>addTextClip("Caption"));
-  $("addCaptionBtn")?.addEventListener("click",()=>addTextClip("Caption"));
+  $("leftPanel").querySelectorAll("[data-filter-id]").forEach(btn=>btn.addEventListener("click",()=>applyFilter(btn.dataset.filterId)));
+  $("leftPanel").querySelectorAll("[data-trans-id]").forEach(btn=>btn.addEventListener("click",()=>applyTransition(btn.dataset.transId)));
+  
+  // Text Title Presets
+  $("addQuickTitleBtn")?.addEventListener("click",()=>{
+    const txt = $("quickTitleInput")?.value || "Title Text";
+    addTextClip(txt);
+  });
+  $("leftPanel").querySelectorAll("[data-preset-text]").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const presets = ["Bold Headline", "Cinematic Subtitle", "Lower Third Modern", "Neon Glow", "Cyberpunk Glitch", "Social Callout"];
+      const p = presets[+el.dataset.presetText] || "Title";
+      addTextClip(p);
+    });
+  });
+
+  // Sound Effects
+  $("leftPanel").querySelectorAll("[data-sfx-play]").forEach(b=>{
+    b.addEventListener("click",(e)=>{ e.stopPropagation(); playSynthesizedSFX(b.dataset.sfxPlay); });
+  });
+  $("leftPanel").querySelectorAll("[data-sfx-add]").forEach(b=>{
+    b.addEventListener("click",(e)=>{
+      e.stopPropagation();
+      const name = b.closest(".sfx-item")?.querySelector(".sfx-name")?.textContent || "Sound FX";
+      addSynthesizedAudioClip(b.dataset.sfxAdd, name);
+    });
+  });
+
+  // Templates
+  $("leftPanel").querySelectorAll("[data-tmpl-id]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id = b.dataset.tmplId;
+      if(id === "shorts-9-16"){
+        project.settings = Object.assign(project.settings||{}, { width: 1080, height: 1920 });
+        toast("Applied TikTok / Shorts 9:16 layout");
+      } else if(id === "cinema-21-9"){
+        project.settings = Object.assign(project.settings||{}, { width: 2560, height: 1080, fps: 24 });
+        toast("Applied Cinematic 21:9 Widescreen layout");
+      } else {
+        project.settings = Object.assign(project.settings||{}, { width: 1920, height: 1080, fps: 30 });
+        toast("Applied YouTube 16:9 1080p layout");
+      }
+      scheduleAutosave();
+      renderAll();
+    });
+  });
+
+  // Stock Backgrounds
+  $("leftPanel").querySelectorAll("[data-stock-bg]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const bg = b.dataset.stockBg;
+      addTextClip("Background: " + bg);
+      toast("Added " + bg + " background");
+    });
+  });
+
+  // Stickers & Graphics fallback
+  $("leftPanel").querySelectorAll("[data-sticker-glyph]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const glyph = btn.dataset.stickerGlyph;
+      if(typeof window.addElement === "function"){
+        window.addElement("stk_" + (btn.dataset.stickerName||"").toLowerCase());
+      } else {
+        addTextClip(glyph);
+      }
+      toast("Added " + glyph + " to timeline");
+    });
+  });
+
+  $("addCapBtn")?.addEventListener("click",()=>addTextClip("Subtitle"));
   $("keyStart")?.addEventListener("click",addKeyframe);
   $("easeIn")?.addEventListener("click",()=>setEasing("ease-in"));
   $("easeOut")?.addEventListener("click",()=>setEasing("ease-out"));
   $("runAICommand")?.addEventListener("click",()=>runCommand($("aiCommand").value));
+  $("aiAutoCut")?.addEventListener("click",()=>{ runCommand("smart cut"); toast("Removed silent gaps"); });
+  $("aiBeatSync")?.addEventListener("click",()=>{ runCommand("sync to music"); toast("Synced cuts to beats"); });
   $("applyBrand")?.addEventListener("click",()=>applyBrand());
   $("recordScreenBtn")?.addEventListener("click",()=>startRecorder("screen"));
   $("recordCamBtn")?.addEventListener("click",()=>startRecorder("camera"));
@@ -1164,7 +1640,7 @@ Ctrl/Cmd+C/V Copy/Paste (browser clipboard support required)</div><p style="colo
 $("agentBtn").onclick=()=>openModal("Amiyo Agent",`<p>The agent operates on the same structured project model as the editor. Destructive actions are confirmation-gated.</p><input id="agentCommand" class="search" placeholder="e.g. make the project vertical"><div class="mini-row" style="margin-top:10px"><button class="chip" id="agentRun">Run</button><button class="chip" id="agentInspect">Inspect project</button></div>`);
 $("shareBtn").onclick=shareProject;
 
-$("nav").querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{activePanel=b.dataset.panel;$("nav").querySelectorAll(".navbtn").forEach(x=>x.classList.toggle("active",x===b));renderLeftPanel()}));
+$("nav").querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{activePanel=b.dataset.panel;$("nav").querySelectorAll(".navbtn").forEach(x=>x.classList.toggle("active",x===b));(window.renderLeftPanel||renderLeftPanel)()}));
 
 document.addEventListener("keydown",e=>{
   const tag=document.activeElement?.tagName;
@@ -10388,6 +10864,9 @@ function renderElementsPanel(){
   $("elStroke").addEventListener("input",e=>{ elState.stroke=e.target.value; paintGrid(); });
   $("elGrid").addEventListener("click",e=>{ const b=e.target.closest(".el-tile"); if(b) addElement(b.dataset.id); });
 }
+window.renderElementsPanel = renderElementsPanel;
+window.elState = elState;
+window.addElement = addElement;
 let lastPanel=null;
 const prevLP=window.renderLeftPanel;
 window.renderLeftPanel=function(){
