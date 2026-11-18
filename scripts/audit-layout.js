@@ -75,6 +75,21 @@ async function main() {
 
   await send('Page.enable');
   await send('Runtime.enable');
+  for (let i = 0; i < 60; i++) {
+    const booted = await send('Runtime.evaluate', {
+      expression: '(!document.getElementById("amBoot") || document.getElementById("amBoot").style.opacity === "0" || !document.getElementById("amBoot").offsetParent) && !!window.__amiyoBooted && document.getElementById("amiyoMain") && document.getElementById("amiyoMain").offsetParent !== null'
+    });
+    if (booted.result && booted.result.value) break;
+    await new Promise(r => setTimeout(r, 300));
+  }
+  await new Promise(r => setTimeout(r, 1000));
+  await send('Runtime.evaluate', {
+    expression: `(function(){
+      if (typeof window.loadDemo === 'function') window.loadDemo();
+      var toolsTab = document.querySelector('#ppInspTabs > button[data-t="tools"]');
+      if (toolsTab) toolsTab.click();
+    })()`
+  });
   await new Promise(r => setTimeout(r, 2500));
 
   // Check full layout across workspace
@@ -125,6 +140,7 @@ async function main() {
         return {
           window: { w: window.innerWidth, h: window.innerHeight },
           app: box(app),
+          pp5Menu: box(document.getElementById('pp5Menu')),
           topbar: box(topbar),
           main: box(main),
           sidebar: box(sidebar),

@@ -1,298 +1,365 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<script id="amiyo-head-nuker">
-(function(){
-  try {
-    // 1. Unregister all service workers immediately
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(regs){
-        regs.forEach(function(r){ r.unregister(); });
-      });
-    }
-    // 2. Clear all cache storage immediately
-    if ('caches' in window) {
-      caches.keys().then(function(keys){
-        keys.forEach(function(k){ caches.delete(k); });
-      });
-    }
-    // 3. Purge all stale layout & session crash localStorage keys
-    ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh', 'amiyo.pr2.trackh.v1', 'amiyo_pr2_ws', 'amiyo.workspace', 'amiyo.w11.sessions', 'amiyo-pp4-mview'].forEach(function(k){
-      try { localStorage.removeItem(k); } catch(e){}
-    });
-    // 4. Force root CSS variable
-    document.documentElement.style.setProperty('--am-f', '0.48');
+  <script id="amiyo-head-nuker">
+    (function () {
+      try {
+        // 1. Unregister all service workers immediately
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.unregister(); });
+          });
+        }
+        // 2. Clear all cache storage immediately
+        if ('caches' in window) {
+          caches.keys().then(function (keys) {
+            keys.forEach(function (k) { caches.delete(k); });
+          });
+        }
+        // 3. Purge all stale layout & session crash localStorage keys
+        ['amiyo.preview.size.v1', 'amiyo_pv_size_v1', 'amiyo-pp4-tlh', 'amiyo.pr2.layout', 'amiyo_col_widths', 'amiyo.pr2.trackh', 'amiyo.pr2.trackh.v1', 'amiyo_pr2_ws', 'amiyo.workspace', 'amiyo.w11.sessions', 'amiyo-pp4-mview'].forEach(function (k) {
+          try { localStorage.removeItem(k); } catch (e) { }
+        });
+        // 4. Force root CSS variable
+        document.documentElement.style.setProperty('--am-f', '0.48');
 
-    // 5. Active DOM sentinel: aggressively prune topbar clutter and rogue workspace bars
-    function prune() {
-      document.querySelectorAll('.am-menus, .am-ws, #mbar, #uxQuick').forEach(function(el){ el.remove(); });
-      ['ui20Ws', 'amOneRow', 'ppWs', 'wsBtn', 'uxQuick', 'amQaBtn', 'pp5Menu', 'pvSizes', 'amiyoCrashBar', 'pwaOffBtn', 'pwaInstallBtn', 'topMoreBtn', 'tourMenuBtn', 'focusBtn', 'amFocusBtn', 'amFocusX', 'offlineBtn', 'amCmdBtn', 'seqExportBtn', 'amSess', 'am-dd', 'mbar'].forEach(function(id){
-        var el = document.getElementById(id);
-        if (el) el.remove();
-      });
-    }
-    prune();
-    if (typeof MutationObserver !== 'undefined') {
-      new MutationObserver(prune).observe(document.documentElement, { childList: true, subtree: true });
-    }
-  } catch(e){}
-})();
-</script>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#0a0908"/>
-<meta name="color-scheme" content="dark"/>
+        // 5. Initial cleanup of legacy rogue bars
+        function prune() {
+          document.querySelectorAll('.am-menus, #mbar, #uxQuick').forEach(function (el) { el.remove(); });
+          ['amOneRow', 'ppWs', 'wsBtn', 'uxQuick', 'amQaBtn', 'pvSizes', 'amiyoCrashBar', 'pwaOffBtn', 'pwaInstallBtn', 'topMoreBtn', 'tourMenuBtn', 'focusBtn', 'amFocusBtn', 'amFocusX', 'offlineBtn', 'amCmdBtn', 'seqExportBtn', 'amSess', 'am-dd', 'mbar'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.remove();
+          });
+        }
+        prune();
+      } catch (e) { }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0908" />
+  <meta name="color-scheme" content="dark" />
 
-<link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg"/>
-<link rel="icon" type="image/png" sizes="64x64" href="assets/icons/icon-64.png"/>
-<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180.png"/>
-<meta name="application-name" content="Amiyo Editor"/>
-<meta name="amiyo-editor-build" content="127"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-title" content="Amiyo Studio"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-<link rel="manifest" href="manifest.webmanifest"/>
-<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png"/>
-<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16.png"/>
-<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180.png"/>
-<title>Amiyo Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<meta name="description" content="Amiyo Studio: a private, offline-capable video editor that runs entirely in your browser. Your media never leaves your device."/>
-<meta property="og:title" content="Amiyo Studio - video editor in your browser"/>
-<meta property="og:description" content="Cut, edit and export video on-device. No upload, no account."/>
-<meta property="og:type" content="website"/>
-<meta name="format-detection" content="telephone=no,date=no,address=no,email=no"/>
-<meta name="referrer" content="no-referrer"/>
-<meta name="robots" content="noindex,nofollow"/>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg" />
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/icons/icon-64.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180.png" />
+  <meta name="application-name" content="Amiyo Editor" />
+  <meta name="amiyo-editor-build" content="127" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Amiyo Studio" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180.png" />
+  <title>Amiyo Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="description"
+    content="Amiyo Studio: a private, offline-capable video editor that runs entirely in your browser. Your media never leaves your device." />
+  <meta property="og:title" content="Amiyo Studio - video editor in your browser" />
+  <meta property="og:description" content="Cut, edit and export video on-device. No upload, no account." />
+  <meta property="og:type" content="website" />
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="robots" content="noindex,nofollow" />
 
-<!-- Application Stylesheet (378 styles extracted) -->
-<link rel="stylesheet" href="css/app.css?v=1.0.3" id="v07-css"/>
+  <!-- Application Stylesheet (378 styles extracted) -->
+  <link rel="stylesheet" href="css/app.css?v=1.0.3" id="v07-css" />
 
-<!-- INLINE: Force correct desktop NLE layout before any cached external files -->
+  <!-- INLINE: Force correct desktop NLE layout before any cached external files -->
 
-<script>
-/* INLINE: Bust stale service worker cache + stale localStorage on desktop */
-(function(){
-  try{
-    if(typeof innerWidth==="number"&&innerWidth>=768){
-      try{localStorage.removeItem("amiyo.preview.size.v1");localStorage.removeItem("amiyo_pv_size_v1");localStorage.removeItem("amiyo-pp4-tlh");}catch(e){}
-      document.documentElement.style.setProperty("--am-f","0.48");
-    }
-    if("serviceWorker" in navigator){
-      navigator.serviceWorker.getRegistrations().then(function(regs){
-        regs.forEach(function(r){r.update()});
-      });
-      if(typeof caches!=="undefined"){
-        caches.keys().then(function(ks){ks.forEach(function(k){if(k!=="amiyo-editor-v1.0.3")caches.delete(k)})});
-      }
-    }
-  }catch(e){}
-})();
-</script>
+  <script>
+    /* INLINE: Bust stale service worker cache + stale localStorage on desktop */
+    (function () {
+      try {
+        if (typeof innerWidth === "number" && innerWidth >= 768) {
+          try { localStorage.removeItem("amiyo.preview.size.v1"); localStorage.removeItem("amiyo_pv_size_v1"); localStorage.removeItem("amiyo-pp4-tlh"); } catch (e) { }
+          document.documentElement.style.setProperty("--am-f", "0.48");
+        }
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.update() });
+          });
+          if (typeof caches !== "undefined") {
+            caches.keys().then(function (ks) { ks.forEach(function (k) { if (k !== "amiyo-editor-v1.0.3") caches.delete(k) }) });
+          }
+        }
+      } catch (e) { }
+    })();
+  </script>
 
-<!-- Core performance guards & event throttlers -->
-<script src="js/01-core-guards.js?v=1.0.3"></script>
+  <!-- Core performance guards & event throttlers -->
+  <script src="js/01-core-guards.js?v=1.0.3"></script>
 </head>
+
 <body>
-<div id="amBoot" role="status" aria-live="polite" style="position:fixed;inset:0;z-index:2147483600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d0c09;color:#cfc8bb;font:600 14px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;transition:opacity .25s ease;touch-action:none">
-<img src="assets/icons/icon-180.png" width="80" height="80" alt="Amiyo Studio" style="border-radius:18px;margin-bottom:4px;filter:drop-shadow(0 4px 16px rgba(255,122,61,0.35))"/>
-<div style="font-size:22px;letter-spacing:.4px;font-weight:700;color:#ff7a3d">Amiyo Studio</div>
-<div id="amBootT">Opening editor…</div>
-<div style="width:min(240px,60vw);height:4px;border-radius:4px;background:#26221b;overflow:hidden"><div id="amBootBar" style="height:100%;width:3%;background:#ff7a3d;border-radius:4px;transition:width .2s"></div></div>
-</div>
-<div id="pr59-boot" aria-hidden="true" style="position:fixed;left:0;right:0;top:0;height:3px;z-index:99999;pointer-events:none;overflow:hidden;opacity:0;animation:pr59show .01s linear .45s forwards,pr59gone .01s linear 20s forwards"><i style="display:block;height:100%;width:40%;background:#ff7a3d;border-radius:3px;animation:pr59run 1.1s ease-in-out infinite"></i></div>
-<div class="app">
-  <header class="topbar">
-    <div class="brand"><div class="logo"><img src="assets/icons/icon-64.png" width="30" height="30" alt="Amiyo Studio Logo" style="display:block;border-radius:6px;object-fit:contain"/></div><div><b>Amiyo Studio</b></div></div>
-    <input id="projectName" class="project-name" value="Untitled Video" aria-label="Project name"/>
-    <span id="saveStatus" class="status">Unsaved</span>
-    <select id="nleKeymapProfile" class="toolbtn" title="NLE Keyboard Profile (Premiere Pro, DaVinci Resolve, Final Cut Pro)" style="margin-left:8px;padding:2px 8px;height:26px;font-size:11px;background:#181512;color:#ffc06a;border:1px solid #332d26;border-radius:4px">
-      <option value="premiere">⌨ Premiere Pro</option>
-      <option value="resolve">⌨ DaVinci Resolve</option>
-      <option value="fcp">⌨ Final Cut Pro</option>
-    </select>
-    <div class="top-spacer"></div>
-    <button class="topbtn" id="undoBtn" aria-label="Undo" title="Undo (Ctrl+Z)">↶</button>
-    <button class="topbtn" id="redoBtn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)">↷</button>
-    <button class="topbtn primary" id="exportBtn">Export</button>
-    <button class="topbtn" id="topCaptionsBtn" title="Captions & Subtitles">Captions</button>
-    <button class="topbtn" id="versionsBtn">Versions</button>
-    <button class="topbtn" id="shareBtn">Share</button>
-    <button class="topbtn" id="settingsBtn">Settings</button>
-    <button class="topbtn" id="helpBtn">Help</button>
-    <button class="topbtn" id="agentBtn">Amiyo Agent</button>
-    <button class="topbtn" id="storageBtn" title="Storage, media and recovery points">Storage</button>
-    <button class="topbtn" id="renderQueueBtn" title="Queue multiple exports at different presets (like Adobe Media Encoder)">Queue</button>
-  </header>
-
-  <main class="workspace" id="amiyoMain">
-    <aside class="sidebar">
-      <div class="section-title">Workspace</div>
-      <div class="nav" id="nav">
-        <button class="navbtn active" data-panel="media"><span class="dot"></span>Media</button>
-        <button class="navbtn" data-panel="templates"><span class="dot"></span>Templates</button>
-        <button class="navbtn" data-panel="audio"><span class="dot"></span>Audio</button>
-        <button class="navbtn" data-panel="text"><span class="dot"></span>Text</button>
-        <button class="navbtn" data-panel="captions"><span class="dot"></span>Captions</button>
-        <button class="navbtn" data-panel="stickers"><span class="dot"></span>Stickers</button>
-        <button class="navbtn" data-panel="graphics"><span class="dot"></span>Graphics</button>
-        <button class="navbtn" data-panel="transitions"><span class="dot"></span>Transitions</button>
-        <button class="navbtn" data-panel="filters"><span class="dot"></span>Filters</button>
-        <button class="navbtn" data-panel="color"><span class="dot"></span>Color</button>
-        <button class="navbtn" data-panel="effects"><span class="dot"></span>Effects</button>
-        <button class="navbtn" data-panel="animations"><span class="dot"></span>Animations</button>
-        <button class="navbtn" data-panel="brand"><span class="dot"></span>Brand Kit</button>
-        <button class="navbtn" data-panel="record"><span class="dot"></span>Record</button>
-        <button class="navbtn" data-panel="ai"><span class="dot"></span>AI Studio</button>
-        <button class="navbtn" data-panel="stock"><span class="dot"></span>Stock Media</button>
-        <button class="navbtn" data-panel="elements"><span class="dot"></span>Elements</button>
-        <button class="navbtn" data-panel="multicam"><span class="dot"></span>Multicam</button>
-      </div>
-      <div class="panel" id="leftPanel"></div>
-    </aside>
-    <div class="amiyo-split-v amiyo-split-left" id="amiyoSplitLeft" role="separator" aria-label="Resize Media Panel" title="Drag to resize Media Panel"></div>
-
-    <section class="center">
-      <div class="preview-wrap">
-        <div class="preview-toolbar">
-          <button class="toolbtn" id="playBtn" title="Play / Pause (Space)">▶ Play</button>
-          <button class="toolbtn" id="stopBtn" title="Stop (K)">■ Stop</button>
-          <button class="toolbtn" id="prevFrameBtn" title="Step 1 Frame Backward (Left Arrow)">◀ Frame</button>
-          <button class="toolbtn" id="nextFrameBtn" title="Step 1 Frame Forward (Right Arrow)">Frame ▶</button>
-          <button class="toolbtn" id="loopBtn" title="Toggle Loop Playback">🔁 Loop</button>
-          <button class="toolbtn" id="safeZoneBtn" title="Toggle Safe Margins (Title 80%, Action 90%)">🛡 Safe</button>
-          <button class="toolbtn" id="gridBtn" title="Toggle Alignment Grid">Grid</button>
-          <button class="toolbtn" id="dualMonitorBtn" title="Toggle Dual Monitor (Source & Program side-by-side)">🗔 Dual</button>
-          <select id="playbackResolution" class="toolbtn" title="Playback Resolution (Full, 1/2, 1/4) for smooth real-time scrubbing" style="padding:3px 6px;height:26px">
-            <option value="1">1/1 Full</option>
-            <option value="2">1/2 Half</option>
-            <option value="4">1/4 Qtr</option>
-          </select>
-          <button class="toolbtn" id="proxyToggleBtn" title="Toggle Proxies (50% Canvas Downsampling for high-speed playback)">⚡ Proxy</button>
-          <button class="toolbtn" id="renderRangeBtn" title="Render In/Out Timeline Cache (Enter)">⚙ Render</button>
-          <button class="toolbtn" id="fitBtn" title="Fit to stage">Fit</button>
-          <button class="toolbtn" id="fullscreenBtn" title="Full Screen Preview (~ or Ctrl+F)">⛶ Full</button>
-          <span class="badge" id="proxyBadge" style="display:none;background:#264e36;color:#9af0b8;border-color:#2e6a45">PROXIES 50%</span>
-          <span class="badge" id="engineBadge">Canvas Preview</span>
-          <span class="badge" id="shuttleBadge" style="display:none">J/K/L</span>
-          <span class="playhead-time" id="timeReadout" title="Click to jump to timecode">00:00.000 / 00:30.000</span>
-        </div>
-        <div class="preview-stage" id="previewStage">
-          <!-- Dual Monitor Layout (Source & Program side-by-side) -->
-          <div class="dual-monitor-wrap" id="dualMonitorWrap" style="display:none">
-            <div class="canvas-shell source-shell" id="sourceShell" style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
-              <div class="source-header" style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ffc06a;font-size:10px;font-weight:600;z-index:3;display:flex;justify-content:space-between">
-                <span>SOURCE MONITOR</span>
-                <span id="srcAssetTitle" style="color:#e4dcce;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">No Media Selected</span>
-              </div>
-              <video id="sourceVideoEl" playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;background:#050505"></video>
-              <div class="source-io-bar" style="position:absolute;bottom:0;left:0;right:0;height:26px;background:rgba(12,11,9,0.9);display:flex;align-items:center;gap:4px;padding:0 6px;z-index:3;border-top:1px solid #26221c">
-                <button class="toolbtn" id="srcInBtn" title="Mark In (I)" style="padding:2px 6px;font-size:10px">In</button>
-                <button class="toolbtn" id="srcOutBtn" title="Mark Out (O)" style="padding:2px 6px;font-size:10px">Out</button>
-                <button class="toolbtn" id="srcInsertBtn" title="Insert edit at playhead (,)" style="padding:2px 6px;font-size:10px">Insert ,</button>
-                <button class="toolbtn" id="srcOverwriteBtn" title="Overwrite edit at playhead (.)" style="padding:2px 6px;font-size:10px">Overwrite .</button>
-                <span id="srcTimecode" style="margin-left:auto;font-size:10px;color:#c4bcac;font-family:var(--font-mono)">00:00.000</span>
-              </div>
-            </div>
-            <div class="canvas-shell program-shell" id="programShellWrap" style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
-              <div class="program-header" style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ff7a3d;font-size:10px;font-weight:600;z-index:3">PROGRAM MONITOR (TIMELINE)</div>
-            </div>
-          </div>
-
-          <!-- Standard Canvas Shell -->
-          <div class="canvas-shell" id="canvasShell">
-            <canvas id="previewCanvas" width="1280" height="720"></canvas>
-            <video id="videoEl" playsinline preload="metadata"></video>
-            <div class="preview-overlay" id="previewOverlay">
-              <div class="safe" id="defaultSafe"></div>
-              <div class="safe-zone-box safe-zone-action" id="actionSafe" style="display:none"></div>
-              <div class="safe-zone-box safe-zone-title" id="titleSafe" style="display:none"></div>
-              <div class="grid-overlay" id="gridOverlay"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="timeline">
-        <div class="timeline-toolbar" style="flex-wrap:wrap;height:auto;min-height:42px;row-gap:4px">
-          <button class="toolbtn tool-active" id="toolSelect" title="Selection tool (V)">↖ V</button>
-          <button class="toolbtn" id="toolTrackSelect" title="Track Select Forward (A / Shift+A)">⇉ A</button>
-          <button class="toolbtn" id="toolRipple" title="Ripple Edit tool (B)">⇥ B</button>
-          <button class="toolbtn" id="toolRazor" title="Razor / Cut tool (C)">✂ C</button>
-          <button class="toolbtn" id="toolRateStretch" title="Rate Stretch tool (R)">↔ R</button>
-          <button class="toolbtn" id="toolSlip" title="Slip tool — shift a clip's source In/Out under a fixed position (Y)">⇄ Slip Y</button>
-          <button class="toolbtn" id="toolSlide" title="Slide tool — move a clip and let neighbors absorb the gap (U)">⇉ Slide U</button>
-          <button class="toolbtn" id="toolRoll" title="Rolling Edit — drag the cut point between two clips (N)">⇕ Roll N</button>
-          <button class="toolbtn" id="toolPen" title="Pen tool — add/edit keyframes on timeline clips (P)">🖋 P</button>
-          <button class="toolbtn" id="toolHand" title="Hand tool (H)">✋ H</button>
-          <button class="toolbtn" id="toolZoom" title="Zoom tool (Z)">🔍 Zoom Z</button>
-          <button class="toolbtn" id="snapToggle" title="Snap to clips/playhead (S)">🧲 Snap</button>
-          <button class="toolbtn" id="groupBtn" title="Group Selected Clips (Ctrl+G)">📦 Group</button>
-          <button class="toolbtn" id="linkBtn" title="Link/Unlink Audio (Ctrl+L)">🔗 Link</button>
-          <span style="width:1px;height:20px;background:var(--line)"></span>
-          <button class="toolbtn" id="setInBtn" title="Set In point (I)">In</button>
-          <button class="toolbtn" id="setOutBtn" title="Set Out point (O)">Out</button>
-          <button class="toolbtn" id="clearInOutBtn" title="Clear In/Out">Clear I/O</button>
-          <button class="toolbtn" id="trimIOBtn" title="Trim selected clip to In/Out">Trim to I/O</button>
-          <span style="width:1px;height:20px;background:var(--line)"></span>
-          <button class="toolbtn" id="addVideoBtn">＋ Video/Audio</button>
-          <button class="toolbtn" id="addTextBtn">＋ Text</button>
-          <button class="toolbtn" id="addAdjustmentBtn" title="Add an Adjustment Layer — effects on it grade everything stacked beneath">＋ Adjustment</button>
-          <button class="toolbtn" id="splitBtn">Split</button>
-          <button class="toolbtn" id="deleteBtn">Delete</button>
-          <button class="toolbtn" id="duplicateBtn">Duplicate</button>
-          <button class="toolbtn" id="fitTimelineBtn">Fit Timeline</button>
-          <label style="margin-left:auto;color:#7f8998;font-size:10px">Zoom <input id="timelineZoom" type="range" min="1" max="6000" step="5" value="250" style="vertical-align:middle;width:100px"></label>
-        </div>
-        <div class="timeline-scroll" id="timelineScroll">
-          <div class="timeline-inner" id="timelineInner">
-            <div class="ruler" id="ruler"><div class="ruler-marks" id="rulerMarks"></div><div id="ioRange"></div></div>
-            <div class="tracks" id="tracks"></div>
-            <div class="playhead" id="playhead"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="amiyo-split-v amiyo-split-right" id="amiyoSplitRight" role="separator" aria-label="Resize Inspector" title="Drag to resize Inspector"></div>
-    <div class="inspector-col" id="inspectorCol">
-      <div id="ppInspTabs" role="tablist" aria-label="Right panel">
-        <button type="button" data-t="fx" role="tab" aria-selected="true">Effect Controls</button>
-        <button type="button" data-t="pp6fx" role="tab">Effects</button>
-        <button type="button" data-t="pp6gfx" role="tab">Essential Graphics</button>
-        <button type="button" data-t="pp6lum" role="tab">Lumetri Color</button>
-        <button type="button" data-t="pp6lib" role="tab">Libraries</button>
-        <button type="button" data-t="tools" role="tab">Tools</button>
-      </div>
-      <div id="pp6Dock" role="tabpanel" style="display:none"></div>
-      <aside class="inspector" id="inspector"></aside>
+  <div id="amBoot" role="status" aria-live="polite"
+    style="position:fixed;inset:0;z-index:2147483600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d0c09;color:#cfc8bb;font:600 14px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;transition:opacity .25s ease;touch-action:none">
+    <img src="assets/icons/icon-180.png" width="80" height="80" alt="Amiyo Studio"
+      style="border-radius:18px;margin-bottom:4px;filter:drop-shadow(0 4px 16px rgba(255,122,61,0.35))" />
+    <div style="font-size:22px;letter-spacing:.4px;font-weight:700;color:#ff7a3d">Amiyo Studio</div>
+    <div id="amBootT">Opening editor…</div>
+    <div style="width:min(240px,60vw);height:4px;border-radius:4px;background:#26221b;overflow:hidden">
+      <div id="amBootBar" style="height:100%;width:3%;background:#ff7a3d;border-radius:4px;transition:width .2s"></div>
     </div>
-  </main>
-  <nav class="mbar" id="mbar" aria-label="Editor actions">
-    <button type="button" id="mbLib"><i>☰</i>Library</button>
-    <button type="button" id="mbSplit"><i>✂</i>Split</button>
-    <button type="button" id="mbPlay" class="mb-play"><i>▶</i>Play</button>
-    <button type="button" id="mbDel"><i>🗑</i>Delete</button>
-    <button type="button" id="mbInsp"><i>⚙</i>Inspect</button>
-  </nav>
-</div>
-
-<div class="toast" id="toast" aria-hidden="true"></div>
-<div id="a11yLive" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-<div id="a11yAlert" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-    <div class="modal-head"><b id="modalTitle">Amiyo</b><button class="toolbtn" id="modalClose" aria-label="Close dialog">Close</button></div>
-    <div class="modal-body" id="modalBody"></div>
   </div>
-</div>
+  <div id="pr59-boot" aria-hidden="true"
+    style="position:fixed;left:0;right:0;top:0;height:3px;z-index:99999;pointer-events:none;overflow:hidden;opacity:0;animation:pr59show .01s linear .45s forwards,pr59gone .01s linear 20s forwards">
+    <i
+      style="display:block;height:100%;width:40%;background:#ff7a3d;border-radius:3px;animation:pr59run 1.1s ease-in-out infinite"></i>
+  </div>
+  <div class="app">
+    <div id="pp5Menu" role="menubar" aria-label="Menu bar">
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">File</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Edit</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Clip</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Sequence</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Markers</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Graphics</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">View</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Window</button>
+      <button type="button" class="m" role="menuitem" aria-haspopup="true" aria-expanded="false">Help</button>
+      <span class="sp"></span>
+      <span class="st" id="pp5MenuSt">Untitled Video</span>
+    </div>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"><img src="assets/icons/icon-64.png" width="30" height="30" alt="Amiyo Studio Logo"
+            style="display:block;border-radius:6px;object-fit:contain" /></div>
+        <div><b>Amiyo Studio</b></div>
+      </div>
+      <input id="projectName" class="project-name" value="Untitled Video" aria-label="Project name" />
+      <span id="saveStatus" class="status">Unsaved</span>
+      <div id="ui20Ws" role="tablist" aria-label="Workspaces">
+        <button type="button" class="ws-btn" data-ws="editing" role="tab" aria-selected="true">Editing</button>
+        <button type="button" class="ws-btn" data-ws="assembly" role="tab" aria-selected="false">Assembly</button>
+        <button type="button" class="ws-btn" data-ws="color" role="tab" aria-selected="false">Color</button>
+        <button type="button" class="ws-btn" data-ws="audio" role="tab" aria-selected="false">Audio</button>
+        <button type="button" class="ws-btn" data-ws="effects" role="tab" aria-selected="false">Effects</button>
+      </div>
+      <select id="nleKeymapProfile" class="toolbtn"
+        title="NLE Keyboard Profile (Premiere Pro, DaVinci Resolve, Final Cut Pro)"
+        style="margin-left:8px;padding:2px 8px;height:26px;font-size:11px;background:#181512;color:#ffc06a;border:1px solid #332d26;border-radius:4px">
+        <option value="premiere">⌨ Premiere Pro</option>
+        <option value="resolve">⌨ DaVinci Resolve</option>
+        <option value="fcp">⌨ Final Cut Pro</option>
+      </select>
+      <div class="top-spacer"></div>
+      <button class="topbtn" id="undoBtn" aria-label="Undo" title="Undo (Ctrl+Z)">↶</button>
+      <button class="topbtn" id="redoBtn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)">↷</button>
+      <button class="topbtn primary" id="exportBtn">Export</button>
+      <button class="topbtn" id="topCaptionsBtn" title="Captions & Subtitles">Captions</button>
+      <button class="topbtn" id="versionsBtn">Versions</button>
+      <button class="topbtn" id="shareBtn">Share</button>
+      <button class="topbtn" id="settingsBtn">Settings</button>
+      <button class="topbtn" id="helpBtn">Help</button>
+      <button class="topbtn" id="agentBtn">Amiyo Agent</button>
+      <button class="topbtn" id="storageBtn" title="Storage, media and recovery points">Storage</button>
+      <button class="topbtn" id="renderQueueBtn"
+        title="Queue multiple exports at different presets (like Adobe Media Encoder)">Queue</button>
+    </header>
 
-<input id="fileInput" type="file" multiple accept="video/*,audio/*,image/*,.svg,.m4a,.opus,.flac,.oga,.aif,.aiff,.wma,.amr,.caf,.aac,.mkv,.avi,.mov,.webm,.mp4,.mp3,.wav,.ogg,.srt,.vtt,.cube,.json,.amiyovideo,.ttf,.otf,.woff,.woff2,.txt" class="hidden"/>
+    <main class="workspace" id="amiyoMain">
+      <aside class="sidebar">
+        <div class="section-title">Workspace</div>
+        <div class="nav" id="nav">
+          <button class="navbtn active" data-panel="media"><span class="dot"></span>Media</button>
+          <button class="navbtn" data-panel="templates"><span class="dot"></span>Templates</button>
+          <button class="navbtn" data-panel="audio"><span class="dot"></span>Audio</button>
+          <button class="navbtn" data-panel="text"><span class="dot"></span>Text</button>
+          <button class="navbtn" data-panel="captions"><span class="dot"></span>Captions</button>
+          <button class="navbtn" data-panel="stickers"><span class="dot"></span>Stickers</button>
+          <button class="navbtn" data-panel="graphics"><span class="dot"></span>Graphics</button>
+          <button class="navbtn" data-panel="transitions"><span class="dot"></span>Transitions</button>
+          <button class="navbtn" data-panel="filters"><span class="dot"></span>Filters</button>
+          <button class="navbtn" data-panel="color"><span class="dot"></span>Color</button>
+          <button class="navbtn" data-panel="effects"><span class="dot"></span>Effects</button>
+          <button class="navbtn" data-panel="animations"><span class="dot"></span>Animations</button>
+          <button class="navbtn" data-panel="brand"><span class="dot"></span>Brand Kit</button>
+          <button class="navbtn" data-panel="record"><span class="dot"></span>Record</button>
+          <button class="navbtn" data-panel="ai"><span class="dot"></span>AI Studio</button>
+          <button class="navbtn" data-panel="stock"><span class="dot"></span>Stock Media</button>
+          <button class="navbtn" data-panel="elements"><span class="dot"></span>Elements</button>
+          <button class="navbtn" data-panel="multicam"><span class="dot"></span>Multicam</button>
+        </div>
+        <div class="panel" id="leftPanel"></div>
+      </aside>
+      <div class="amiyo-split-v amiyo-split-left" id="amiyoSplitLeft" role="separator" aria-label="Resize Media Panel"
+        title="Drag to resize Media Panel"></div>
 
-<!-- Embedded text data payloads (read synchronously by application) -->
-<script type="text/plain" id="amiyo-setup-stub-src">
+      <section class="center">
+        <div class="preview-wrap">
+          <div class="preview-toolbar">
+            <button class="toolbtn" id="playBtn" title="Play / Pause (Space)">▶ Play</button>
+            <button class="toolbtn" id="stopBtn" title="Stop (K)">■ Stop</button>
+            <button class="toolbtn" id="prevFrameBtn" title="Step 1 Frame Backward (Left Arrow)">◀ Frame</button>
+            <button class="toolbtn" id="nextFrameBtn" title="Step 1 Frame Forward (Right Arrow)">Frame ▶</button>
+            <button class="toolbtn" id="loopBtn" title="Toggle Loop Playback">🔁 Loop</button>
+            <button class="toolbtn" id="safeZoneBtn" title="Toggle Safe Margins (Title 80%, Action 90%)">🛡
+              Safe</button>
+            <button class="toolbtn" id="gridBtn" title="Toggle Alignment Grid">Grid</button>
+            <button class="toolbtn" id="dualMonitorBtn" title="Toggle Dual Monitor (Source & Program side-by-side)">🗔
+              Dual</button>
+            <select id="playbackResolution" class="toolbtn"
+              title="Playback Resolution (Full, 1/2, 1/4) for smooth real-time scrubbing"
+              style="padding:3px 6px;height:26px">
+              <option value="1">1/1 Full</option>
+              <option value="2">1/2 Half</option>
+              <option value="4">1/4 Qtr</option>
+            </select>
+            <button class="toolbtn" id="proxyToggleBtn"
+              title="Toggle Proxies (50% Canvas Downsampling for high-speed playback)">⚡ Proxy</button>
+            <button class="toolbtn" id="renderRangeBtn" title="Render In/Out Timeline Cache (Enter)">⚙ Render</button>
+            <button class="toolbtn" id="fitBtn" title="Fit to stage">Fit</button>
+            <button class="toolbtn" id="fullscreenBtn" title="Full Screen Preview (~ or Ctrl+F)">⛶ Full</button>
+            <span class="badge" id="proxyBadge"
+              style="display:none;background:#264e36;color:#9af0b8;border-color:#2e6a45">PROXIES 50%</span>
+            <span class="badge" id="engineBadge">Canvas Preview</span>
+            <span class="badge" id="shuttleBadge" style="display:none">J/K/L</span>
+            <span class="playhead-time" id="timeReadout" title="Click to jump to timecode">00:00.000 / 00:30.000</span>
+          </div>
+          <div class="preview-stage" id="previewStage">
+            <!-- Dual Monitor Layout (Source & Program side-by-side) -->
+            <div class="dual-monitor-wrap" id="dualMonitorWrap" style="display:none">
+              <div class="canvas-shell source-shell" id="sourceShell"
+                style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
+                <div class="source-header"
+                  style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ffc06a;font-size:10px;font-weight:600;z-index:3;display:flex;justify-content:space-between">
+                  <span>SOURCE MONITOR</span>
+                  <span id="srcAssetTitle"
+                    style="color:#e4dcce;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">No
+                    Media Selected</span>
+                </div>
+                <video id="sourceVideoEl" playsinline preload="metadata"
+                  style="width:100%;height:100%;object-fit:contain;background:#050505"></video>
+                <div class="source-io-bar"
+                  style="position:absolute;bottom:0;left:0;right:0;height:26px;background:rgba(12,11,9,0.9);display:flex;align-items:center;gap:4px;padding:0 6px;z-index:3;border-top:1px solid #26221c">
+                  <button class="toolbtn" id="srcInBtn" title="Mark In (I)"
+                    style="padding:2px 6px;font-size:10px">In</button>
+                  <button class="toolbtn" id="srcOutBtn" title="Mark Out (O)"
+                    style="padding:2px 6px;font-size:10px">Out</button>
+                  <button class="toolbtn" id="srcInsertBtn" title="Insert edit at playhead (,)"
+                    style="padding:2px 6px;font-size:10px">Insert ,</button>
+                  <button class="toolbtn" id="srcOverwriteBtn" title="Overwrite edit at playhead (.)"
+                    style="padding:2px 6px;font-size:10px">Overwrite .</button>
+                  <span id="srcTimecode"
+                    style="margin-left:auto;font-size:10px;color:#c4bcac;font-family:var(--font-mono)">00:00.000</span>
+                </div>
+              </div>
+              <div class="canvas-shell program-shell" id="programShellWrap"
+                style="flex:1;aspect-ratio:16/9;position:relative;background:#000;border:1px solid #26221c;border-radius:8px;overflow:hidden">
+                <div class="program-header"
+                  style="position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,0.7);color:#ff7a3d;font-size:10px;font-weight:600;z-index:3">
+                  PROGRAM MONITOR (TIMELINE)</div>
+              </div>
+            </div>
+
+            <!-- Standard Canvas Shell -->
+            <div class="canvas-shell" id="canvasShell">
+              <canvas id="previewCanvas" width="1280" height="720"></canvas>
+              <video id="videoEl" playsinline preload="metadata"></video>
+              <div class="preview-overlay" id="previewOverlay">
+                <div class="safe" id="defaultSafe"></div>
+                <div class="safe-zone-box safe-zone-action" id="actionSafe" style="display:none"></div>
+                <div class="safe-zone-box safe-zone-title" id="titleSafe" style="display:none"></div>
+                <div class="grid-overlay" id="gridOverlay"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-toolbar" style="flex-wrap:wrap;height:auto;min-height:42px;row-gap:4px">
+            <button class="toolbtn tool-active" id="toolSelect" title="Selection tool (V)">↖ V</button>
+            <button class="toolbtn" id="toolTrackSelect" title="Track Select Forward (A / Shift+A)">⇉ A</button>
+            <button class="toolbtn" id="toolRipple" title="Ripple Edit tool (B)">⇥ B</button>
+            <button class="toolbtn" id="toolRazor" title="Razor / Cut tool (C)">✂ C</button>
+            <button class="toolbtn" id="toolRateStretch" title="Rate Stretch tool (R)">↔ R</button>
+            <button class="toolbtn" id="toolSlip"
+              title="Slip tool — shift a clip's source In/Out under a fixed position (Y)">⇄ Slip Y</button>
+            <button class="toolbtn" id="toolSlide"
+              title="Slide tool — move a clip and let neighbors absorb the gap (U)">⇉ Slide U</button>
+            <button class="toolbtn" id="toolRoll" title="Rolling Edit — drag the cut point between two clips (N)">⇕ Roll
+              N</button>
+            <button class="toolbtn" id="toolPen" title="Pen tool — add/edit keyframes on timeline clips (P)">🖋
+              P</button>
+            <button class="toolbtn" id="toolHand" title="Hand tool (H)">✋ H</button>
+            <button class="toolbtn" id="toolZoom" title="Zoom tool (Z)">🔍 Zoom Z</button>
+            <button class="toolbtn" id="snapToggle" title="Snap to clips/playhead (S)">🧲 Snap</button>
+            <button class="toolbtn" id="groupBtn" title="Group Selected Clips (Ctrl+G)">📦 Group</button>
+            <button class="toolbtn" id="linkBtn" title="Link/Unlink Audio (Ctrl+L)">🔗 Link</button>
+            <span style="width:1px;height:20px;background:var(--line)"></span>
+            <button class="toolbtn" id="setInBtn" title="Set In point (I)">In</button>
+            <button class="toolbtn" id="setOutBtn" title="Set Out point (O)">Out</button>
+            <button class="toolbtn" id="clearInOutBtn" title="Clear In/Out">Clear I/O</button>
+            <button class="toolbtn" id="trimIOBtn" title="Trim selected clip to In/Out">Trim to I/O</button>
+            <span style="width:1px;height:20px;background:var(--line)"></span>
+            <button class="toolbtn" id="addVideoBtn">＋ Video/Audio</button>
+            <button class="toolbtn" id="addTextBtn">＋ Text</button>
+            <button class="toolbtn" id="addAdjustmentBtn"
+              title="Add an Adjustment Layer — effects on it grade everything stacked beneath">＋ Adjustment</button>
+            <button class="toolbtn" id="splitBtn">Split</button>
+            <button class="toolbtn" id="deleteBtn">Delete</button>
+            <button class="toolbtn" id="duplicateBtn">Duplicate</button>
+            <button class="toolbtn" id="fitTimelineBtn">Fit Timeline</button>
+            <label style="margin-left:auto;color:#7f8998;font-size:10px">Zoom <input id="timelineZoom" type="range"
+                min="1" max="6000" step="5" value="250" style="vertical-align:middle;width:100px"></label>
+          </div>
+          <div class="timeline-scroll" id="timelineScroll">
+            <div class="timeline-inner" id="timelineInner">
+              <div class="ruler" id="ruler">
+                <div class="ruler-marks" id="rulerMarks"></div>
+                <div id="ioRange"></div>
+              </div>
+              <div class="tracks" id="tracks"></div>
+              <div class="playhead" id="playhead"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="amiyo-split-v amiyo-split-right" id="amiyoSplitRight" role="separator" aria-label="Resize Inspector"
+        title="Drag to resize Inspector"></div>
+      <div class="inspector-col" id="inspectorCol">
+        <div id="ppInspTabs" role="tablist" aria-label="Right panel">
+          <button type="button" data-t="p7kw" role="tab">WORDS</button>
+          <button type="button" data-t="p7ro" role="tab">ROLES</button>
+          <button type="button" data-t="p7ed" role="tab">EDIT</button>
+          <button type="button" data-t="tools" role="tab" aria-selected="true" class="active">TOOLS</button>
+        </div>
+        <div id="pp6Dock" role="tabpanel" style="display:none"></div>
+        <aside class="inspector" id="inspector"></aside>
+      </div>
+    </main>
+    <nav class="mbar" id="mbar" aria-label="Editor actions">
+      <button type="button" id="mbLib"><i>☰</i>Library</button>
+      <button type="button" id="mbSplit"><i>✂</i>Split</button>
+      <button type="button" id="mbPlay" class="mb-play"><i>▶</i>Play</button>
+      <button type="button" id="mbDel"><i>🗑</i>Delete</button>
+      <button type="button" id="mbInsp"><i>⚙</i>Inspect</button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" aria-hidden="true"></div>
+  <div id="a11yLive" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="a11yAlert" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <div class="modal-head"><b id="modalTitle">Amiyo</b><button class="toolbtn" id="modalClose"
+          aria-label="Close dialog">Close</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <input id="fileInput" type="file" multiple
+    accept="video/*,audio/*,image/*,.svg,.m4a,.opus,.flac,.oga,.aif,.aiff,.wma,.amr,.caf,.aac,.mkv,.avi,.mov,.webm,.mp4,.mp3,.wav,.ogg,.srt,.vtt,.cube,.json,.amiyovideo,.ttf,.otf,.woff,.woff2,.txt"
+    class="hidden" />
+
+  <!-- Embedded text data payloads (read synchronously by application) -->
+  <script type="text/plain" id="amiyo-setup-stub-src">
 /* Amiyo Editor - Windows setup stub (32-bit and 64-bit builds share this file).
    Layout of the finished setup.exe:  [this program][payload][trailer]
    payload = version(32) | sha256(32) | htmlLen(u32) | iconLen(u32) | html | icon
@@ -489,7 +556,7 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE hp, LPWSTR cmd, int show) {
 
 </script>
 
-<script type="text/plain" id="amiyo-lame-src">/* lamejs 1.2.1 — https://github.com/zhuker/lamejs — LGPL-3.0, unmodified. Built in so MP3 export works offline. */
+  <script type="text/plain" id="amiyo-lame-src">/* lamejs 1.2.1 — https://github.com/zhuker/lamejs — LGPL-3.0, unmodified. Built in so MP3 export works offline. */
 function lamejs(){function X(c){return new Int32Array(c)}function K(c){return new Float32Array(c)}function ca(c){if(1==c.length)return K(c[0]);var k=c[0];c=c.slice(1);for(var n=[],u=0;u<k;u++)n.push(ca(c));return n}function Ia(c){if(1==c.length)return X(c[0]);var k=c[0];c=c.slice(1);for(var n=[],u=0;u<k;u++)n.push(Ia(c));return n}function dc(c){if(1==c.length)return new Int16Array(c[0]);var k=c[0];c=c.slice(1);for(var n=[],u=0;u<k;u++)n.push(dc(c));return n}function Ob(c){if(1==c.length)return Array(c[0]);
 var k=c[0];c=c.slice(1);for(var n=[],u=0;u<k;u++)n.push(Ob(c));return n}function ra(c){this.ordinal=c}function G(c){this.ordinal=c}function la(c){this.ordinal=function(){return c}}function mc(){this.getLameVersion=function(){return"3.98.4"};this.getLameShortVersion=function(){return"3.98.4"};this.getLameVeryShortVersion=function(){return"LAME3.98r"};this.getPsyVersion=function(){return"0.93"};this.getLameUrl=function(){return"http://www.mp3dev.org/"};this.getLameOsBitness=function(){return"32bits"}}
 function Y(){function c(f,b,c,a,m,k){for(;0!=m--;)c[a]=1E-10+f[b+0]*k[0]-c[a-1]*k[1]+f[b-1]*k[2]-c[a-2]*k[3]+f[b-2]*k[4]-c[a-3]*k[5]+f[b-3]*k[6]-c[a-4]*k[7]+f[b-4]*k[8]-c[a-5]*k[9]+f[b-5]*k[10]-c[a-6]*k[11]+f[b-6]*k[12]-c[a-7]*k[13]+f[b-7]*k[14]-c[a-8]*k[15]+f[b-8]*k[16]-c[a-9]*k[17]+f[b-9]*k[18]-c[a-10]*k[19]+f[b-10]*k[20],++a,++b}function k(f,b,c,a,m,k){for(;0!=m--;)c[a]=f[b+0]*k[0]-c[a-1]*k[1]+f[b-1]*k[2]-c[a-2]*k[3]+f[b-2]*k[4],++a,++b}function n(f){return f*f}var V=Y.RMS_WINDOW_TIME_NUMERATOR,
@@ -800,33 +867,34 @@ a.length>D&&(D=a.length,p=0|1.25*D+7200,r=new Int8Array(p));a=u.lame_encode_buff
 
 </script>
 
-<!-- Application Modules (1,677 scripts organized into modules) -->
-<script src="js/02-ux3-system.js?v=1.0.3"></script>
-<script src="js/03-editor-core.js?v=1.0.3"></script>
-<script src="js/04-editor-tools.js?v=1.0.3"></script>
-<script src="js/05-ai-features.js?v=1.0.3"></script>
-<script src="js/06-range-fx.js?v=1.0.3"></script>
-<script src="js/07-storage-export.js?v=1.0.3"></script>
-<script src="js/08-audio-lab.js?v=1.0.3"></script>
-<script src="js/09-pro-davinci.js?v=1.0.3"></script>
-<script src="js/10-filmora-opt.js?v=1.0.3"></script>
-<script src="js/11-screen-touch.js?v=1.0.3"></script>
-<script>
-(function(){
-  function initTopCaps(){
-    var b = document.getElementById('topCaptionsBtn');
-    if (!b) return;
-    b.onclick = function(){
-      var cp = document.querySelector('[data-panel="captions"]');
-      if (cp) cp.click();
-    };
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTopCaps);
-  } else {
-    initTopCaps();
-  }
-})();
-</script>
+  <!-- Application Modules (1,677 scripts organized into modules) -->
+  <script src="js/02-ux3-system.js?v=1.0.3"></script>
+  <script src="js/03-editor-core.js?v=1.0.3"></script>
+  <script src="js/04-editor-tools.js?v=1.0.3"></script>
+  <script src="js/05-ai-features.js?v=1.0.3"></script>
+  <script src="js/06-range-fx.js?v=1.0.3"></script>
+  <script src="js/07-storage-export.js?v=1.0.3"></script>
+  <script src="js/08-audio-lab.js?v=1.0.3"></script>
+  <script src="js/09-pro-davinci.js?v=1.0.3"></script>
+  <script src="js/10-filmora-opt.js?v=1.0.3"></script>
+  <script src="js/11-screen-touch.js?v=1.0.3"></script>
+  <script>
+    (function () {
+      function initTopCaps() {
+        var b = document.getElementById('topCaptionsBtn');
+        if (!b) return;
+        b.onclick = function () {
+          var cp = document.querySelector('[data-panel="captions"]');
+          if (cp) cp.click();
+        };
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTopCaps);
+      } else {
+        initTopCaps();
+      }
+    })();
+  </script>
 </body>
+
 </html>

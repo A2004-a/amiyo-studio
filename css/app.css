@@ -5068,25 +5068,36 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   width: 100vw !important;
   height: 100vh !important;
   display: grid !important;
-  grid-template-rows: 48px minmax(0, 1fr) 26px !important;
+  grid-template-rows: 28px 46px minmax(0, 1fr) 26px !important;
   grid-template-columns: 100% !important;
   overflow: hidden !important;
   background: #0a0907 !important;
 }
 
-/* Row 1: Header Topbar Locked to Row 1 */
-html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body .app > header.topbar {
+html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body .app > #pp5Menu {
   grid-row: 1 / 2 !important;
   grid-column: 1 / -1 !important;
-  height: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
   overflow: hidden !important;
 }
 
-/* Row 2: Workspace Locked to Row 2 (Never squeezed) */
-html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body:not(.am-fs) .app > :is(main, .workspace, #amiyoMain) {
+/* Row 2: Header Topbar Locked to Row 2 */
+html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body .app > header.topbar {
   grid-row: 2 / 3 !important;
+  grid-column: 1 / -1 !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  overflow: hidden !important;
+}
+
+/* Row 3: Workspace Locked to Row 3 (Never squeezed) */
+html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body:not(.am-fs) .app > :is(main, .workspace, #amiyoMain) {
+  grid-row: 3 / 4 !important;
   grid-column: 1 / -1 !important;
   height: 100% !important;
   min-height: 0 !important;
@@ -5094,9 +5105,9 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   overflow: hidden !important;
 }
 
-/* Row 3: Bottom Status Bar Locked to Row 3 */
+/* Row 4: Bottom Status Bar Locked to Row 4 */
 html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body:not(.am-fs) .app > :is(#footerBar, #oneBar, .status-bar, footer) {
-  grid-row: 3 / 4 !important;
+  grid-row: 4 / 5 !important;
   grid-column: 1 / -1 !important;
   height: 26px !important;
   min-height: 26px !important;
@@ -5105,7 +5116,7 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
 }
 
 /* Permanently eliminate mobile bottom bar and rogue overlays on desktop */
-html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body :is(#mbar, nav.mbar, .mbar, #pp5Menu, .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess, #amFocusX) {
+html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(#amz7):not(#amz8):not(#amz9):not(#amz10):not(#amz11):not(#amz12):not(#amz13):not(#amz14):not(#amz15):not(#amz16):not(#amz17):not(#amz18):not(#amz19):not(#amz20):not(#amz21):not(#amz22):not(#amz23):not(#amz24):not(#amz25):not(#amz26):not(#amz27):not(#amz28):not(#amz29):not(#amz30):not(#amz31):not(#amz32):not(#amz33):not(#amz34):not(#amz35):not(#amz36):not(#amz37):not(#amz38):not(#amz39):not(#amz40):not(#amz41):not(#amz42):not(#amz43):not(#amz44):not(#amz45):not(#amz46):not(#amz47):not(#amz48):not(#amz49):not(#amz50):not(#amz51):not(#amz52):not(#amz53):not(#amz54):not(#amz55):not(#amz56):not(#amz57):not(#amz58):not(#amz59):not(#amz60):not(#amz61):not(#amz62):not(#amz63):not(#amz64):not(#amz65):not(#amz66):not(#amz67):not(#amz68):not(#amz69):not(#amz70):not(#amz71):not(#amz72):not(#amz73):not(#amz74):not(#amz75):not(#amz76):not(#amz77):not(#amz78):not(#amz79):not(#amz80):not(#amz81):not(#amz82):not(#amz83):not(#amz84):not(#amz85):not(#amz86):not(#amz87):not(#amz88):not(#amz89):not(#amz90):not(#amz91):not(#amz92):not(#amz93):not(#amz94):not(#amz95):not(#amz96):not(#amz97):not(#amz98):not(#amz99):not(#amz100):not(#amz101):not(#amz102):not(#amz103):not(#amz104):not(#amz105):not(#amz106):not(#amz107):not(#amz108):not(#amz109):not(#amz110):not(#amz111):not(#amz112):not(#amz113):not(#amz114):not(#amz115):not(#amz116):not(#amz117):not(#amz118):not(#amz119):not(#amz120):not(#amz121):not(#amz122):not(#amz123):not(#amz124):not(#amz125):not(#amz126):not(#amz127):not(#amz128):not(#amz129):not(#amz130):not(#amz131):not(#amz132):not(#amz133):not(#amz134):not(#amz135):not(#amz136):not(#amz137):not(#amz138):not(#amz139):not(#amz140):not(#amz141):not(#amz142):not(#amz143):not(#amz144):not(#amz145):not(#amz146):not(#amz147):not(#amz148):not(#amz149):not(#amz150):not(#amz151):not(#amz152):not(#amz153):not(#amz154):not(#amz155):not(#amz156):not(#amz157):not(#amz158):not(#amz159):not(#amz160):not(#amz161):not(#amz162):not(#amz163):not(#amz164):not(#amz165):not(#amz166):not(#amz167):not(#amz168):not(#amz169):not(#amz170):not(#amz171):not(#amz172):not(#amz173):not(#amz174):not(#amz175):not(#amz176):not(#amz177):not(#amz178):not(#amz179):not(#amz180):not(#amz181):not(#amz182):not(#amz183):not(#amz184):not(#amz185):not(#amz186):not(#amz187):not(#amz188):not(#amz189):not(#amz190):not(#amz191):not(#amz192):not(#amz193):not(#amz194):not(#amz195):not(#amz196):not(#amz197):not(#amz198):not(#amz199):not(#amz200):not(#amz201):not(#amz202):not(#amz203):not(#amz204):not(#amz205):not(#amz206):not(#amz207):not(#amz208):not(#amz209):not(#amz210):not(#amz211):not(#amz212):not(#amz213):not(#amz214):not(#amz215):not(#amz216):not(#amz217):not(#amz218):not(#amz219):not(#amz220):not(#amz221):not(#amz222):not(#amz223):not(#amz224):not(#amz225):not(#amz226):not(#amz227):not(#amz228):not(#amz229):not(#amz230):not(#amz231):not(#amz232):not(#amz233):not(#amz234):not(#amz235):not(#amz236):not(#amz237):not(#amz238):not(#amz239):not(#amz240):not(#amz241):not(#amz242):not(#amz243):not(#amz244):not(#amz245):not(#amz246):not(#amz247):not(#amz248):not(#amz249):not(#amz250):not(#amz251):not(#amz252):not(#amz253):not(#amz254):not(#amz255):not(#amz256):not(#amz257):not(#amz258):not(#amz259):not(#amz260):not(#amz261):not(#amz262):not(#amz263):not(#amz264):not(#amz265):not(#amz266):not(#amz267):not(#amz268):not(#amz269):not(#amz270):not(#amz271):not(#amz272):not(#amz273):not(#amz274):not(#amz275):not(#amz276):not(#amz277):not(#amz278):not(#amz279):not(#amz280):not(#amz281):not(#amz282):not(#amz283):not(#amz284):not(#amz285):not(#amz286):not(#amz287):not(#amz288):not(#amz289):not(#amz290):not(#amz291):not(#amz292):not(#amz293):not(#amz294):not(#amz295):not(#amz296):not(#amz297):not(#amz298):not(#amz299):not(#amz300) body :is(#mbar, nav.mbar, .mbar, .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess, #amFocusX) {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -5361,7 +5372,7 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
   #amTourLink, #tourMenuBtn, #tourBtn,
   #aiCmdBtn, #testBtn, #amQaBtn,
   #amiyoCaptionsBtn, #p4s2CaptionsBtn,
-  #ui20Ws, #amOneRow, #ppWs, #wsBtn, #pp5Menu,
+  #amOneRow, #ppWs, #wsBtn,
   #pvSizes, .pv-sizes, #amiyoCrashBar,
   #agentBtn, #storageBtn, #renderQueueBtn,
   .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess
@@ -6024,27 +6035,70 @@ html:root:not(#amz1):not(#amz2):not(#amz3):not(#amz4):not(#amz5):not(#amz6):not(
 
 
 /* === AMYIO DEFINITIVE WORKSPACE GRID & TOPBAR FIX v2.0 === */
-/* 1. Root .app Layout */
+/* 1. Root .app 4-Row Grid Layout (Row 1: Menu bar, Row 2: Top bar, Row 3: Workspace, Row 4: Status footer) */
 html:root body > .app,
 html body .app {
   display: grid !important;
-  grid-template-rows: 48px minmax(0, 1fr) 26px !important;
+  grid-template-rows: 28px 46px minmax(0, 1fr) 26px !important;
   height: 100vh !important;
   max-height: 100vh !important;
   overflow: hidden !important;
 }
 
-/* 2. Topbar Clean Layout */
+/* Row 1: Real Menu Bar (#pp5Menu) */
+html body #pp5Menu {
+  grid-row: 1 / 2 !important;
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 28px !important;
+  max-height: 28px !important;
+  background: #080706 !important;
+  border-bottom: 1px solid #1f1b16 !important;
+  padding: 0 10px !important;
+  font-size: 11.5px !important;
+  color: #b0a89c !important;
+  z-index: 100 !important;
+  user-select: none !important;
+  overflow: hidden !important;
+}
+html body #pp5Menu .m {
+  height: 28px !important;
+  padding: 0 9px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #b0a89c !important;
+  font-size: 11.5px !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+html body #pp5Menu .m:hover,
+html body #pp5Menu .m.open {
+  background: #1f1b16 !important;
+  color: #ffffff !important;
+}
+html body #pp5Menu .sp {
+  flex: 1 1 auto !important;
+}
+html body #pp5Menu .st {
+  font-size: 11.5px !important;
+  color: #8c8477 !important;
+  padding-right: 8px !important;
+  white-space: nowrap !important;
+}
+
+/* Row 2: Topbar Clean Layout */
 html:root body > .app > header.topbar,
 html body .topbar {
-  grid-row: 1 / 2 !important;
-  height: 48px !important;
-  max-height: 48px !important;
-  min-height: 48px !important;
+  grid-row: 2 / 3 !important;
+  height: 46px !important;
+  max-height: 46px !important;
+  min-height: 46px !important;
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  padding: 0 16px !important;
+  padding: 0 12px !important;
   background: #0d0c0a !important;
   border-bottom: 1px solid #24201a !important;
   overflow: hidden !important;
@@ -6056,12 +6110,12 @@ html body .topbar .brand {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  min-width: 140px !important;
+  min-width: 120px !important;
   flex: 0 0 auto !important;
 }
 html body .topbar #projectName {
   order: 2 !important;
-  width: 140px !important;
+  width: 130px !important;
   flex: 0 0 auto !important;
 }
 html body .topbar #saveStatus {
@@ -6071,141 +6125,109 @@ html body .topbar #saveStatus {
   flex: 0 0 auto !important;
   margin: 0 4px !important;
 }
-html body .topbar #vsThemeBtn,
-html body .topbar #vsColorBtn {
+
+/* Topbar Workspaces Tabs (#ui20Ws) */
+html body .topbar #ui20Ws {
   order: 4 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  margin: 0 auto !important;
+  flex: 0 1 auto !important;
+  height: 36px !important;
+}
+html body #ui20Ws > button:not(.add) {
+  height: 32px !important;
+  padding: 0 12px !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: #9c9486 !important;
+  cursor: pointer !important;
+  border-radius: 4px !important;
+  position: relative !important;
+  white-space: nowrap !important;
+}
+html body #ui20Ws > button:not(.add):hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+html body #ui20Ws > button:not(.add)[aria-selected="true"],
+html body #ui20Ws > button:not(.add).active {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+html body #ui20Ws > button:not(.add)[aria-selected="true"]::after,
+html body #ui20Ws > button:not(.add).active::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 0px !important;
+  height: 2px !important;
+  background: #ff7a2f !important;
+  border-radius: 2px 2px 0 0 !important;
+}
+
+html body #ppInspTabs > button:not([data-t="p7kw"]):not([data-t="p7ro"]):not([data-t="p7ed"]):not([data-t="tools"]),
+html body #ppInspTabs > button[data-t="fx"],
+html body #ui20PtR {
+  display: none !important;
+}
+html body #ui20Ws > button.add {
+  display: none !important;
+}
+
+/* Topbar Right Actions */
+html body .topbar #vsThemeBtn {
+  order: 5 !important;
   flex: 0 0 auto !important;
   width: 28px !important;
   height: 28px !important;
-}
-html body .topbar #nleKeymapProfile {
-  order: 5 !important;
-  width: auto !important;
-  max-width: 130px !important;
-  flex: 0 0 auto !important;
-  height: 26px !important;
-}
-html body .topbar .top-spacer {
-  order: 6 !important;
-  flex: 1 1 auto !important;
 }
 html body .topbar #exportBtn {
-  order: 7 !important;
-  flex: 0 0 auto !important;
-  background: #ff7a3d !important;
-  color: #1a0c03 !important;
-  font-weight: 700 !important;
-  border-radius: 6px !important;
-  padding: 6px 18px !important;
-  box-shadow: 0 4px 12px rgba(255,122,61,0.3) !important;
-  cursor: pointer !important;
-  border: none !important;
-}
-html body #uxQuick {
-  order: 8 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  position: static !important;
-  margin-left: 12px !important;
-  flex: 0 0 auto !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-html body #uxQuick button {
-  background: transparent !important;
-  border: none !important;
-  color: #9c9284 !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  padding: 4px 6px !important;
-}
-html body #uxQuick button:hover {
-  color: #ffc06a !important;
-}
-html body #uxQuick button.uxcc {
-  color: #ffc06a !important;
-}
-/* 2. Topbar Action Buttons: Export + Clean Text Links matching reference design */
-html body .topbar {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  padding: 0 12px !important;
-  overflow: visible !important;
-}
-
-html body .topbar > .top-spacer {
-  flex: 1 1 auto !important;
-  order: 5 !important;
-  min-width: 8px !important;
-}
-
-html body .topbar > #undoBtn {
   order: 6 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   flex: 0 0 auto !important;
-  height: 28px !important;
-  width: 28px !important;
-  padding: 0 !important;
-  margin: 0 2px !important;
-}
-
-html body .topbar > #redoBtn {
-  order: 7 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  flex: 0 0 auto !important;
-  height: 28px !important;
-  width: 28px !important;
-  padding: 0 !important;
-  margin: 0 2px !important;
-}
-
-html body .topbar > #exportBtn {
-  position: relative !important;
-  right: auto !important;
-  order: 8 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #ff7a30 !important;
+  background: #ff7a2f !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  border-radius: 6px !important;
-  padding: 0 16px !important;
-  height: 30px !important;
-  min-height: 30px !important;
-  border: none !important;
-  cursor: pointer !important;
-  z-index: 10 !important;
   font-size: 13px !important;
-  box-shadow: 0 2px 10px rgba(255, 122, 48, 0.35) !important;
-  margin: 0 6px !important;
-  flex: 0 0 auto !important;
+  border-radius: 6px !important;
+  padding: 6px 18px !important;
+  box-shadow: 0 2px 8px rgba(255, 122, 47, 0.35) !important;
+  cursor: pointer !important;
+  border: none !important;
+  margin-left: 8px !important;
+}
+html body .topbar #exportBtn:hover {
+  background: #ff8e4d !important;
 }
 
 html body .topbar > #topCaptionsBtn {
-  order: 9 !important;
+  order: 7 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   height: 28px !important;
   font-size: 13px !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   padding: 0 8px !important;
   background: transparent !important;
-  color: #ffc06a !important;
+  color: #b8b0a2 !important;
   border: none !important;
   border-radius: 4px !important;
   cursor: pointer !important;
   flex: 0 0 auto !important;
 }
+
+html body .topbar > #versionsBtn { order: 8 !important; }
+html body .topbar > #shareBtn    { order: 9 !important; }
+html body .topbar > #settingsBtn { order: 10 !important; }
+html body .topbar > #helpBtn     { order: 11 !important; }
 
 html body .topbar > :is(#versionsBtn, #shareBtn, #settingsBtn, #helpBtn) {
   display: inline-flex !important;
@@ -6223,17 +6245,12 @@ html body .topbar > :is(#versionsBtn, #shareBtn, #settingsBtn, #helpBtn) {
   flex: 0 0 auto !important;
 }
 
-html body .topbar > #versionsBtn { order: 10 !important; }
-html body .topbar > #shareBtn    { order: 11 !important; }
-html body .topbar > #settingsBtn { order: 12 !important; }
-html body .topbar > #helpBtn     { order: 13 !important; }
-
 html body .topbar > :is(#topCaptionsBtn, #versionsBtn, #shareBtn, #settingsBtn, #helpBtn):hover {
   color: #ffffff !important;
 }
 
 /* Hide clutter buttons from topbar */
-html body .topbar > :is(#agentBtn, #amQaBtn, #storageBtn, #renderQueueBtn, #ui20More, #pr2Ws, #amiyoUpgradeTools, #amiyoProToolbar, #amiyoSequenceWrap, #shortcutsBtn, #batchBtn, #importHubBtn, #audioExportBtn, #gifExportBtn, #aspectSel) {
+html body .topbar > :is(#agentBtn, #amQaBtn, #storageBtn, #renderQueueBtn, #ui20More, #pr2Ws, #undoBtn, #redoBtn, #nleKeymapProfile, #uxQuick, #vsColorBtn, #amiyoUpgradeTools, #amiyoProToolbar, #amiyoSequenceWrap, #shortcutsBtn, #batchBtn, #importHubBtn, #audioExportBtn, #gifExportBtn, #aspectSel) {
   display: none !important;
 }
 
@@ -6294,6 +6311,12 @@ html body #ppInspTabs > button.active::after {
   border-radius: 2px 2px 0 0 !important;
 }
 
+html body #ppInspTabs > button:not([data-t="p7kw"]):not([data-t="p7ro"]):not([data-t="p7ed"]):not([data-t="tools"]),
+html body #ppInspTabs > button[data-t="fx"],
+html body #ui20PtR {
+  display: none !important;
+}
+
 /* Inspector Dock vs Controls Display */
 html body #inspectorCol.pp6-dock-on #inspector,
 html body #inspectorCol.pp6-dock-on #amiyoProInspector {
@@ -6320,6 +6343,80 @@ html body #inspectorCol.pp-tab-tools #amiyoProInspector {
 html body #inspectorCol.pp-tab-tools #inspector,
 html body #inspectorCol.pp-tab-tools #pp6Dock {
   display: none !important;
+}
+
+/* Professional Editing Inspector Panel Styles matching reference Image 2 */
+html body #amiyoProInspector {
+  padding: 10px 12px !important;
+  background: #100f0c !important;
+}
+html body #amiyoProInspector h3 {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #9c9486 !important;
+  margin: 0 0 6px !important;
+}
+html body #proStatus {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: #b0a89c !important;
+  margin-bottom: 8px !important;
+}
+html body #pngAddBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #ff7a2f !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 12.5px !important;
+  border-radius: 6px !important;
+  padding: 7px 16px !important;
+  margin: 4px 0 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(255, 122, 47, 0.3) !important;
+}
+html body #pngAddBtn:hover {
+  background: #ff8e4d !important;
+}
+html body #proSearch {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #14120e !important;
+  border: 1px solid #2d261e !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  margin-bottom: 4px !important;
+}
+html body #proSearch:focus {
+  border-color: #ff7a2f !important;
+  outline: none !important;
+}
+html body #proKeyHint {
+  font-size: 10.5px !important;
+  color: #8c8477 !important;
+  margin-bottom: 8px !important;
+}
+html body #proKeyHint kbd {
+  background: #1f1b16 !important;
+  border: 1px solid #362e24 !important;
+  border-radius: 3px !important;
+  padding: 1px 4px !important;
+  font-size: 10px !important;
+  color: #b0a89c !important;
+}
+html body .timeline-toolbar #snapToggle.tool-active,
+html body .timeline-toolbar #snapToggle[aria-pressed="true"],
+html body .timeline-toolbar #snapToggle.on {
+  background: #ff7a2f !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
 }
 
 /* Timeline Toolbar: Clean width without horizontal clipping or gutter bleed */
@@ -6474,7 +6571,7 @@ html:root body > .app > :is(#footerBar, #oneBar, .status-bar, footer) {
 }
 
 /* 7. Hide Rogue and Mobile Elements */
-html body :is(#mbar, nav.mbar, .mbar, #pp5Menu, .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess, #amFocusX) {
+html body :is(#mbar, nav.mbar, .mbar, .am-menus, .am-ws, #amCmdBtn, #seqExportBtn, #amSess, #amFocusX) {
   display: none !important;
   visibility: hidden !important;
   width: 0 !important;

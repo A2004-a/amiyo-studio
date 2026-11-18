@@ -7881,7 +7881,7 @@ function init(){
       b.addEventListener('click',function(){show(t)});
     }
   }
-  tab('fx','Effect Controls');tab('tools','Tools');
+  tab('tools','TOOLS');
   function show(t){
     col.classList.toggle('pp-tab-fx',t==='fx');col.classList.toggle('pp-tab-tools',t==='tools');
     if(t==='fx'||t==='tools') col.classList.remove('pp6-dock-on');
@@ -7890,9 +7890,9 @@ function init(){
   }
   var had=null;
   function sync(){var has=!/Select a clip to edit/i.test(ins.textContent||'');col.classList.toggle('pp-has-clip',has);
-   if(has!==had){had=has;show('fx')}}
+   if(has!==had){had=has;}}
   new MutationObserver(function(){requestAnimationFrame(sync)}).observe(ins,{childList:true,subtree:true,characterData:true});
-  sync();show('fx');
+  sync();show('tools');
   return true;
 }
 var n=0;(function t(){if(init()||n++>60)return;setTimeout(t,200)})();

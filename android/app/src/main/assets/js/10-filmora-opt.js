@@ -1742,18 +1742,20 @@ sets.forEach(function(ids){var els=ids.map(function(i){return document.getElemen
 
 ;
 /* ==================== Script 1443 id="amiyo-ui20-s06" ==================== */
-(function(){try{ return; // Disabled: #ui20Ws workspace tabs in topbar
+(function(){try{
 var api=window.AMIYO_PR2_S08,app=document.querySelector('.app'),top=document.querySelector('header.topbar');
-if(!api||!app||!top||document.getElementById('ui20Ws'))return;
-var bar=document.createElement('div');bar.id='ui20Ws';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Workspaces');
-top.parentNode.insertBefore(bar,top.nextSibling);
+if(!api||!app||!top)return;
+var bar=document.getElementById('ui20Ws');
+if(!bar){
+  bar=document.createElement('div');bar.id='ui20Ws';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Workspaces');
+  top.appendChild(bar);
+}
 function label(k){return k.indexOf('my:')===0?'\u2605 '+k.slice(3):k.charAt(0).toUpperCase()+k.slice(1)}
 var cur='editing';
 function build(){bar.innerHTML='';
- api.names().forEach(function(k){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=label(k);b.setAttribute('aria-selected',k===cur?'true':'false');
+ api.names().filter(function(k){return ['editing','assembly','color','audio','effects'].indexOf(k)>=0||k.indexOf('my:')===0}).forEach(function(k){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=label(k);b.setAttribute('aria-selected',k===cur?'true':'false');
   b.addEventListener('click',function(){cur=k;try{api.pick(k)}catch(e){}build()});bar.appendChild(b)});
- var a=document.createElement('button');a.type='button';a.className='add';a.textContent='\uFF0B';a.title='Save current layout as a workspace';a.setAttribute('aria-label','Save current layout as a workspace');
- a.addEventListener('click',function(){try{api.save()}catch(e){}setTimeout(build,50)});bar.appendChild(a)}
+}
 build();
 
 }catch(e){try{console.warn("ui20-s06",e)}catch(_){}}})();
@@ -1764,7 +1766,7 @@ build();
 var side=document.querySelector('.sidebar'),insp=document.getElementById('inspector'),tl=document.querySelector('.timeline');
 function mk(id,t,r){var d=document.createElement('div');d.className='ui20-ptitle';d.id=id;d.innerHTML='<span class="t"></span><span class="dim"></span>';d.firstChild.textContent=t;d.lastChild.textContent=r||'';return d}
 if(side&&!document.getElementById('ui20PtL')){var h=mk('ui20PtL','Project');side.insertBefore(h,side.firstChild)}
-if(insp&&!document.getElementById('ui20PtR')){var h2=mk('ui20PtR','Effect Controls');insp.parentNode.insertBefore(h2,insp)}
+/* ui20PtR removed to match reference inspector layout */
 if(tl&&!document.getElementById('ui20PtT')){var h3=mk('ui20PtT','Timeline','');tl.insertBefore(h3,tl.firstChild)}
 var nm={media:'Project: Media',templates:'Project: Templates',audio:'Audio',text:'Text',captions:'Captions',stickers:'Stickers',graphics:'Essential Graphics',transitions:'Transitions',filters:'Filters',color:'Color',effects:'Effects',animations:'Animations',brand:'Brand Kit',record:'Record',ai:'AI Studio',stock:'Stock Media',elements:'Elements',multicam:'Multicam'};
 function upd(){var a=document.querySelector('.navbtn.active'),l=document.querySelector('#ui20PtL .t');
@@ -3260,12 +3262,12 @@ var F='amiyo-pp4-s10';try{if(localStorage.getItem(F))return;localStorage.setItem
   }
  }catch(e){try{console.warn('pp5-s01',e)}catch(_){}}
 }
-if(document.readyState==='complete')setTimeout(go,900);else addEventListener('load',function(){setTimeout(go,900)});})();
+if(document.readyState==='complete')setTimeout(go,50);else addEventListener('load',function(){setTimeout(go,50)});})();
 
 ;
 /* ==================== Script 1531 id="amiyo-pp5-s02" ==================== */
 /* Premiere-style PP5 step 2: a real menu bar (File Edit Clip Sequence Markers Graphics View Window Help) and a top bar that no longer hides workspace tabs. */
-(function(){var n=0;function go(){ return; // Disabled pp5-s02 menu and topbar overrides
+(function(){var n=0;function go(){
 
  var app=document.querySelector('.app'),top=document.querySelector('header.topbar');
  if(!(app&&top&&document.getElementById('amiyoMain'))){if(n++<150)return setTimeout(go,100);return}
@@ -3293,7 +3295,12 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
    {n:'Window',items:function(){var a=[{h:'Workspaces'}];wsButtons().forEach(function(b){a.push({l:b.textContent.trim(),chk:b.getAttribute('aria-selected')==='true',f:function(){b.click()}})});a.push(S,B('Versions','versionsBtn'),B('Captions','amiyoCaptions'),B('Settings','settingsBtn'));return a}},
    {n:'Help',items:function(){return [B('Help and shortcuts','helpBtn','F1'),B('Keyboard shortcuts','shortcutsBtn')]}}
   ];
-  var bar=document.createElement('div');bar.id='pp5Menu';bar.setAttribute('role','menubar');bar.setAttribute('aria-label','Menu bar');
+  var bar=document.getElementById('pp5Menu');
+  if(!bar){
+    bar=document.createElement('div');bar.id='pp5Menu';bar.setAttribute('role','menubar');bar.setAttribute('aria-label','Menu bar');
+    app.insertBefore(bar,app.firstChild);
+  }
+  bar.innerHTML='';
   var pop=document.createElement('div');pop.id='pp5Pop';pop.setAttribute('role','menu');document.body.appendChild(pop);
   var btns=[],cur=-1,foc=-1;
   MENUS.forEach(function(m,i){var b=document.createElement('button');b.type='button';b.className='m';b.textContent=m.n;b.setAttribute('role','menuitem');b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
@@ -3301,12 +3308,10 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
    b.addEventListener('mouseenter',function(){if(cur>-1&&cur!==i)open(i)});
    bar.appendChild(b);btns.push(b)});
   var sp=document.createElement('span');sp.className='sp';bar.appendChild(sp);
-  var st=document.createElement('span');st.className='st';st.id='pp5MenuSt';st.textContent='Amiyo Studio';bar.appendChild(st);
-  // pp5Menu disabled to preserve clean single-row header and optimal workspace
-  bar.style.display="none";
+  var st=document.createElement('span');st.className='st';st.id='pp5MenuSt';st.textContent='Untitled Video';bar.appendChild(st);
   function rowsFix(){var big=innerWidth>=768&&innerHeight>=500;
-   if(big){app.style.setProperty('grid-template-rows','56px minmax(0,1fr) auto','important');
-    [['header.topbar',2],['#amiyoMain',3],['#oneBar',4]].forEach(function(a){var e=app.querySelector(':scope>'+a[0]);if(e)e.style.setProperty('grid-row',String(a[1]),'important')});bar.style.setProperty('grid-row','1','important')}
+   if(big){app.style.setProperty('grid-template-rows','28px 46px minmax(0,1fr) 26px','important');
+    [['#pp5Menu',1],['header.topbar',2],['#amiyoMain',3],['#oneBar',4]].forEach(function(a){var e=app.querySelector(':scope>'+a[0]);if(e)e.style.setProperty('grid-row',String(a[1]),'important')});bar.style.setProperty('grid-row','1','important')}
    else{app.style.removeProperty('grid-template-rows');['header.topbar','#amiyoMain','#oneBar'].forEach(function(a){var e=app.querySelector(':scope>'+a);if(e)e.style.removeProperty('grid-row')})}}
   rowsFix();addEventListener('resize',rowsFix);
   /* the menu row changed the height; if the timeline size is still our own seed (never dragged), re-seed at 60% */
@@ -3369,7 +3374,7 @@ if(document.readyState==='complete')setTimeout(go,900);else addEventListener('lo
   nm();var pn=$('projectName');if(pn)pn.addEventListener('input',nm);
  }catch(e){try{console.warn('pp5-s02',e)}catch(_){}}
 }
-if(document.readyState==='complete')setTimeout(go,900);else addEventListener('load',function(){setTimeout(go,900)});})();
+if(document.readyState==='complete')setTimeout(go,50);else addEventListener('load',function(){setTimeout(go,50)});})();
 
 ;
 /* ==================== Script 1532 id="amiyo-pp5-s03" ==================== */
@@ -3848,7 +3853,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    var st=document.createElement('style'); st.id='amiyo-pp6-s05-css'; st.textContent=css; document.head.appendChild(st);
    var dock=document.getElementById('pp6Dock')||document.createElement('div'); dock.id='pp6Dock'; dock.setAttribute('role','tabpanel');
    if(!dock.parentNode) col.insertBefore(dock,ins);
-   var TABS=[['pp6fx','Effects'],['pp6gfx','Essential Graphics'],['pp6lum','Lumetri Color'],['pp6lib','Libraries']];
+   var TABS=[['p7kw','WORDS'],['p7ro','ROLES'],['p7ed','EDIT']];
    var cur=null, q='', NOREF={pp6fx:1,pp6lib:1};
    function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}); }
    function toastS(m){ try{toast(m)}catch(e){} }
@@ -3951,7 +3956,7 @@ if(document.readyState==='complete')setTimeout(go,1200);else addEventListener('l
    var last='';
    setInterval(function(){ if(!cur||NOREF[cur]) return; if(dock.contains(document.activeElement)&&document.activeElement.tagName!=='BUTTON') return;
     var sig=''; try{ sig=String(selectedClipId)+'|'+clipsSel().length; }catch(e){} if(sig!==last){ last=sig; render(); } },500);
-   window.AMIYO_PP6.openTab=openTab; window.AMIYO_PP6.current=function(){return cur}; window.AMIYO_PP6.render=render; window.AMIYO_PP6.setView=function(id,h,b,nr){ VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; }; window.AMIYO_PP6.addTab=function(id,label,h,b,nr){ if(!VIEWS[id]) TABS.push([id,label]); VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; build(); };
+   window.AMIYO_PP6.openTab=openTab; window.AMIYO_PP6.current=function(){return cur}; window.AMIYO_PP6.render=render; window.AMIYO_PP6.setView=function(id,h,b,nr){ VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; }; window.AMIYO_PP6.addTab=function(id,label,h,b,nr){ if(['p7kw','p7ro','p7ed','tools'].indexOf(id)<0) return; if(!VIEWS[id]) TABS.push([id,label]); VIEWS[id]=[h,b]; if(nr) NOREF[id]=1; build(); };
   }catch(e){ try{console.warn('pp6-s05',e)}catch(_){} }
  }
  go(); if(document.readyState==='complete') setTimeout(go,100); else addEventListener('DOMContentLoaded',function(){ go(); setTimeout(go,100); });
@@ -5025,14 +5030,14 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
   try{
    if(window.__p7s05) return; window.__p7s05=1; window.AMIYO_P7=window.AMIYO_P7||{}; window.AMIYO_P7.step=5;
    try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s&&s.mode) F=s; }catch(e){}
-   P.addTab('p7kw','Keywords',html,bind,true);
+   P.addTab('p7kw','WORDS',html,bind,true);
    var lp=document.getElementById('leftPanel');
    lp.addEventListener('click',function(e){ var el=e.target.closest&&e.target.closest('.asset[data-asset]'); if(!el) return; selId=el.getAttribute('data-asset'); sched(); if(P.current&&P.current()==='p7kw') setTimeout(P.render,30); },true);
    new MutationObserver(sched).observe(lp,{childList:true,subtree:true});
    deco(); window.AMIYO_P7.keywords={filter:F,setFav:setFav,addKw:addKw,all:allKw};
   }catch(e){ try{console.warn('p7-s05',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,2500); else addEventListener('load',function(){ setTimeout(go,2500); });
+ if(document.readyState==='complete') setTimeout(go,150); else addEventListener('load',function(){ setTimeout(go,150); });
 })();
 
 ;
@@ -5084,13 +5089,13 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
   try{
    if(window.__p7s06) return; window.__p7s06=1; window.AMIYO_P7=window.AMIYO_P7||{}; window.AMIYO_P7.step=6;
    var cs=document.createElement('style'); cs.textContent='#tracks .clip[data-p7r]::before{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--p7r);pointer-events:none;z-index:2;opacity:.95}'; document.head.appendChild(cs);
-   P.addTab('p7ro','Roles',html,bind,true);
+   P.addTab('p7ro','ROLES',html,bind,true);
    var tr=document.getElementById('tracks'); new MutationObserver(function(){ if(!q) q=requestAnimationFrame(paint); }).observe(tr,{childList:true,subtree:true}); paint();
    if(window.amiyoClipMenu&&window.amiyoClipMenu.register) window.amiyoClipMenu.register(function(ctx){ var p=ctx&&ctx.primary; if(!p) return []; var cur=role(p.clip,p.track); return [{type:'row',label:'Role',items:ROLES.map(function(r){ return {text:r[0].slice(0,3),swatch:r[1],title:r[0],on:cur===r[0],run:function(){ assign(r[0]); }}; })}]; });
    window.AMIYO_P7.roles={assign:assign,apply:apply,state:S,roleOf:role};
   }catch(e){ try{console.warn('p7-s06',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,2600); else addEventListener('load',function(){ setTimeout(go,2600); });
+ if(document.readyState==='complete') setTimeout(go,200); else addEventListener('load',function(){ setTimeout(go,200); });
 })();
 
 ;
@@ -5137,13 +5142,13 @@ function addCss(id,css){ var st=document.createElement("style"); st.id=id; st.te
   if(!(P&&P.addTab&&typeof project!=='undefined'&&window.AMIYO_DV_S02&&window.AMIYO_DV_S02.mkClip&&window.AMIYO_DV_S02.trackFor)){ if(n++<200) return setTimeout(go,100); return; }
   try{
    if(window.__p7s07) return; window.__p7s07=1; window.AMIYO_P7=window.AMIYO_P7||{}; window.AMIYO_P7.step=7;
-   P.addTab('p7ed','Edit',html,bind,true);
+   P.addTab('p7ed','EDIT',html,bind,true);
    document.addEventListener('keydown',function(e){ var t=e.target,g=t&&t.tagName; if(g==='INPUT'||g==='TEXTAREA'||g==='SELECT'||(t&&t.isContentEditable)) return; if(!(e.ctrlKey&&e.altKey)) return; var k=e.code; if(k==='KeyE'){ e.preventDefault(); append(); } else if(k==='KeyQ'){ e.preventDefault(); connect(); } else if(k==='KeyW'){ e.preventDefault(); insert(); } },true);
    try{ pr2Register('Append (Edit tab)','Ctrl+Alt+E',append); pr2Register('Connect on top (Edit tab)','Ctrl+Alt+Q',connect); pr2Register('Insert at playhead (Edit tab)','Ctrl+Alt+W',insert); }catch(e){}
    window.AMIYO_P7.edit={append:append,connect:connect,insert:insert};
   }catch(e){ try{console.warn('p7-s07',e)}catch(_){} }
  }
- if(document.readyState==='complete') setTimeout(go,2700); else addEventListener('load',function(){ setTimeout(go,2700); });
+ if(document.readyState==='complete') setTimeout(go,250); else addEventListener('load',function(){ setTimeout(go,250); });
 })();
 
 ;
