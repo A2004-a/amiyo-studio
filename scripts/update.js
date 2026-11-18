@@ -58,9 +58,9 @@ async function runUpdate() {
   try {
     const remotePkg = await fetchJson(remotePkgUrl);
     remoteVersion = remotePkg.version || currentVersion;
-    console.log(`  ✓ Latest available version: v${remoteVersion}`);
+    console.log(`  [OK] Latest available version: v${remoteVersion}`);
   } catch (err) {
-    console.log(`  ℹ Could not fetch remote metadata (${err.message}). Proceeding with direct branch pull...`);
+    console.log(`  [INFO] Could not fetch remote metadata (${err.message}). Proceeding with direct branch pull...`);
   }
 
   console.log('\n[2/4] Pulling latest code and assets...');
@@ -87,7 +87,7 @@ async function runUpdate() {
     } else {
       execSync(`curl -fsSL "${zipUrl}" -o "${tempZip}" && unzip -q -o "${tempZip}" -d "${extractDir}" && cp -rf "${extractDir}"/amiyo-studio-main/* "${rootDir}"/ && rm -rf "${tempZip}" "${extractDir}"`, { stdio: 'inherit' });
     }
-    console.log('  ✓ Latest files unpacked and updated successfully!');
+    console.log('  [OK] Latest files unpacked and updated successfully!');
   }
 
   console.log('\n[3/4] Syncing Android and web resources...');
@@ -112,11 +112,11 @@ async function runUpdate() {
 
   console.log(`
 =============================================================
-  🎉 UPDATE COMPLETED SUCCESSFULLY!
+  [SUCCESS] UPDATE COMPLETED SUCCESSFULLY!
 =============================================================
-  ✓ Installed Version: v${remoteVersion}
-  ✓ Workspace: ${rootDir}
-  ✓ New 3D Branding, NLE Features, and Fixes are Active!
+  [OK] Installed Version: v${remoteVersion}
+  [OK] Workspace: ${rootDir}
+  [OK] New 3D Branding, NLE Features, and Fixes are Active!
 
 To open Amiyo Studio now, run:
   amiyo

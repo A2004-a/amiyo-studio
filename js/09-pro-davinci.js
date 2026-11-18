@@ -7871,9 +7871,9 @@ function show(t){col.classList.toggle('pp-tab-fx',t==='fx');col.classList.toggle
  bar.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.t===t))});col.scrollTop=0}
 var had=null;
 function sync(){var has=!/Select a clip to edit/i.test(ins.textContent||'');col.classList.toggle('pp-has-clip',has);
- if(has!==had){had=has;show(has?'fx':'tools')}}
+ if(has!==had){had=has;show('fx')}}
 new MutationObserver(function(){requestAnimationFrame(sync)}).observe(ins,{childList:true,subtree:true,characterData:true});
-sync();if(had===null)show('tools');
+sync();show('fx');
 }catch(e){console.warn('pp08',e)}})();
 
 ;

@@ -117,6 +117,8 @@
     <div class="top-spacer"></div>
     <button class="topbtn" id="undoBtn" aria-label="Undo" title="Undo (Ctrl+Z)">↶</button>
     <button class="topbtn" id="redoBtn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)">↷</button>
+    <button class="topbtn primary" id="exportBtn">Export</button>
+    <button class="topbtn" id="topCaptionsBtn" title="Captions & Subtitles">Captions</button>
     <button class="topbtn" id="versionsBtn">Versions</button>
     <button class="topbtn" id="shareBtn">Share</button>
     <button class="topbtn" id="settingsBtn">Settings</button>
@@ -124,7 +126,6 @@
     <button class="topbtn" id="agentBtn">Amiyo Agent</button>
     <button class="topbtn" id="storageBtn" title="Storage, media and recovery points">Storage</button>
     <button class="topbtn" id="renderQueueBtn" title="Queue multiple exports at different presets (like Adobe Media Encoder)">Queue</button>
-    <button class="topbtn primary" id="exportBtn">Export</button>
   </header>
 
   <main class="workspace" id="amiyoMain">
@@ -799,5 +800,22 @@ a.length>D&&(D=a.length,p=0|1.25*D+7200,r=new Int8Array(p));a=u.lame_encode_buff
 <script src="js/09-pro-davinci.js?v=1.0.3"></script>
 <script src="js/10-filmora-opt.js?v=1.0.3"></script>
 <script src="js/11-screen-touch.js?v=1.0.3"></script>
+<script>
+(function(){
+  function initTopCaps(){
+    var b = document.getElementById('topCaptionsBtn');
+    if (!b) return;
+    b.onclick = function(){
+      var cp = document.querySelector('[data-panel="captions"]');
+      if (cp) cp.click();
+    };
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTopCaps);
+  } else {
+    initTopCaps();
+  }
+})();
+</script>
 </body>
 </html>

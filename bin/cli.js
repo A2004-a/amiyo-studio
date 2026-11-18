@@ -40,7 +40,7 @@ for (let i = 0; i < args.length; i++) {
     process.exit(0);
   } else if (arg === '-h' || arg === '--help') {
     console.log(`
-🎬 Amiyo Studio CLI v${pkg.version}
+>> Amiyo Studio CLI v${pkg.version}
 
 Usage:
   amiyo                 Launch Amiyo Studio in default browser

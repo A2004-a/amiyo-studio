@@ -11,12 +11,20 @@ if ($args -contains "--version" -or $args -contains "-v" -or $args -contains "ve
 if ($args -contains "update" -or $args -contains "upgrade" -or $args -contains "--update" -or $args -contains "-update") {
     $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
     $rootDir = Split-Path -Parent $scriptDir
-    $updatePs1 = Join-Path $rootDir "update.ps1"
-    if (Test-Path $updatePs1) {
-        & $updatePs1
-    } else {
-        irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.ps1 | iex
+    $searchUpdates = @(
+        (Join-Path $rootDir "update.ps1"),
+        (Join-Path (Get-Location).Path "update.ps1"),
+        (Join-Path $env:USERPROFILE "Desktop\amiyo studio 2\update.ps1"),
+        (Join-Path $env:LOCALAPPDATA "AmiyoStudio\update.ps1"),
+        (Join-Path $env:USERPROFILE "amiyo-studio\update.ps1")
+    )
+    foreach ($candidate in $searchUpdates) {
+        if ($candidate -and (Test-Path $candidate)) {
+            & $candidate
+            return
+        }
     }
+    irm https://raw.githubusercontent.com/A2004-a/amiyo-studio/main/update.ps1 | iex
     return
 }
 

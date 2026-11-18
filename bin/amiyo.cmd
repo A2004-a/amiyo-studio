@@ -88,10 +88,22 @@ if exist "%APP_DIR%\update.cmd" (
   call "%APP_DIR%\update.cmd"
   exit /b %ERRORLEVEL%
 )
+if exist "%USERPROFILE%\Desktop\amiyo studio 2\update.cmd" (
+  call "%USERPROFILE%\Desktop\amiyo studio 2\update.cmd"
+  exit /b %ERRORLEVEL%
+)
+if exist "%LOCALAPPDATA%\AmiyoStudio\update.cmd" (
+  call "%LOCALAPPDATA%\AmiyoStudio\update.cmd"
+  exit /b %ERRORLEVEL%
+)
 where node >nul 2>&1
 if %ERRORLEVEL% equ 0 (
   if exist "%APP_DIR%\scripts\update.js" (
     node "%APP_DIR%\scripts\update.js"
+    exit /b %ERRORLEVEL%
+  )
+  if exist "%USERPROFILE%\Desktop\amiyo studio 2\scripts\update.js" (
+    node "%USERPROFILE%\Desktop\amiyo studio 2\scripts\update.js"
     exit /b %ERRORLEVEL%
   )
 )
