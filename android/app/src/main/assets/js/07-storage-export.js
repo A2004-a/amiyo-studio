@@ -3600,7 +3600,7 @@ f();document.addEventListener('DOMContentLoaded',f);setTimeout(f,1500);})();
   window.closeModal=function(){ if(busy&&!cancel){ cancel=true; say("Image sequence stopped"); } return typeof oldClose==="function"?oldClose.apply(this,arguments):undefined; };
   window.amiyoExportSequence=open; if(window.amiyoX) window.amiyoX.exportSequence=open;
   var anchor=$("gifExportBtn")||$("audioExportBtn")||$("exportBtn");
-  if(anchor&&!$("seqExportBtn")){ var b=document.createElement("button"); b.className="topbtn"; b.id="seqExportBtn"; b.type="button"; b.textContent="🖼 Frames"; b.title="Export an image sequence (numbered pictures in a ZIP)"; b.setAttribute("aria-label","Export image sequence"); b.onclick=open; anchor.after(b); }
+  if(anchor&&!$("seqExportBtn")){ var b=document.createElement("button"); b.className="topbtn"; b.id="seqExportBtn"; b.type="button"; b.textContent="🖼 Frames"; b.title="Export an image sequence (numbered pictures in a ZIP)"; b.setAttribute("aria-label","Export image sequence"); b.onclick=open; /* anchor.after(b); disabled seqExportBtn in topbar */ }
   var oc=window.commandList; if(typeof oc==="function") window.commandList=function(){ return oc.apply(this,arguments).concat([["Export image sequence…","amiyoExportSequence()"]]); };
   var oq=window.amiyoExportCheck; if(typeof oq==="function") window.amiyoExportCheck=oq;
 })();
